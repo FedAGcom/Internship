@@ -38,12 +38,14 @@ public class UserController {
         user.setPassword(userDetails.getPassword());
         user.setFirstName(userDetails.getFirstName());
         user.setLastName(userDetails.getLastName());
+        user.setCreated(userDetails.getCreated());
+        user.setProfile(userDetails.getProfile());  //TODO прикрутить сущность profile_company
         return userService.editUser(user);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable(value = "id") Long userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build(); //TODO уточнить возвращаемый тип при удалении
     }
 }
