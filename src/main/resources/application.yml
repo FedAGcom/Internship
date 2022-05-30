@@ -1,0 +1,17 @@
+spring:
+  # PostgreSQL
+  datasource:
+    url: jdbc:postgresql://host.docker.internal:5432/intership-db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: admin
+
+    # JPA
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        ddl-auto: validate
+      properties:
+        hibernate:
+          format_sql: true
+      show-sql: true
