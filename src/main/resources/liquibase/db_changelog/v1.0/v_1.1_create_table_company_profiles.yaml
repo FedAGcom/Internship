@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.1
+      author: damir.iusupov
+      changes:
+        - createTable:
+            tableName: company_profiles
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rating
+                  type: DOUBLE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: link
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
