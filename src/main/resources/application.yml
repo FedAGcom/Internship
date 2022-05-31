@@ -6,12 +6,12 @@ spring:
     username: postgres
     password: admin
 
-    # JPA
+  # JPA
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
       hibernate:
-        ddl-auto: validate
-      properties:
-        hibernate:
-          format_sql: true
-      show-sql: true
+        format_sql: true
+    show-sql: true
