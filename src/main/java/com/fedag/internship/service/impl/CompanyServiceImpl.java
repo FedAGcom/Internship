@@ -3,14 +3,13 @@ package com.fedag.internship.service.impl;
 import com.fedag.internship.domain.CompanyMapper;
 import com.fedag.internship.domain.dto.CompanyDto;
 import com.fedag.internship.domain.entity.CompanyEntity;
-import com.fedag.internship.domain.exception.CompanyNotFoundException;
+import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.repository.CompanyRepository;
 import com.fedag.internship.service.CompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,16 +20,14 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDto getCompanyById(Long id) {
         CompanyEntity companyEntity = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException(id));
+                .orElseThrow(() -> new EntityNotFoundException("Company", "id", id));
         return companyMapper.toDto(companyEntity);
     }
 
     @Override
-    public List<CompanyDto> getAllCompanies() {
-        List<CompanyDto> companies = new ArrayList<>();
-        companyRepository.findAll()
-                .forEach(entity -> companies.add(companyMapper.toDto(entity)));
-        return companies;
+    public Page<CompanyDto> getAllCompanies(Pageable pageable) {
+        return companyRepository.findAll(pageable)
+                .map(companyMapper::toDto);
     }
 
     @Override

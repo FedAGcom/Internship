@@ -1,31 +1,31 @@
 package com.fedag.internship.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fedag.internship.domain.dto.CompanyDto;
+import com.fedag.internship.domain.dto.CompanyRequest;
+import com.fedag.internship.domain.dto.CompanyResponse;
 import com.fedag.internship.domain.entity.CompanyEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class CompanyMapper {
+    private final ObjectMapper objectMapper;
 
     public CompanyDto toDto(CompanyEntity companyEntity) {
-        CompanyDto companyDto = new CompanyDto();
-        companyDto.setId(companyEntity.getId());
-        companyDto.setName(companyEntity.getName());
-        companyDto.setDescription(companyEntity.getDescription());
-        companyDto.setLocation(companyEntity.getLocation());
-        companyDto.setRating(companyEntity.getRating());
-        companyDto.setLink(companyEntity.getLink());
-        return companyDto;
+        return objectMapper.convertValue(companyEntity, CompanyDto.class);
+    }
+
+    public CompanyDto toDto(CompanyRequest companyRequest) {
+        return objectMapper.convertValue(companyRequest, CompanyDto.class);
     }
 
     public CompanyEntity toEntity(CompanyDto companyDto) {
-        CompanyEntity companyEntity = new CompanyEntity();
-        companyEntity.setId(companyDto.getId());
-        companyEntity.setName(companyDto.getName());
-        companyEntity.setDescription(companyDto.getDescription());
-        companyEntity.setRating(companyDto.getRating());
-        companyEntity.setLocation(companyDto.getLocation());
-        companyEntity.setLink(companyDto.getLink());
-        return companyEntity;
+        return objectMapper.convertValue(companyDto, CompanyEntity.class);
+    }
+
+    public CompanyResponse toResponse(CompanyDto companyDto) {
+        return objectMapper.convertValue(companyDto, CompanyResponse.class);
     }
 }
