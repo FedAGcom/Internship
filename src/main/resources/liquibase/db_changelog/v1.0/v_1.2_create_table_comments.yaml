@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.2
+      author: damir.iusupov
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: text
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false

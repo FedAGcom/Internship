@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: classpath:liquibase/db_changelog/v1.0/v_1.0_create_table_users.yaml
+  - include:
+      file: classpath:liquibase/db_changelog/v1.0/v_1.1_create_table_company_profiles.yaml
+  - include:
+      file: classpath:liquibase/db_changelog/v1.0/v_1.2_create_table_comments.yaml
+  - include:
+      file: classpath:liquibase/db_changelog/v1.0/v_1.3_create_table_trainee_positions.yaml

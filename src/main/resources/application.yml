@@ -15,3 +15,10 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+
+  # Liquibase
+  liquibase:
+    change-log: classpath:liquibase/db.changelog_master.yaml
+    url: jdbc:postgresql://host.docker.internal:5432/intership-db
+    user: postgres
+    password: admin
