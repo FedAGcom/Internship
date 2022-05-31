@@ -1,6 +1,7 @@
 package com.fedag.internship.service.impl;
 
 import com.fedag.internship.domain.CompanyMapper;
+import com.fedag.internship.domain.CompanyMapperImpl;
 import com.fedag.internship.domain.dto.CompanyDto;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;

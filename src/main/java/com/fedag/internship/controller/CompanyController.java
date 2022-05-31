@@ -1,6 +1,7 @@
 package com.fedag.internship.controller;
 
 import com.fedag.internship.domain.CompanyMapper;
+import com.fedag.internship.domain.CompanyMapperImpl;
 import com.fedag.internship.domain.dto.CompanyDto;
 import com.fedag.internship.domain.dto.CompanyRequest;
 import com.fedag.internship.domain.dto.CompanyResponse;
