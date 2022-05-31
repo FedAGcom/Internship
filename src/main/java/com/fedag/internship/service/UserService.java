@@ -1,17 +1,20 @@
 package com.fedag.internship.service;
 
-import com.fedag.internship.dto.User;
+import com.fedag.internship.domain.dto.UserDto;
+import com.fedag.internship.domain.entity.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers();
+    Page<UserEntity> getAllUsers(Pageable pageable);
 
-    User getUserById(long id);
+    UserEntity getUserById(long id);
 
-    User addUser(User user);
+    UserEntity addUser(UserEntity user);
 
     void deleteUser(long id);
 
-    User editUser(User user);
+    UserEntity editUser(UserEntity user);
 }

@@ -1,51 +1,62 @@
 package com.fedag.internship.controller;
 
-import com.fedag.internship.dto.User;
-import com.fedag.internship.service.impl.UserServiceImpl;
+import com.fedag.internship.domain.UserMapperImpl;
+import com.fedag.internship.domain.dto.UserDto;
+import com.fedag.internship.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
+
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("api/user")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
+    private final UserMapperImpl userMapper;
 
-    public UserController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping("/")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable(value = "id") Long userId) {
-        return userService.getUserById(userId);
+    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
+        UserDto userDto = Optional.of(id)
+                .map(userService::getUserById)
+                .map(userMapper::toDto)
+                .orElseThrow();
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @PostMapping("/")
-    public User createUser(@RequestBody User user) {
-        return userService.addUser(user);
+    @GetMapping
+    public ResponseEntity<Page<UserDto>> getAllUsers(@RequestParam int page, @RequestParam int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<UserDto> users = userService.getAllUsers(pageRequest)
+                .map(userMapper::toDto);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable(value = "id") Long userId, @RequestBody User userDetails) {
-        User user = userService.getUserById(userId);
-        user.setEmail(userDetails.getEmail());
-        user.setPassword(userDetails.getPassword());
-        user.setFirstName(userDetails.getFirstName());
-        user.setLastName(userDetails.getLastName());
-        user.setCreated(userDetails.getCreated());
-        user.setProfile(userDetails.getProfile());  //TODO прикрутить сущность profile_company
-        return userService.editUser(user);
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
+        Optional.ofNullable(userDto)
+                .map(userMapper::toEntity)
+                .map(userService::addUser);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
+        Optional.ofNullable(userDto)
+                .map(userMapper::toEntity)
+                .map(userService::editUser);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable(value = "id") Long userId) {
-        userService.deleteUser(userId);
-        return ResponseEntity.ok().build(); //TODO уточнить возвращаемый тип при удалении
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,33 +1,34 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.dto.User;
+import com.fedag.internship.domain.entity.UserEntity;
+import com.fedag.internship.exception.EntityNotFoundException;
 import com.fedag.internship.repository.UserRepository;
 import com.fedag.internship.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Override
+    public Page<UserEntity> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public UserEntity getUserById(long id) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User", "Id", id));
+        return userEntity;
     }
 
     @Override
-    public User getUserById(long id) {
-        return userRepository.getReferenceById(id);
-    }
-
-    @Override
-    public User addUser(User user) {
-        return userRepository.saveAndFlush(user);
+    public UserEntity addUser(UserEntity userEntity) {
+        return userRepository.save(userEntity);
     }
 
     @Override
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User editUser(User user) {
-        return userRepository.saveAndFlush(user);
+    public UserEntity editUser(UserEntity userEntity) {
+        return userRepository.save(userEntity);
     }
 }
