@@ -4,11 +4,11 @@ import com.fedag.internship.domain.dto.CommentCreateDto;
 import com.fedag.internship.domain.dto.CommentDto;
 import com.fedag.internship.domain.dto.CommentUpdateDto;
 import com.fedag.internship.domain.entity.Comment;
-import com.fedag.internship.domain.mapper.CommentMapper;
 import com.fedag.internship.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +37,6 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
-    private final CommentMapper commentMapper;
 
     /**
      * Method for finding Comment with id from DataBase and mapping
@@ -50,7 +49,6 @@ public class CommentController {
     public ResponseEntity<CommentDto> findById(@PathVariable Long id) {
         CommentDto result = Optional.of(id)
                 .map(commentService::findById)
-                .map(commentMapper::toDto)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
     }
@@ -64,9 +62,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentDto> create(@RequestBody @Valid CommentCreateDto commentCreateDto) {
         CommentDto result = Optional.ofNullable(commentCreateDto)
-                .map(commentMapper::fromCreateDto)
                 .map(commentService::create)
-                .map(commentMapper::toDto)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
     }
@@ -82,9 +78,7 @@ public class CommentController {
     public ResponseEntity<CommentDto> update(@PathVariable Long id,
                                              @RequestBody @Valid CommentUpdateDto commentUpdateDto) {
         CommentDto result = Optional.ofNullable(commentUpdateDto)
-                .map(commentMapper::fromUpdateDto)
                 .map(comment -> commentService.update(id, comment))
-                .map(commentMapper::toDto)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
     }
@@ -107,11 +101,8 @@ public class CommentController {
      * @return Page of CommentsDtos
      */
     @GetMapping
-    public ResponseEntity<Page<CommentDto>> findAll() {
-        PageRequest pageRequest = PageRequest.of(0, 5);
-        Page<CommentDto> result = commentService
-                .findAll(pageRequest)
-                .map(commentMapper::toDto);
+    public ResponseEntity<Page<CommentDto>> findAll(@PageableDefault(size = 5, page = 0) Pageable pageable) {
+        Page<CommentDto> result = commentService.findAll(pageable);
         return new ResponseEntity<>(result, OK);
     }
 }

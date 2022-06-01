@@ -1,5 +1,8 @@
 package com.fedag.internship.service;
 
+import com.fedag.internship.domain.dto.CommentCreateDto;
+import com.fedag.internship.domain.dto.CommentDto;
+import com.fedag.internship.domain.dto.CommentUpdateDto;
 import com.fedag.internship.domain.entity.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,25 +20,25 @@ public interface CommentService {
      * @param id - id of Comment object
      * @return Comment with id
      */
-    Comment findById(Long id);
+    CommentDto findById(Long id);
 
     /**
      * Method for save created Comment in DataBase.
      *
-     * @param comment - Comment object for saving
+     * @param commentCreateDto - Comment's Dto object for saving
      * @return created Comment
      */
-    Comment create(Comment comment);
+    CommentDto create(CommentCreateDto commentCreateDto);
 
     /**
      * Method for replacing fields of the old Comment with a new one and
      * save updated Comment in DataBase.
      *
-     * @param id     - id of Comment object
-     * @param source - Comment object for replace
+     * @param id               - id of Comment object
+     * @param commentUpdateDto - Comment's Dto object for updating
      * @return updated Comment
      */
-    Comment update(Long id, Comment source);
+    CommentDto update(Long id, CommentUpdateDto commentUpdateDto);
 
     /**
      * Method for delete Comment.
@@ -51,5 +54,5 @@ public interface CommentService {
      * @param pageable - param for pagination information
      * @return Page of Comments
      */
-    Page<Comment> findAll(Pageable pageable);
+    Page<CommentDto> findAll(Pageable pageable);
 }

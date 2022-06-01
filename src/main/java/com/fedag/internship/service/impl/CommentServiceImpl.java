@@ -1,5 +1,8 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.dto.CommentCreateDto;
+import com.fedag.internship.domain.dto.CommentDto;
+import com.fedag.internship.domain.dto.CommentUpdateDto;
 import com.fedag.internship.domain.entity.Comment;
 import com.fedag.internship.domain.mapper.CommentMapper;
 import com.fedag.internship.exception.EntityNotFoundException;
@@ -29,23 +32,31 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public Comment findById(Long id) {
+    public CommentDto findById(Long id) {
         return commentRepository.findById(id)
+                .map(commentMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Comment", "id", id));
     }
 
     @Override
     @Transactional
-    public Comment create(Comment comment) {
-        return commentRepository.save(comment);
+    public CommentDto create(CommentCreateDto commentCreateDto) {
+        return Optional.ofNullable(commentCreateDto)
+                .map(commentMapper::fromCreateDto)
+                .map(commentRepository::save)
+                .map(commentMapper::toDto)
+                .orElseThrow();
     }
 
     @Override
     @Transactional
-    public Comment update(Long id, Comment source) {
-        return Optional.of(id)
-                .map(this::findById)
-                .map(target -> commentMapper.merge(source, target))
+    public CommentDto update(Long id, CommentUpdateDto commentUpdateDto) {
+        Comment target = commentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Comment", "id", id));
+        return Optional.ofNullable(commentUpdateDto)
+                .map(commentMapper::fromUpdateDto)
+                .map(source -> commentMapper.merge(source, target))
+                .map(commentMapper::toDto)
                 .orElseThrow();
     }
 
@@ -57,7 +68,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page<Comment> findAll(Pageable pageable) {
-        return commentRepository.findAll(pageable);
+    public Page<CommentDto> findAll(Pageable pageable) {
+        return commentRepository.findAll(pageable)
+                .map(commentMapper::toDto);
     }
 }
