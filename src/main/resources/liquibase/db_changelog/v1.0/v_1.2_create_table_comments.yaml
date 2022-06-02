@@ -1,6 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: 1.2
+      id: 1.2.0
+      author: damir.iusupov
+      changes:
+        - createSequence:
+            dataType:  BIGINT
+            incrementBy:  1
+            sequenceName:  seq_id
+            startValue:  1
+  - changeSet:
+      id: 1.2.1
       author: damir.iusupov
       changes:
         - createTable:
@@ -14,5 +23,15 @@ databaseChangeLog:
               - column:
                   name: text
                   type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated
+                  type: TIMESTAMP
                   constraints:
                     nullable: false
