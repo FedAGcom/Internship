@@ -1,6 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: 1.0
+      id: 1.0.0
+      author: damir.iusupov
+      changes:
+        - createSequence:
+            dataType:  BIGINT
+            incrementBy:  1
+            sequenceName:  seq_users_id
+            startValue:  1
+  - changeSet:
+      id: 1.0.1
       author: damir.iusupov
       changes:
         - createTable:

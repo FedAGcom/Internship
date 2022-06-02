@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Setter(PRIVATE)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AuditableEntity extends BaseEntity {
+public abstract class AuditableEntity {
     /**
      * date of object create
      */
