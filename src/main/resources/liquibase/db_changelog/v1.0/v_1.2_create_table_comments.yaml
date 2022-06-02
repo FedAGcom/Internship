@@ -6,7 +6,7 @@ databaseChangeLog:
         - createSequence:
             dataType:  BIGINT
             incrementBy:  1
-            sequenceName:  seq_id
+            sequenceName:  seq_comments_id
             startValue:  1
   - changeSet:
       id: 1.2.1
