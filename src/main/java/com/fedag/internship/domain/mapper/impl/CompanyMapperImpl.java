@@ -1,16 +1,17 @@
-package com.fedag.internship.domain;
+package com.fedag.internship.domain.mapper.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fedag.internship.domain.dto.CompanyDto;
 import com.fedag.internship.domain.dto.CompanyRequest;
 import com.fedag.internship.domain.dto.CompanyResponse;
 import com.fedag.internship.domain.entity.CompanyEntity;
+import com.fedag.internship.domain.mapper.CompanyMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
-@Service
-public class CompanyMapperImpl implements CompanyMapper{
+public class CompanyMapperImpl implements CompanyMapper {
     private final ObjectMapper objectMapper;
 
     @Override

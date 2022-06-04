@@ -1,4 +1,4 @@
-package com.fedag.internship.domain;
+package com.fedag.internship.domain.mapper;
 
 import com.fedag.internship.domain.dto.CompanyDto;
 import com.fedag.internship.domain.dto.CompanyRequest;

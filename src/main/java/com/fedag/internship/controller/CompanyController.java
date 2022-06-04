@@ -1,7 +1,6 @@
 package com.fedag.internship.controller;
 
-import com.fedag.internship.domain.CompanyMapper;
-import com.fedag.internship.domain.CompanyMapperImpl;
+import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.domain.dto.CompanyDto;
 import com.fedag.internship.domain.dto.CompanyRequest;
 import com.fedag.internship.domain.dto.CompanyResponse;
@@ -29,7 +28,7 @@ public class CompanyController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CompanyResponse>> getAllCompanies(@PageableDefault(size = 5, page = 1) Pageable pageable) {
+    public ResponseEntity<Page<CompanyResponse>> getAllCompanies(@PageableDefault(size = 5) Pageable pageable) {
         Page<CompanyResponse> companies = companyService.getAllCompanies(pageable)
                 .map(companyMapper::toResponse);
         return new ResponseEntity<>(companies, HttpStatus.OK);

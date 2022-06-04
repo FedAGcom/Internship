@@ -3,9 +3,9 @@ package com.fedag.internship.service.impl;
 import com.fedag.internship.domain.dto.CommentCreateDto;
 import com.fedag.internship.domain.dto.CommentDto;
 import com.fedag.internship.domain.dto.CommentUpdateDto;
-import com.fedag.internship.domain.entity.Comment;
+import com.fedag.internship.domain.entity.CommentEntity;
+import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.CommentMapper;
-import com.fedag.internship.exception.EntityNotFoundException;
 import com.fedag.internship.repository.CommentRepository;
 import com.fedag.internship.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDto update(Long id, CommentUpdateDto commentUpdateDto) {
-        Comment target = commentRepository.findById(id)
+        CommentEntity target = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comment", "id", id));
         return Optional.ofNullable(commentUpdateDto)
                 .map(commentMapper::fromUpdateDto)

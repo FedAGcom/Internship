@@ -3,10 +3,10 @@ package com.fedag.internship.domain.mapper;
 import com.fedag.internship.domain.dto.CommentCreateDto;
 import com.fedag.internship.domain.dto.CommentDto;
 import com.fedag.internship.domain.dto.CommentUpdateDto;
-import com.fedag.internship.domain.entity.Comment;
+import com.fedag.internship.domain.entity.CommentEntity;
 
 /**
- * interface CommentMapper for Dto layer and for class {@link Comment}.
+ * interface CommentMapper for Dto layer and for class {@link CommentEntity}.
  *
  * @author damir.iusupov
  * @since 2022-06-01
@@ -18,7 +18,7 @@ public interface CommentMapper {
      * @param source - Comment object for mapping
      * @return CommentDto object
      */
-    CommentDto toDto(Comment source);
+    CommentDto toDto(CommentEntity source);
 
     /**
      * Method for mapping CommentCreateDto to Comment
@@ -26,7 +26,7 @@ public interface CommentMapper {
      * @param source - CommentCreateDto object for mapping
      * @return Comment object
      */
-    Comment fromCreateDto(CommentCreateDto source);
+    CommentEntity fromCreateDto(CommentCreateDto source);
 
     /**
      * Method for mapping CommentUpdateDto to Comment
@@ -34,7 +34,7 @@ public interface CommentMapper {
      * @param source - CommentUpdateDto object for mapping
      * @return Comment object
      */
-    Comment fromUpdateDto(CommentUpdateDto source);
+    CommentEntity fromUpdateDto(CommentUpdateDto source);
 
     /**
      * Method for merge-update from source Comment object to target Comment object.
@@ -43,5 +43,5 @@ public interface CommentMapper {
      * @param target - Comment object target for update
      * @return merge-updated Comment object
      */
-    Comment merge(Comment source, Comment target);
+    CommentEntity merge(CommentEntity source, CommentEntity target);
 }
