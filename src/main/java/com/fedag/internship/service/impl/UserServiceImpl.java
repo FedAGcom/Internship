@@ -1,7 +1,7 @@
 package com.fedag.internship.service.impl;
 
 import com.fedag.internship.domain.entity.UserEntity;
-import com.fedag.internship.exception.EntityNotFoundException;
+import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.repository.UserRepository;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;

@@ -22,7 +22,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Setter
 @Entity
 @Table(name = "comments")
-public class Comment extends AuditableEntity {
+public class CommentEntity extends AuditableEntity {
     /**
      * id of all Entities
      */

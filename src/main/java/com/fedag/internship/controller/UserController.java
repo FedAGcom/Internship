@@ -1,6 +1,6 @@
 package com.fedag.internship.controller;
 
-import com.fedag.internship.domain.UserMapperImpl;
+import com.fedag.internship.domain.mapper.impl.UserMapperImpl;
 import com.fedag.internship.domain.dto.UserDto;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.service.UserService;
@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserDto>> getAllUsers(@PageableDefault(size = 5, page = 1) Pageable pageable) {
+    public ResponseEntity<Page<UserDto>> getAllUsers(@PageableDefault(size = 5) Pageable pageable) {
         Page<UserDto> users = userService.getAllUsers(pageable)
                 .map(userMapper::toDto);
         return new ResponseEntity<>(users, HttpStatus.OK);

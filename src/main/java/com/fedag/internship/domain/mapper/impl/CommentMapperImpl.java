@@ -1,10 +1,12 @@
 package com.fedag.internship.domain.mapper.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fedag.internship.domain.dto.CommentCreateDto;
 import com.fedag.internship.domain.dto.CommentDto;
 import com.fedag.internship.domain.dto.CommentUpdateDto;
-import com.fedag.internship.domain.entity.Comment;
+import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.mapper.CommentMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,32 +16,27 @@ import org.springframework.stereotype.Component;
  * @since 2022-06-01
  */
 @Component
+@RequiredArgsConstructor
 public class CommentMapperImpl implements CommentMapper {
+    private final ObjectMapper objectMapper;
+
     @Override
-    public CommentDto toDto(Comment source) {
-        return new CommentDto()
-                .setId(source.getId())
-                .setText(source.getText())
-                .setCreated(source.getCreated())
-                .setUpdated(source.getUpdated());
+    public CommentDto toDto(CommentEntity source) {
+        return objectMapper.convertValue(source, CommentDto.class);
     }
 
     @Override
-    public Comment fromCreateDto(CommentCreateDto source) {
-        Comment result = new Comment();
-        result.setText(source.getText());
-        return result;
+    public CommentEntity fromCreateDto(CommentCreateDto source) {
+        return objectMapper.convertValue(source, CommentEntity.class);
     }
 
     @Override
-    public Comment fromUpdateDto(CommentUpdateDto source) {
-        Comment result = new Comment();
-        result.setText(source.getText());
-        return result;
+    public CommentEntity fromUpdateDto(CommentUpdateDto source) {
+        return objectMapper.convertValue(source, CommentEntity.class);
     }
 
     @Override
-    public Comment merge(Comment source, Comment target) {
+    public CommentEntity merge(CommentEntity source, CommentEntity target) {
         target.setText(source.getText());
         return target;
     }

@@ -1,9 +1,9 @@
 package com.fedag.internship.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentDto {
     private Long id;
     private String text;

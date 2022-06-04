@@ -1,8 +1,9 @@
-package com.fedag.internship.domain;
+package com.fedag.internship.domain.mapper.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fedag.internship.domain.dto.UserDto;
 import com.fedag.internship.domain.entity.UserEntity;
+import com.fedag.internship.domain.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

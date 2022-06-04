@@ -3,12 +3,12 @@ package com.fedag.internship.service;
 import com.fedag.internship.domain.dto.CommentCreateDto;
 import com.fedag.internship.domain.dto.CommentDto;
 import com.fedag.internship.domain.dto.CommentUpdateDto;
-import com.fedag.internship.domain.entity.Comment;
+import com.fedag.internship.domain.entity.CommentEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * interface CommentService for class {@link Comment}.
+ * interface CommentService for class {@link CommentEntity}.
  *
  * @author damir.iusupov
  * @since 2022-06-01

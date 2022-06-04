@@ -3,7 +3,7 @@ package com.fedag.internship.controller;
 import com.fedag.internship.domain.dto.CommentCreateDto;
 import com.fedag.internship.domain.dto.CommentDto;
 import com.fedag.internship.domain.dto.CommentUpdateDto;
-import com.fedag.internship.domain.entity.Comment;
+import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,13 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 /**
- * Rest Controller for class {@link Comment}.
+ * Rest Controller for class {@link CommentEntity}.
  *
  * @author damir.iusupov
  * @since 2022-06-01
@@ -47,9 +46,7 @@ public class CommentController {
      */
     @GetMapping("{id}")
     public ResponseEntity<CommentDto> findById(@PathVariable Long id) {
-        CommentDto result = Optional.of(id)
-                .map(commentService::findById)
-                .orElseThrow();
+        CommentDto result = commentService.findById(id);
         return new ResponseEntity<>(result, OK);
     }
 
@@ -61,9 +58,7 @@ public class CommentController {
      */
     @PostMapping
     public ResponseEntity<CommentDto> create(@RequestBody @Valid CommentCreateDto commentCreateDto) {
-        CommentDto result = Optional.ofNullable(commentCreateDto)
-                .map(commentService::create)
-                .orElseThrow();
+        CommentDto result = commentService.create(commentCreateDto);
         return new ResponseEntity<>(result, CREATED);
     }
 
@@ -77,9 +72,7 @@ public class CommentController {
     @PatchMapping("/{id}")
     public ResponseEntity<CommentDto> update(@PathVariable Long id,
                                              @RequestBody @Valid CommentUpdateDto commentUpdateDto) {
-        CommentDto result = Optional.ofNullable(commentUpdateDto)
-                .map(comment -> commentService.update(id, comment))
-                .orElseThrow();
+        CommentDto result = commentService.update(id, commentUpdateDto);
         return new ResponseEntity<>(result, CREATED);
     }
 
@@ -101,7 +94,7 @@ public class CommentController {
      * @return Page of CommentsDtos
      */
     @GetMapping
-    public ResponseEntity<Page<CommentDto>> findAll(@PageableDefault(size = 5, page = 0) Pageable pageable) {
+    public ResponseEntity<Page<CommentDto>> findAll(@PageableDefault(size = 5) Pageable pageable) {
         Page<CommentDto> result = commentService.findAll(pageable);
         return new ResponseEntity<>(result, OK);
     }
