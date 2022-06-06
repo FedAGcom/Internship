@@ -1,16 +1,13 @@
 package com.fedag.internship.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public final class CompanyDto {
-    private Long id;
+public class CompanyRequestUpdate {
     private String name;
     private String description;
     private Double rating;

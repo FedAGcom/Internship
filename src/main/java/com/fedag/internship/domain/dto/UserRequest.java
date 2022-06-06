@@ -8,18 +8,20 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-/**
- * class CommentCreateDto for create Dto layer of Comment.
- *
- * @author damir.iusupov
- * @since 2022-06-01
- */
 @Getter
 @Setter
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommentCreateDto {
+public class UserRequest {
     @NotBlank
-    @Size(max = 500)
-    private String text;
+    @Size(max = 255)
+    private String email;
+
+    @NotBlank
+    @Size(max = 255)
+    private String firstName;
+
+    @NotBlank
+    @Size(max = 255)
+    private String lastName;
 }

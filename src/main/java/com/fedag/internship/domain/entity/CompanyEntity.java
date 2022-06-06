@@ -4,12 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -19,6 +22,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 @Table(name = "company_profiles")
 public class CompanyEntity {
     @Id
@@ -31,4 +35,7 @@ public class CompanyEntity {
     private Double rating;
     private String location;
     private String link;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }

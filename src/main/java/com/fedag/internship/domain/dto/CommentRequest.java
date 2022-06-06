@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
- * class CommentDto for view from Comment's Dto layer of Comment.
+ * class CommentCreateDto for create Dto layer of Comment.
  *
  * @author damir.iusupov
  * @since 2022-06-01
@@ -17,9 +18,8 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommentDto {
-    private Long id;
+public class CommentRequest {
+    @NotBlank
+    @Size(max = 500)
     private String text;
-    private LocalDateTime created;
-    private LocalDateTime updated;
 }

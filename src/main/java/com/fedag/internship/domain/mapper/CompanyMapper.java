@@ -1,17 +1,16 @@
 package com.fedag.internship.domain.mapper;
 
-import com.fedag.internship.domain.dto.CompanyDto;
 import com.fedag.internship.domain.dto.CompanyRequest;
+import com.fedag.internship.domain.dto.CompanyRequestUpdate;
 import com.fedag.internship.domain.dto.CompanyResponse;
 import com.fedag.internship.domain.entity.CompanyEntity;
 
 public interface CompanyMapper {
+    CompanyResponse toResponse(CompanyEntity companyEntity);
 
-    CompanyDto toDto(CompanyEntity companyEntity);
+    CompanyEntity fromRequest(CompanyRequest companyRequest);
 
-    CompanyDto toDto(CompanyRequest companyRequest);
+    CompanyEntity fromRequestUpdate(CompanyRequestUpdate companyRequestUpdate);
 
-    CompanyEntity toEntity(CompanyDto companyDto);
-
-    CompanyResponse toResponse(CompanyDto companyDto);
+    CompanyEntity merge(CompanyEntity source, CompanyEntity target);
 }

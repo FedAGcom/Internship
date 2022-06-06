@@ -45,3 +45,19 @@ databaseChangeLog:
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    unique: true
+                    nullable: false
+  - changeSet:
+      id: 1.1.2
+      author: damir.iusupov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: company_profiles
+            constraintName: fk_company_profiles_users
+            referencedColumnNames: id
+            referencedTableName: users

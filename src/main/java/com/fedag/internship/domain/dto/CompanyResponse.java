@@ -1,16 +1,15 @@
 package com.fedag.internship.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Accessors(chain = true)
 public class CompanyResponse {
     private Long id;
     private String name;
@@ -18,4 +17,5 @@ public class CompanyResponse {
     private Double rating;
     private String location;
     private String link;
+    private Long userId;
 }

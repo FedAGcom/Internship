@@ -1,9 +1,9 @@
 package com.fedag.internship.domain.mapper.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fedag.internship.domain.dto.CommentCreateDto;
-import com.fedag.internship.domain.dto.CommentDto;
-import com.fedag.internship.domain.dto.CommentUpdateDto;
+import com.fedag.internship.domain.dto.CommentRequest;
+import com.fedag.internship.domain.dto.CommentRequestUpdate;
+import com.fedag.internship.domain.dto.CommentResponse;
 import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +21,22 @@ public class CommentMapperImpl implements CommentMapper {
     private final ObjectMapper objectMapper;
 
     @Override
-    public CommentDto toDto(CommentEntity source) {
-        return objectMapper.convertValue(source, CommentDto.class);
+    public CommentResponse toResponse(CommentEntity commentEntity) {
+        return new CommentResponse()
+                .setId(commentEntity.getId())
+                .setText(commentEntity.getText())
+                .setCreated(commentEntity.getCreated())
+                .setUpdated(commentEntity.getUpdated())
+                .setUserId(commentEntity.getUser().getId());
     }
 
     @Override
-    public CommentEntity fromCreateDto(CommentCreateDto source) {
+    public CommentEntity fromRequest(CommentRequest source) {
         return objectMapper.convertValue(source, CommentEntity.class);
     }
 
     @Override
-    public CommentEntity fromUpdateDto(CommentUpdateDto source) {
+    public CommentEntity fromRequestUpdate(CommentRequestUpdate source) {
         return objectMapper.convertValue(source, CommentEntity.class);
     }
 
