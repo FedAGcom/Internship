@@ -1,8 +1,8 @@
 package com.fedag.internship.domain.mapper.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fedag.internship.domain.dto.CompanyDto;
 import com.fedag.internship.domain.dto.CompanyRequest;
+import com.fedag.internship.domain.dto.CompanyRequestUpdate;
 import com.fedag.internship.domain.dto.CompanyResponse;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.mapper.CompanyMapper;
@@ -15,22 +15,42 @@ public class CompanyMapperImpl implements CompanyMapper {
     private final ObjectMapper objectMapper;
 
     @Override
-    public CompanyDto toDto(CompanyEntity companyEntity) {
-        return objectMapper.convertValue(companyEntity, CompanyDto.class);
+    public CompanyResponse toResponse(CompanyEntity companyEntity) {
+        return new CompanyResponse()
+                .setId(companyEntity.getId())
+                .setName(companyEntity.getName())
+                .setDescription(companyEntity.getDescription())
+                .setRating(companyEntity.getRating())
+                .setLocation(companyEntity.getLocation())
+                .setLink(companyEntity.getLink())
+                .setUserId(companyEntity.getUser().getId());
+    }
+
+    public CompanyEntity fromRequest(CompanyRequest companyRequest) {
+        return objectMapper.convertValue(companyRequest, CompanyEntity.class);
+    }
+
+    public CompanyEntity fromRequestUpdate(CompanyRequestUpdate companyRequestUpdate) {
+        return objectMapper.convertValue(companyRequestUpdate, CompanyEntity.class);
     }
 
     @Override
-    public CompanyDto toDto(CompanyRequest companyRequest) {
-        return objectMapper.convertValue(companyRequest, CompanyDto.class);
-    }
-
-    @Override
-    public CompanyEntity toEntity(CompanyDto companyDto) {
-        return objectMapper.convertValue(companyDto, CompanyEntity.class);
-    }
-
-    @Override
-    public CompanyResponse toResponse(CompanyDto companyDto) {
-        return objectMapper.convertValue(companyDto, CompanyResponse.class);
+    public CompanyEntity merge(CompanyEntity source, CompanyEntity target) {
+        if (source.getName() != null) {
+            target.setName(source.getName());
+        }
+        if (source.getDescription() != null) {
+            target.setDescription(source.getDescription());
+        }
+        if (source.getRating() != null) {
+            target.setRating(source.getRating());
+        }
+        if (source.getLocation() != null) {
+            target.setLocation(source.getLocation());
+        }
+        if (source.getLink() != null) {
+            target.setLink(source.getLink());
+        }
+        return target;
     }
 }

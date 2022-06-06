@@ -1,20 +1,17 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.dto.CommentCreateDto;
-import com.fedag.internship.domain.dto.CommentDto;
-import com.fedag.internship.domain.dto.CommentUpdateDto;
 import com.fedag.internship.domain.entity.CommentEntity;
+import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.CommentMapper;
 import com.fedag.internship.repository.CommentRepository;
 import com.fedag.internship.service.CommentService;
+import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * class CommentServiceImpl for create connections between CommentRepository and CommentController.
@@ -30,46 +27,41 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private final UserService userService;
 
     @Override
-    public CommentDto findById(Long id) {
+    public CommentEntity getCommentById(Long id) {
         return commentRepository.findById(id)
-                .map(commentMapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Comment", "id", id));
     }
 
     @Override
-    @Transactional
-    public CommentDto create(CommentCreateDto commentCreateDto) {
-        return Optional.ofNullable(commentCreateDto)
-                .map(commentMapper::fromCreateDto)
-                .map(commentRepository::save)
-                .map(commentMapper::toDto)
-                .orElseThrow();
+    public Page<CommentEntity> getAllComments(Pageable pageable) {
+        return commentRepository.findAll(pageable);
     }
 
     @Override
     @Transactional
-    public CommentDto update(Long id, CommentUpdateDto commentUpdateDto) {
-        CommentEntity target = commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment", "id", id));
-        return Optional.ofNullable(commentUpdateDto)
-                .map(commentMapper::fromUpdateDto)
-                .map(source -> commentMapper.merge(source, target))
-                .map(commentMapper::toDto)
-                .orElseThrow();
+    public CommentEntity createComment(Long userId, CommentEntity commentEntity) {
+        final UserEntity userEntity = userService.getUserById(userId);
+        userEntity.addComments(commentEntity);
+        return commentRepository.save(commentEntity);
     }
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        this.findById(id);
+    public CommentEntity updateComment(Long id, CommentEntity commentEntity) {
+        CommentEntity target = this.getCommentById(id);
+        CommentEntity result = commentMapper.merge(commentEntity, target);
+        return commentRepository.save(result);
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(Long id) {
+        CommentEntity comment = this.getCommentById(id);
+        final UserEntity userEntity = userService.getUserById(comment.getUser().getId());
+        userEntity.removeComments(comment);
         commentRepository.deleteById(id);
-    }
-
-    @Override
-    public Page<CommentDto> findAll(Pageable pageable) {
-        return commentRepository.findAll(pageable)
-                .map(commentMapper::toDto);
     }
 }

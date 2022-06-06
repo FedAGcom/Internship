@@ -4,48 +4,49 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Accessors(chain = true)
-@Schema(name = "Компания", description = "Информация о компании")
-public class CompanyResponse {
-    @Schema(description = "Идентификатор компании",
-            example = "1")
-    private Long id;
-
+@Schema(name = "Обновление компании", description = "Запрос для обновления компании")
+public class CompanyRequestUpdate {
     @Schema(description = "Имя компании",
             maxLength = 255,
             minLength = 1,
-            example = "some name")
+            example = "some name upd")
+    @Size(max = 255)
     private String name;
 
     @Schema(description = "Описание компании",
             maxLength = 500,
             minLength = 1,
-            example = "some description")
+            example = "some description upd")
+    @Size(max = 500)
     private String description;
 
     @Schema(description = "Рейтинг компании",
             maximum = "10",
             minimum = "1",
-            example = "5")
+            example = "4")
+    @Min(1)
+    @Max(10)
     private Double rating;
 
     @Schema(description = "Место нахождения компании компании",
             maxLength = 255,
             minLength = 1,
-            example = "some location")
+            example = "some location upd")
+    @Size(max = 255)
     private String location;
 
     @Schema(description = "Ссылка на компанию",
             maxLength = 255,
             minLength = 1,
-            example = "someUrl.com")
+            example = "someUrlUpd.com")
+    @Size(max = 255)
     private String link;
-
-    @Schema(description = "Идентификатор пользователя компании", example = "1")
-    private Long userId;
 }
