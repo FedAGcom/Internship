@@ -53,4 +53,11 @@ public class CompanyController {
         companyService.deleteCompany(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<CompanyResponse>> search(@RequestParam String keyword, Pageable pageable) {
+        Page<CompanyResponse> companies = companyService.searchCompanyByName(keyword, pageable)
+                .map(companyMapper::toResponse);
+        return new ResponseEntity<>(companies, HttpStatus.OK);
+    }
 }

@@ -48,4 +48,10 @@ public class CompanyServiceImpl implements CompanyService {
     public void deleteCompany(Long id) {
         companyRepository.deleteById(id);
     }
+
+    @Override
+    public Page<CompanyDto> searchCompanyByName(String keyword, Pageable pageable) {
+        return companyRepository.search(keyword, "name", pageable)
+                .map(companyMapper::toDto);
+    }
 }

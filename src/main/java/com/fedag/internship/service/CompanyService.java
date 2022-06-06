@@ -18,4 +18,6 @@ public interface CompanyService {
 
     void deleteCompany(Long id);
 
+    Page<CompanyDto> searchCompanyByName(String keyword, Pageable pageable);
+
 }
