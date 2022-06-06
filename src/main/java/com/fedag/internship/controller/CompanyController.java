@@ -3,12 +3,19 @@ package com.fedag.internship.controller;
 import com.fedag.internship.domain.dto.CompanyRequest;
 import com.fedag.internship.domain.dto.CompanyRequestUpdate;
 import com.fedag.internship.domain.dto.CompanyResponse;
+import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.service.CompanyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +36,21 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/companies")
+@Tag(name = "Компания", description = "Работа с компаниями")
 public class CompanyController {
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
 
+    @Operation(summary = "Получение компании по Id")
+    @ApiResponse(responseCode = "200", description = "Компания найдена",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CompanyResponse.class))})
+    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @ApiResponse(responseCode = "404", description = "Компания не найдена",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/{id}")
     public ResponseEntity<CompanyResponse> getCompany(@PathVariable Long id) {
         CompanyResponse companyResponse = Optional.of(id)
@@ -42,6 +60,13 @@ public class CompanyController {
         return new ResponseEntity<>(companyResponse, OK);
     }
 
+    @Operation(summary = "Получение страницы с компаниями")
+    @ApiResponse(responseCode = "200", description = "Компании найдены",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Page.class))})
+    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
     public ResponseEntity<Page<CompanyResponse>> getAllCompanies(@PageableDefault(size = 5) Pageable pageable) {
         Page<CompanyResponse> companies = companyService.getAllCompanies(pageable)
@@ -49,9 +74,19 @@ public class CompanyController {
         return new ResponseEntity<>(companies, OK);
     }
 
+    @Operation(summary = "Создание компании")
+    @ApiResponse(responseCode = "201", description = "Компания создана",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CompanyResponse.class))})
+    @ApiResponse(responseCode = "400", description = "Ошибка валидации",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
     public ResponseEntity<CompanyResponse> createCompany(@RequestParam Long userId,
-                                           @RequestBody @Valid CompanyRequest companyRequest) {
+                                                         @RequestBody @Valid CompanyRequest companyRequest) {
         CompanyResponse companyResponse = Optional.ofNullable(companyRequest)
                 .map(companyMapper::fromRequest)
                 .map(companyEntity -> companyService.createCompany(userId, companyEntity))
@@ -60,9 +95,16 @@ public class CompanyController {
         return new ResponseEntity<>(companyResponse, CREATED);
     }
 
+    @Operation(summary = "Обновление компании")
+    @ApiResponse(responseCode = "200", description = "Компания обновлена",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CompanyResponse.class))})
+    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
     public ResponseEntity<CompanyResponse> updateCompany(@PathVariable Long id,
-                                           @RequestBody CompanyRequestUpdate companyRequestUpdate) {
+                                                         @RequestBody CompanyRequestUpdate companyRequestUpdate) {
         CompanyResponse companyResponse = Optional.ofNullable(companyRequestUpdate)
                 .map(companyMapper::fromRequestUpdate)
                 .map(company -> companyService.updateCompany(id, company))
@@ -71,6 +113,14 @@ public class CompanyController {
         return new ResponseEntity<>(companyResponse, OK);
     }
 
+    @Operation(summary = "Удаление компании")
+    @ApiResponse(responseCode = "200", description = "Компания удалена")
+    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCompany(@PathVariable Long id) {
         companyService.deleteCompany(id);
