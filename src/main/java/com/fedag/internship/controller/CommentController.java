@@ -1,9 +1,10 @@
 package com.fedag.internship.controller;
 
+import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.dto.request.CommentRequest;
 import com.fedag.internship.domain.dto.request.CommentRequestUpdate;
 import com.fedag.internship.domain.dto.response.CommentResponse;
-import com.fedag.internship.domain.dto.DtoErrorInfo;
+import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.mapper.CommentMapper;
 import com.fedag.internship.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,12 +35,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 /**
- * Rest Controller for class {@link com.fedag.internship.domain.entity.CommentEntity}.
+ * Rest Controller for class {@link CommentEntity}.
  *
  * @author damir.iusupov
  * @since 2022-06-01
  */
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/comments")
@@ -55,7 +55,7 @@ public class CommentController {
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @ApiResponse(responseCode = "404", description = "Компания не найдена",
+    @ApiResponse(responseCode = "404", description = "Комментарий не найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("{id}")
@@ -71,7 +71,7 @@ public class CommentController {
     @ApiResponse(responseCode = "200", description = "Комментарии найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
-    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
@@ -109,6 +109,9 @@ public class CommentController {
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
+    @ApiResponse(responseCode = "404", description = "Комментарий не найдена",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
     public ResponseEntity<CommentResponse> update(@PathVariable Long id,
                                                   @RequestBody @Valid CommentRequestUpdate commentRequestUpdate) {
@@ -125,7 +128,7 @@ public class CommentController {
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
+    @ApiResponse(responseCode = "404", description = "Комментарий не найден",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
