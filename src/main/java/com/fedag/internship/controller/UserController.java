@@ -1,8 +1,9 @@
 package com.fedag.internship.controller;
 
-import com.fedag.internship.domain.dto.*;
-import com.fedag.internship.domain.entity.CompanyEntity;
-import com.fedag.internship.domain.mapper.CompanyMapper;
+import com.fedag.internship.domain.dto.DtoErrorInfo;
+import com.fedag.internship.domain.dto.UserRequest;
+import com.fedag.internship.domain.dto.UserRequestUpdate;
+import com.fedag.internship.domain.dto.UserResponse;
 import com.fedag.internship.domain.mapper.UserMapper;
 import com.fedag.internship.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,18 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
-
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -39,7 +32,6 @@ import static org.springframework.http.HttpStatus.OK;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
-    private final CompanyMapper companyMapper;
 
     @Operation(summary = "Получение пользователя по Id")
     @ApiResponse(responseCode = "200", description = "Пользователь найден",
@@ -123,22 +115,6 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return new ResponseEntity<>(OK);
-    }
-
-//      @GetMapping
-//    public ResponseEntity<Page<List<CompanyResponse>>> getAllFavouriteCompanies(@PathVariable Long id) {
-//
-//          return new ResponseEntity<>(page, OK);
-//    }
-
-
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteFavouriteCompany(@PathVariable Long id,
-                                                    @RequestBody @Valid CompanyRequest companyRequest) {
-        userService.deleteFavouriteCompany(id, companyMapper.fromRequest(companyRequest));
         return new ResponseEntity<>(OK);
     }
 }

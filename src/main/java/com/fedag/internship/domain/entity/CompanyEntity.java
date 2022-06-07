@@ -46,5 +46,19 @@ public class CompanyEntity {
 
     @Setter(PRIVATE)
     @ManyToMany(cascade = CascadeType.ALL, fetch = LAZY)
+    @JoinTable(
+            name = "favourite-companies"
+            , joinColumns = @JoinColumn(name = "company_profile_id")
+            , inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<UserEntity> users = new ArrayList<>();
+
+    public void addFavouriteCompanyToUser(UserEntity userEntity) {
+        this.users.add(userEntity);
+        userEntity.getFavouriteCompanies().add(this);
+    }
+
+    public void removeFavouriteCompany(UserEntity userEntity) {
+        this.users.remove(userEntity);
+        userEntity.getFavouriteCompanies().remove(this);
+    }
 }

@@ -48,7 +48,7 @@ public class UserEntity {
     private List<CommentEntity> comments = new ArrayList<>();
 
     @Setter(PRIVATE)
-    @ManyToMany(mappedBy = "user", fetch = LAZY)
+    @ManyToMany(mappedBy = "users", fetch = LAZY)
     private List<CompanyEntity> favouriteCompanies = new ArrayList<>();
 
     public void addComments(CommentEntity commentEntity) {
