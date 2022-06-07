@@ -9,20 +9,19 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 /**
- * class Comment is domain-entity comment object.
+ * class ProposalCompany is domain-entity proposal company object.
  *
  * @author damir.iusupov
- * @since 2022-06-01
+ * @since 2022-06-07
  */
 @Getter
 @Setter
@@ -30,16 +29,16 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@Table(name = "comments")
-public class CommentEntity extends AuditableEntity {
+@Table(name = "proposal_company")
+public class ProposalCompanyEntity {
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "seq_comments_id")
-    @GenericGenerator(name = "seq_comments_id", strategy = "sequence",
-            parameters = {@Parameter(name = "sequence", value = "seq_comments_id")})
+    @GeneratedValue(strategy = SEQUENCE, generator = "seq_proposal_company_id")
+    @GenericGenerator(name = "seq_proposal_company_id", strategy = "sequence",
+            parameters = {@Parameter(name = "sequence", value = "seq_proposal_company_id")})
     private Long id;
-    private String text;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private String name;
+
+    @Enumerated(STRING)
+    private Status status;
 }

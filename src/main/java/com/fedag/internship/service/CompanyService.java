@@ -1,21 +1,20 @@
 package com.fedag.internship.service;
 
-import com.fedag.internship.domain.dto.CompanyDto;
+import com.fedag.internship.domain.entity.CompanyEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface CompanyService {
 
-    CompanyDto getCompanyById(Long id);
+    CompanyEntity getCompanyById(Long id);
 
-    Page<CompanyDto> getAllCompanies(Pageable pageable);
+    Page<CompanyEntity> getAllCompanies(Pageable pageable);
 
-    CompanyDto createCompany(CompanyDto companyDto);
+    CompanyEntity createCompany(Long userId, CompanyEntity companyDto);
 
-    CompanyDto updateCompany(CompanyDto companyDto);
+    CompanyEntity updateCompany(Long id, CompanyEntity companyDto);
 
     void deleteCompany(Long id);
 
+    Page<CompanyEntity> searchCompanyByName(String keyword, Pageable pageable);
 }

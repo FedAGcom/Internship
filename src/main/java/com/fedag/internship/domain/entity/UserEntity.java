@@ -4,15 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
+import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @Setter
@@ -20,6 +25,8 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@Accessors(chain = true)
+@EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "seq_users_id")
@@ -29,5 +36,28 @@ public class UserEntity {
     private String email;
     private String firstName;
     private String lastName;
-    private String timeOfCreating;
+
+    @CreatedDate
+    private LocalDateTime created;
+
+    @OneToOne(mappedBy = "user")
+    private CompanyEntity company;
+
+    @Setter(PRIVATE)
+    @OneToMany(mappedBy = "user", fetch = LAZY)
+    private List<CommentEntity> comments = new ArrayList<>();
+
+    @Setter(PRIVATE)
+    @ManyToMany(mappedBy = "users", fetch = LAZY)
+    private List<CompanyEntity> favouriteCompanies = new ArrayList<>();
+
+    public void addComments(CommentEntity commentEntity) {
+        this.comments.add(commentEntity);
+        commentEntity.setUser(this);
+    }
+
+    public void removeComments(CommentEntity commentEntity) {
+        this.comments.remove(commentEntity);
+    }
+
 }

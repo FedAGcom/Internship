@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.4.0
+      author: damir.iusupov
+      changes:
+        - createSequence:
+            dataType:  BIGINT
+            incrementBy:  1
+            sequenceName:  seq_proposal_company_id
+            startValue:  1
+  - changeSet:
+      id: 1.4.1
+      author: damir.iusupov
+      changes:
+        - createTable:
+            tableName: proposal_company
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
