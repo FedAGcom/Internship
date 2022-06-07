@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
- * class CommentMapperImpl
+ * class CommentMapperImpl is implementation of {@link CommentMapper} interface.
  *
  * @author damir.iusupov
  * @since 2022-06-01

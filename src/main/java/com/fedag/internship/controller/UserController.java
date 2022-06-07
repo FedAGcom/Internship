@@ -63,7 +63,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Пользователи найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
-    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
@@ -98,6 +98,9 @@ public class UserController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = UserResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")

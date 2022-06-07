@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * interface CommentService for class {@link com.fedag.internship.domain.entity.CommentEntity}.
+ * interface CommentService for class {@link CommentEntity}.
  *
  * @author damir.iusupov
  * @since 2022-06-01
