@@ -5,8 +5,6 @@ import com.fedag.internship.domain.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
-
 public interface UserService {
     UserEntity getUserById(Long id);
 
