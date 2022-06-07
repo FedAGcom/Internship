@@ -10,14 +10,15 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
+import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
+import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @Setter
@@ -42,4 +43,22 @@ public class CompanyEntity {
     @OneToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @Setter(PRIVATE)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = LAZY)
+    @JoinTable(
+            name = "favourite-companies"
+            , joinColumns = @JoinColumn(name = "company_profile_id")
+            , inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<UserEntity> users = new ArrayList<>();
+
+    public void addFavouriteCompanyToUser(UserEntity userEntity) {
+        this.users.add(userEntity);
+        userEntity.getFavouriteCompanies().add(this);
+    }
+
+    public void removeFavouriteCompany(UserEntity userEntity) {
+        this.users.remove(userEntity);
+        userEntity.getFavouriteCompanies().remove(this);
+    }
 }

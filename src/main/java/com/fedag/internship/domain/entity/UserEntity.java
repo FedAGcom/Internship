@@ -10,13 +10,7 @@ import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +47,10 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<CommentEntity> comments = new ArrayList<>();
 
+    @Setter(PRIVATE)
+    @ManyToMany(mappedBy = "users", fetch = LAZY)
+    private List<CompanyEntity> favouriteCompanies = new ArrayList<>();
+
     public void addComments(CommentEntity commentEntity) {
         this.comments.add(commentEntity);
         commentEntity.setUser(this);
@@ -61,4 +59,5 @@ public class UserEntity {
     public void removeComments(CommentEntity commentEntity) {
         this.comments.remove(commentEntity);
     }
+
 }
