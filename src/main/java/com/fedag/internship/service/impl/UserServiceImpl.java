@@ -1,5 +1,6 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.UserMapper;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +51,28 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         this.getUserById(id);
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CompanyEntity> getAllFavouriteCompanies(Long id) {
+        UserEntity userEntity = getUserById(id);
+        return userEntity.getFavouriteCompanies();
+    }
+
+    @Override
+    @Transactional
+    public UserEntity addFavouriteCompany(Long id, CompanyEntity companyEntity) {
+        UserEntity userEntity = getUserById(id);
+        List<CompanyEntity> list = userEntity.getFavouriteCompanies();
+        list.add(companyEntity);
+        return userRepository.save(userEntity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteFavouriteCompany(Long id, CompanyEntity companyEntity) {
+        UserEntity userEntity = getUserById(id);
+        List<CompanyEntity> list = userEntity.getFavouriteCompanies();
+        list.remove(companyEntity);
     }
 }
