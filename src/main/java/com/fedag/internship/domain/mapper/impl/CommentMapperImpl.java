@@ -1,9 +1,9 @@
 package com.fedag.internship.domain.mapper.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fedag.internship.domain.dto.CommentRequest;
-import com.fedag.internship.domain.dto.CommentRequestUpdate;
-import com.fedag.internship.domain.dto.CommentResponse;
+import com.fedag.internship.domain.dto.request.CommentRequest;
+import com.fedag.internship.domain.dto.request.CommentRequestUpdate;
+import com.fedag.internship.domain.dto.response.CommentResponse;
 import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.fedag.internship.controller;
 
-import com.fedag.internship.domain.dto.CommentRequest;
-import com.fedag.internship.domain.dto.CommentRequestUpdate;
-import com.fedag.internship.domain.dto.CommentResponse;
+import com.fedag.internship.domain.dto.request.CommentRequest;
+import com.fedag.internship.domain.dto.request.CommentRequestUpdate;
+import com.fedag.internship.domain.dto.response.CommentResponse;
 import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.mapper.CommentMapper;
 import com.fedag.internship.service.CommentService;

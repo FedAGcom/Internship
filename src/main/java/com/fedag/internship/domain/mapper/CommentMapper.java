@@ -1,8 +1,8 @@
 package com.fedag.internship.domain.mapper;
 
-import com.fedag.internship.domain.dto.CommentRequest;
-import com.fedag.internship.domain.dto.CommentRequestUpdate;
-import com.fedag.internship.domain.dto.CommentResponse;
+import com.fedag.internship.domain.dto.request.CommentRequest;
+import com.fedag.internship.domain.dto.request.CommentRequestUpdate;
+import com.fedag.internship.domain.dto.response.CommentResponse;
 
 /**
  * interface CommentMapper for Dto layer and for class {@link com.fedag.internship.domain.entity.CommentEntity}.
