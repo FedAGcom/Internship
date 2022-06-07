@@ -1,9 +1,9 @@
 package com.fedag.internship.domain.mapper.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fedag.internship.domain.dto.CompanyRequest;
-import com.fedag.internship.domain.dto.CompanyRequestUpdate;
-import com.fedag.internship.domain.dto.CompanyResponse;
+import com.fedag.internship.domain.dto.request.CompanyRequest;
+import com.fedag.internship.domain.dto.request.CompanyRequestUpdate;
+import com.fedag.internship.domain.dto.response.CompanyResponse;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import lombok.RequiredArgsConstructor;
