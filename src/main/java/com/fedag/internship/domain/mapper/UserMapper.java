@@ -1,8 +1,8 @@
 package com.fedag.internship.domain.mapper;
 
-import com.fedag.internship.domain.dto.UserRequest;
-import com.fedag.internship.domain.dto.UserRequestUpdate;
-import com.fedag.internship.domain.dto.UserResponse;
+import com.fedag.internship.domain.dto.request.UserRequest;
+import com.fedag.internship.domain.dto.request.UserRequestUpdate;
+import com.fedag.internship.domain.dto.response.UserResponse;
 import com.fedag.internship.domain.entity.UserEntity;
 
 public interface UserMapper {

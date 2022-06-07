@@ -1,5 +1,6 @@
-package com.fedag.internship.domain.dto;
+package com.fedag.internship.domain.dto.response;
 
+import com.fedag.internship.domain.entity.CommentEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 /**
- * class CommentDto for view from Comment's Dto layer of Comment.
+ * class CommentDto for view from Comment's Dto layer of {@link CommentEntity}.
  *
  * @author damir.iusupov
  * @since 2022-06-01

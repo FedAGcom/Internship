@@ -1,5 +1,6 @@
-package com.fedag.internship.domain.dto;
+package com.fedag.internship.domain.dto.request;
 
+import com.fedag.internship.domain.entity.CommentEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * class CommentUpdateDto for update Dto layer of Comment.
+ * class CommentUpdateDto for update Dto layer of {@link CommentEntity}.
  *
  * @author damir.iusupov
  * @since 2022-06-01

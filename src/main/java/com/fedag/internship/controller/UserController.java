@@ -1,9 +1,9 @@
 package com.fedag.internship.controller;
 
 import com.fedag.internship.domain.dto.DtoErrorInfo;
-import com.fedag.internship.domain.dto.UserRequest;
-import com.fedag.internship.domain.dto.UserRequestUpdate;
-import com.fedag.internship.domain.dto.UserResponse;
+import com.fedag.internship.domain.dto.request.UserRequest;
+import com.fedag.internship.domain.dto.request.UserRequestUpdate;
+import com.fedag.internship.domain.dto.response.UserResponse;
 import com.fedag.internship.domain.mapper.UserMapper;
 import com.fedag.internship.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +56,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Пользователи найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
-    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
@@ -91,6 +91,9 @@ public class UserController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = UserResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")

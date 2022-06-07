@@ -57,8 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Page<CompanyDto> searchCompanyByName(String keyword, Pageable pageable) {
-        return companyRepository.search(keyword, "name", pageable)
-                .map(companyMapper::toDto);
+    public Page<CompanyEntity> searchCompanyByName(String keyword, Pageable pageable) {
+        return companyRepository.search(keyword, "name", pageable);
     }
 }
