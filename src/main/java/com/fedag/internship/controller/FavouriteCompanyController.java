@@ -1,7 +1,7 @@
 package com.fedag.internship.controller;
 
-import com.fedag.internship.domain.dto.CompanyResponse;
-import com.fedag.internship.domain.dto.UserResponse;
+import com.fedag.internship.domain.dto.response.CompanyResponse;
+import com.fedag.internship.domain.dto.response.UserResponse;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.domain.mapper.UserMapper;
