@@ -51,6 +51,10 @@ public class UserEntity {
     @ManyToMany(mappedBy = "users", fetch = LAZY)
     private List<CompanyEntity> favouriteCompanies = new ArrayList<>();
 
+    @Setter(PRIVATE)
+    @ManyToMany(mappedBy = "users", fetch = LAZY)
+    private List<TraineePositionEntity> favouriteTraineePositions = new ArrayList<>();
+
     public void addComments(CommentEntity commentEntity) {
         this.comments.add(commentEntity);
         commentEntity.setUser(this);

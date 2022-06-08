@@ -8,13 +8,14 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
+import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @Setter
@@ -40,4 +41,21 @@ public class TraineePositionEntity {
     private String url;
     private String text;
 
+    @Setter(PRIVATE)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = LAZY)
+    @JoinTable(
+            name = "favourite-trainee-positions"
+            , joinColumns = @JoinColumn(name = "trainee_position_id")
+            , inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<UserEntity> users = new ArrayList<>();
+
+    public void addFavouriteTraineePositionToUser(UserEntity userEntity) {
+        this.users.add(userEntity);
+        userEntity.getFavouriteTraineePositions().add(this);
+    }
+
+    public void removeFavouriteTraineePosition(UserEntity userEntity) {
+        this.users.remove(userEntity);
+        userEntity.getFavouriteTraineePositions().remove(this);
+    }
 }
