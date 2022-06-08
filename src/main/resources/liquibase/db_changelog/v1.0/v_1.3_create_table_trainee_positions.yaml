@@ -38,25 +38,15 @@ databaseChangeLog:
               - column:
                   name: status
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
               - column:
                   name: location
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
               - column:
                   name: documents
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
               - column:
                   name: url
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
               - column:
                   name: text
                   type: VARCHAR(500)
-                  constraints:
-                    nullable: false

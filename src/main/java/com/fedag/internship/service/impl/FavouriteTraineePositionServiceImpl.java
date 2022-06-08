@@ -16,13 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class FavouriteTraineePositionServiceImpl implements FavouriteTraineePositionService {
-    private UserService userService;
-    private TraineePositionService traineePositionService;
-
+    private final TraineePositionService traineePositionService;
+    private final UserService userService;
 
     @Override
     public Page<TraineePositionEntity> getAllFavouriteTraineePositions(Long userId, Pageable pageable) {
-        UserEntity userEntity=userService.getUserById(userId);
+        UserEntity userEntity = userService.getUserById(userId);
         return new PageImpl<>(userEntity.getFavouriteTraineePositions(),
                 pageable,
                 userEntity.getFavouriteTraineePositions().size());
@@ -31,10 +30,10 @@ public class FavouriteTraineePositionServiceImpl implements FavouriteTraineePosi
     @Override
     @Transactional
     public UserEntity addFavouriteTraineePosition(Long userId, Long traineeId) {
-        UserEntity userEntity=userService.getUserById(userId);
+        UserEntity userEntity = userService.getUserById(userId);
         TraineePositionEntity traineePositionEntity = traineePositionService.getPositionById(traineeId);
         traineePositionEntity.addFavouriteTraineePositionToUser(userEntity);
-        return userService.createUser(userEntity);
+        return userEntity;
     }
 
     @Override
