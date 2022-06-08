@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,6 +61,10 @@ public class TraineePositionEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<UserEntity> users = new ArrayList<>();
 
+    @Setter(PRIVATE)
+    @OneToMany(mappedBy = "traineePosition", fetch = LAZY)
+    private List<CommentEntity> comments = new ArrayList<>();
+
     public void addFavouriteTraineePositionToUser(UserEntity userEntity) {
         this.users.add(userEntity);
         userEntity.getFavouriteTraineePositions().add(this);
@@ -68,5 +73,14 @@ public class TraineePositionEntity {
     public void removeFavouriteTraineePosition(UserEntity userEntity) {
         this.users.remove(userEntity);
         userEntity.getFavouriteTraineePositions().remove(this);
+    }
+
+    public void addComments(CommentEntity commentEntity) {
+        this.comments.add(commentEntity);
+        commentEntity.setTraineePosition(this);
+    }
+
+    public void removeComments(CommentEntity commentEntity) {
+        this.comments.remove(commentEntity);
     }
 }

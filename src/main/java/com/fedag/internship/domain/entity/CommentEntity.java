@@ -38,8 +38,17 @@ public class CommentEntity extends AuditableEntity {
             parameters = {@Parameter(name = "sequence", value = "seq_comments_id")})
     private Long id;
     private String text;
+    private Double rating;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "trainee_position_id")
+    private TraineePositionEntity traineePosition;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "company_id")
+    private CompanyEntity company;
 }

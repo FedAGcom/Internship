@@ -54,15 +54,6 @@ public class CommentServiceImpl_deleteComment {
         }
     }
 
-    /**
-     * public void deleteComment(Long id) {
-     *         CommentEntity comment = this.getCommentById(id);
-     *         final UserEntity userEntity = userService.getUserById(comment.getUser().getId());
-     *         userEntity.removeComments(comment);
-     *         commentRepository.deleteById(id);
-     *     }
-     */
-
     @Test
     public void testPositive() {
         Long id = anyLong();
