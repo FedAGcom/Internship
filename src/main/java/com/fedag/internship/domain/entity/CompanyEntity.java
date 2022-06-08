@@ -10,9 +10,15 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
-
-import javax.persistence.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,16 +46,16 @@ public class CompanyEntity {
     private Double rating;
     private String location;
     private String link;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @Setter(PRIVATE)
     @ManyToMany(cascade = CascadeType.ALL, fetch = LAZY)
-    @JoinTable(
-            name = "favourite-companies"
-            , joinColumns = @JoinColumn(name = "company_profile_id")
-            , inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "favourite_companies",
+            joinColumns = @JoinColumn(name = "company_profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<UserEntity> users = new ArrayList<>();
 
     public void addFavouriteCompanyToUser(UserEntity userEntity) {

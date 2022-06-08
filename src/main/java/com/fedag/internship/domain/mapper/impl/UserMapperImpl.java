@@ -5,6 +5,8 @@ import com.fedag.internship.domain.dto.request.UserRequest;
 import com.fedag.internship.domain.dto.request.UserRequestUpdate;
 import com.fedag.internship.domain.dto.response.UserResponse;
 import com.fedag.internship.domain.entity.CommentEntity;
+import com.fedag.internship.domain.entity.CompanyEntity;
+import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,14 @@ public class UserMapperImpl implements UserMapper {
                 .setCommentIds(userEntity.getComments()
                         .stream()
                         .map(CommentEntity::getId)
+                        .collect(Collectors.toList()))
+                .setFavouriteCompanyIds(userEntity.getFavouriteCompanies()
+                        .stream()
+                        .map(CompanyEntity::getId)
+                        .collect(Collectors.toList()))
+                .setFavouriteTraineePositionIds(userEntity.getFavouriteTraineePositions()
+                        .stream()
+                        .map(TraineePositionEntity::getId)
                         .collect(Collectors.toList()));
     }
 

@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TraineePositionServiceImpl implements TraineePositionService {
-
     private final TraineePositionRepository positionRepository;
     private final TraineePositionMapper positionMapper;
+
     @Override
     public TraineePositionEntity getPositionById(Long id) {
         return positionRepository.findById(id)
@@ -30,11 +30,13 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     }
 
     @Override
-    public TraineePositionEntity createPosition(Long userId, TraineePositionEntity positionEntity) {
+    @Transactional
+    public TraineePositionEntity createPosition(TraineePositionEntity positionEntity) {
         return positionRepository.save(positionEntity);
     }
 
     @Override
+    @Transactional
     public TraineePositionEntity updatePosition(Long id, TraineePositionEntity positionEntity) {
         TraineePositionEntity target = this.getPositionById(id);
         TraineePositionEntity result = positionMapper.merge(positionEntity, target);
@@ -42,9 +44,9 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     }
 
     @Override
+    @Transactional
     public void deletePosition(Long id) {
         this.getPositionById(id);
         positionRepository.deleteById(id);
-
     }
 }

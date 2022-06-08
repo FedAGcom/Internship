@@ -9,3 +9,7 @@ databaseChangeLog:
       file: classpath:liquibase/db_changelog/v1.0/v_1.3_create_table_trainee_positions.yaml
   - include:
       file: classpath:liquibase/db_changelog/v1.0/v_1.4_create_table_proposal_company_profiles.yaml
+  - include:
+      file: classpath:liquibase/db_changelog/v1.0/v_1.5_create_table_favourite_trainee_position.yaml
+  - include:
+      file: classpath:liquibase/db_changelog/v1.0/v_1.6_create_table_favourite_companies.yaml

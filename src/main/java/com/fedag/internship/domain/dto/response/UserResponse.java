@@ -45,4 +45,10 @@ public class UserResponse {
 
     @Schema(description = "Список идентификаторов комментариев пользователя", example = "[1, 2, 3]")
     private List<Long> commentIds;
+
+    @Schema(description = "Список идентификаторов избранных компаний", example = "[1, 2, 3]")
+    private List<Long> favouriteCompanyIds;
+
+    @Schema(description = "Список идентификаторов избранных стажировок", example = "[1, 2, 3]")
+    private List<Long> favouriteTraineePositionIds;
 }
