@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.search.annotations.Field;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -44,7 +45,7 @@ public class TraineePositionEntity {
 
     @CreatedDate
     private LocalDateTime date;
-
+    @Field
     private String name;
     private String employeePosition;
     private String status;
