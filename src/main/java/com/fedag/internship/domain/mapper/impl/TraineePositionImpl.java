@@ -1,9 +1,9 @@
 package com.fedag.internship.domain.mapper.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fedag.internship.domain.dto.TraineePositionRequest;
-import com.fedag.internship.domain.dto.TraineePositionResponse;
-import com.fedag.internship.domain.dto.TraineePositionUpdate;
+import com.fedag.internship.domain.dto.request.TraineePositionRequest;
+import com.fedag.internship.domain.dto.request.TraineePositionRequestUpdate;
+import com.fedag.internship.domain.dto.response.TraineePositionResponse;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TraineePositionImpl implements TraineePositionMapper {
     private final ObjectMapper objectMapper;
+
     @Override
     public TraineePositionResponse toResponse(TraineePositionEntity positionEntity) {
         return new TraineePositionResponse()
@@ -33,7 +34,7 @@ public class TraineePositionImpl implements TraineePositionMapper {
     }
 
     @Override
-    public TraineePositionEntity fromRequestUpdate(TraineePositionUpdate positionUpdate) {
+    public TraineePositionEntity fromRequestUpdate(TraineePositionRequestUpdate positionUpdate) {
         return objectMapper.convertValue(positionUpdate, TraineePositionEntity.class);
     }
 
@@ -41,9 +42,6 @@ public class TraineePositionImpl implements TraineePositionMapper {
     public TraineePositionEntity merge(TraineePositionEntity source, TraineePositionEntity target) {
         if (source.getName() != null) {
             target.setName(source.getName());
-        }
-        if (source.getDate() != null) {
-            target.setDate(source.getDate());
         }
         if (source.getEmployeePosition() != null) {
             target.setEmployeePosition(source.getEmployeePosition());

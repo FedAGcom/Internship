@@ -12,14 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class FavouriteCompanyServiceImpl implements FavouriteCompanyService {
-    private UserService userService;
-    private CompanyService companyService;
-
+    private final CompanyService companyService;
+    private final UserService userService;
 
     @Override
     public Page<CompanyEntity> getAllFavouriteCompanies(Long userId, Pageable pageable) {
@@ -35,7 +33,7 @@ public class FavouriteCompanyServiceImpl implements FavouriteCompanyService {
         UserEntity userEntity = userService.getUserById(userId);
         CompanyEntity companyEntity = companyService.getCompanyById(companyId);
         companyEntity.addFavouriteCompanyToUser(userEntity);
-        return userService.createUser(userEntity);
+        return userEntity;
     }
 
     @Override

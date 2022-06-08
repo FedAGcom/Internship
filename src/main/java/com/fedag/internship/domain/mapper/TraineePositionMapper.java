@@ -1,8 +1,8 @@
 package com.fedag.internship.domain.mapper;
 
-import com.fedag.internship.domain.dto.TraineePositionRequest;
-import com.fedag.internship.domain.dto.TraineePositionResponse;
-import com.fedag.internship.domain.dto.TraineePositionUpdate;
+import com.fedag.internship.domain.dto.request.TraineePositionRequest;
+import com.fedag.internship.domain.dto.request.TraineePositionRequestUpdate;
+import com.fedag.internship.domain.dto.response.TraineePositionResponse;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 
 public interface TraineePositionMapper {
@@ -10,7 +10,7 @@ public interface TraineePositionMapper {
 
     TraineePositionEntity fromRequest(TraineePositionRequest userRequest);
 
-    TraineePositionEntity fromRequestUpdate(TraineePositionUpdate positionUpdate);
+    TraineePositionEntity fromRequestUpdate(TraineePositionRequestUpdate positionUpdate);
 
     TraineePositionEntity merge(TraineePositionEntity source, TraineePositionEntity target);
 }

@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.6.0
+      author: damir.iusupov
+      changes:
+        - createTable:
+            tableName: favourite_companies
+            columns:
+              - column:
+                  name: company_profile_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+  - changeSet:
+      id: 1.6.1
+      author: damir.iusupov
+      changes:
+        - addPrimaryKey:
+            columnNames: company_profile_id, user_id
+            constraintName: pk_favourite_companies
+            tableName: favourite_companies
+  - changeSet:
+      id: 1.6.2
+      author: damir.iusupov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: favourite_companies
+            constraintName: fk_favourite_companies_users
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1.6.3
+      author: damir.iusupov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: company_profile_id
+            baseTableName: favourite_companies
+            constraintName: fk_favourite_companies_companies
+            referencedColumnNames: id
+            referencedTableName: company_profiles

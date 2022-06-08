@@ -9,7 +9,7 @@ public interface TraineePositionService {
 
     Page<TraineePositionEntity> getAllPositions(Pageable pageable);
 
-    TraineePositionEntity createPosition(Long userId, TraineePositionEntity positionEntity);
+    TraineePositionEntity createPosition(TraineePositionEntity positionEntity);
 
     TraineePositionEntity updatePosition(Long id, TraineePositionEntity positionEntity);
 
