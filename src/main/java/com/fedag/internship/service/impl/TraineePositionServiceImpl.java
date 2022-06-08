@@ -1,5 +1,6 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
@@ -48,5 +49,10 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     public void deletePosition(Long id) {
         this.getPositionById(id);
         positionRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<TraineePositionEntity> findPositionByCompanyName(String keyword, Pageable pageable) {
+        return positionRepository.search(keyword, "name", pageable);
     }
 }
