@@ -35,7 +35,7 @@ public class ProposalCompanyServiceImpl implements ProposalCompanyService {
     @Override
     public ProposalCompanyEntity getProposalCompanyById(Long id) {
         return proposalCompanyRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ProposalCompany", "id", id));
+                .orElseThrow(() -> new EntityNotFoundException("ProposalCompany", "Id", id));
     }
 
     @Override
