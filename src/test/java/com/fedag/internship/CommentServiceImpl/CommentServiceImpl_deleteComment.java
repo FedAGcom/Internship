@@ -36,8 +36,6 @@ public class CommentServiceImpl_deleteComment {
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private CommentMapper commentMapper;
-    @Mock
     private UserService userService;
 
     @Test
