@@ -81,7 +81,7 @@ public class CommentController {
         return new ResponseEntity<>(result, OK);
     }
 
-    @Operation(summary = "Создание комментария")
+    @Operation(summary = "Создание комментария для компании")
     @ApiResponse(responseCode = "201", description = "Комментарий создан",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CommentResponse.class))})
@@ -91,12 +91,35 @@ public class CommentController {
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PostMapping
-    public ResponseEntity<CommentResponse> create(@RequestParam Long userId,
-                                                  @RequestBody @Valid CommentRequest commentRequest) {
+    @PostMapping("/company")
+    public ResponseEntity<CommentResponse> createForCompany(@RequestParam Long userId,
+                                                            @RequestParam Long companyId,
+                                                            @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse result = Optional.ofNullable(commentRequest)
                 .map(commentMapper::fromRequest)
-                .map(comment -> commentService.createComment(userId, comment))
+                .map(comment -> commentService.createCommentForCompany(userId, companyId, comment))
+                .map(commentMapper::toResponse)
+                .orElseThrow();
+        return new ResponseEntity<>(result, CREATED);
+    }
+
+    @Operation(summary = "Создание комментария для позиции стажировки")
+    @ApiResponse(responseCode = "201", description = "Комментарий создан",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CommentResponse.class))})
+    @ApiResponse(responseCode = "400", description = "Ошибка валидации",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PostMapping("/trainee-position")
+    public ResponseEntity<CommentResponse> createForTraineePosition(@RequestParam Long userId,
+                                                                    @RequestParam Long positionId,
+                                                                    @RequestBody @Valid CommentRequest commentRequest) {
+        CommentResponse result = Optional.ofNullable(commentRequest)
+                .map(commentMapper::fromRequest)
+                .map(comment -> commentService.createCommentForTraineePosition(userId, positionId, comment))
                 .map(commentMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);

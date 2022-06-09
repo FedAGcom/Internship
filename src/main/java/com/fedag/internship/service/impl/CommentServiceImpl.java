@@ -1,11 +1,15 @@
 package com.fedag.internship.service.impl;
 
 import com.fedag.internship.domain.entity.CommentEntity;
+import com.fedag.internship.domain.entity.CompanyEntity;
+import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.CommentMapper;
 import com.fedag.internship.repository.CommentRepository;
 import com.fedag.internship.service.CommentService;
+import com.fedag.internship.service.CompanyService;
+import com.fedag.internship.service.TraineePositionService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +32,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final UserService userService;
+    private final CompanyService companyService;
+    private final TraineePositionService traineePositionService;
 
     @Override
     public CommentEntity getCommentById(Long id) {
@@ -42,9 +48,23 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentEntity createComment(Long userId, CommentEntity commentEntity) {
+    public CommentEntity createCommentForCompany(Long userId, Long companyId, CommentEntity commentEntity) {
         final UserEntity userEntity = userService.getUserById(userId);
         userEntity.addComments(commentEntity);
+        final CompanyEntity companyEntity = companyService.getCompanyById(companyId);
+        companyEntity.addComments(commentEntity);
+        return commentRepository.save(commentEntity);
+    }
+
+    @Override
+    @Transactional
+    public CommentEntity createCommentForTraineePosition(Long userId,
+                                                         Long traineePositionId,
+                                                         CommentEntity commentEntity) {
+        final UserEntity userEntity = userService.getUserById(userId);
+        userEntity.addComments(commentEntity);
+        final TraineePositionEntity traineePosition = traineePositionService.getPositionById(traineePositionId);
+        traineePosition.addComments(commentEntity);
         return commentRepository.save(commentEntity);
     }
 
