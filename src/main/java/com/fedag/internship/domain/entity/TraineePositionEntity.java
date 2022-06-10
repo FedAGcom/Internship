@@ -8,19 +8,13 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.bridge.builtin.IntegerBridge;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +31,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Accessors(chain = true)
 @Table(name = "trainee_positions")
 @EntityListeners(AuditingEntityListener.class)
+@Indexed
 public class TraineePositionEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "seq_trainee_positions_id")
@@ -46,7 +41,13 @@ public class TraineePositionEntity {
 
     @CreatedDate
     private LocalDateTime date;
+
     @Field
+    @FieldBridge(impl = IntegerBridge.class)
+    @ManyToOne
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private CompanyEntity company;
+
     private String name;
     private String employeePosition;
     private String status;

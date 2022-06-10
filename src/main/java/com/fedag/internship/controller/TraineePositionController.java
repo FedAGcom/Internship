@@ -3,7 +3,6 @@ package com.fedag.internship.controller;
 import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.dto.request.TraineePositionRequest;
 import com.fedag.internship.domain.dto.request.TraineePositionRequestUpdate;
-import com.fedag.internship.domain.dto.response.CompanyResponse;
 import com.fedag.internship.domain.dto.response.TraineePositionResponse;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
 import com.fedag.internship.service.TraineePositionService;
@@ -122,8 +121,8 @@ public class TraineePositionController {
         return new ResponseEntity<>(OK);
     }
 
-    @Operation(summary = "Получение страницы с компаниями по критериям")
-    @ApiResponse(responseCode = "200", description = "Компании найдены",
+    @Operation(summary = "Получение страницы с позициями по критериям")
+    @ApiResponse(responseCode = "200", description = "Позиции найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
@@ -131,8 +130,8 @@ public class TraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/searchposition")
     public ResponseEntity<Page<TraineePositionResponse>> search(@RequestParam String keyword, Pageable pageable) {
-        Page<TraineePositionResponse> companies = positionService.findPositionByCompanyName(keyword, pageable)
+        Page<TraineePositionResponse> positions = positionService.findPositionByCompany(keyword, pageable)
                 .map(positionMapper::toResponse);
-        return new ResponseEntity<>(companies, OK);
+        return new ResponseEntity<>(positions, OK);
     }
 }

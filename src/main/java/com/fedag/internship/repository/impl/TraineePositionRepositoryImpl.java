@@ -1,6 +1,5 @@
 package com.fedag.internship.repository.impl;
 
-import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.repository.PositionsSearcher;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
-public class PositionSearcherImpl implements PositionsSearcher {
+public class TraineePositionRepositoryImpl implements PositionsSearcher {
 
     private final EntityManager entityManager;
 
@@ -46,16 +45,16 @@ public class PositionSearcherImpl implements PositionsSearcher {
                 .onField(searchCriteria)
                 .matching(lowerCaseKeyword)
                 .createQuery();
-        Query allCompaniesQuery = queryBuilder
+        Query allPositionsQuery = queryBuilder
                 .all()
                 .createQuery();
         Query resultQuery = queryBuilder
                 .bool()
                 .should(fullMatchQuery)
                 .should(fuzzyQuery)
-                .should(allCompaniesQuery)
+                .should(allPositionsQuery)
                 .createQuery();
-        FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(resultQuery, CompanyEntity.class);
+        FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(resultQuery, TraineePositionEntity.class);
         fullTextQuery.setFirstResult(pageable.getPageSize() * pageable.getPageNumber());
         fullTextQuery.setMaxResults(pageable.getPageSize());
         List<TraineePositionEntity> positions = fullTextQuery.getResultList();

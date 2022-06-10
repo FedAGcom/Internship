@@ -1,6 +1,5 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
@@ -18,8 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TraineePositionServiceImpl implements TraineePositionService {
+
     private final TraineePositionRepository positionRepository;
+
     private final TraineePositionMapper positionMapper;
+
 
     @Override
     public TraineePositionEntity getPositionById(Long id) {
@@ -71,7 +73,7 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     }
 
     @Override
-    public Page<TraineePositionEntity> findPositionByCompanyName(String keyword, Pageable pageable) {
-        return positionRepository.search(keyword, "name", pageable);
+    public Page<TraineePositionEntity> findPositionByCompany(String keyword, Pageable pageable) {
+        return positionRepository.search(keyword, "company", pageable);
     }
 }
