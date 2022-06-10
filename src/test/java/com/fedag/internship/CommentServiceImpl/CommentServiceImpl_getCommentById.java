@@ -45,7 +45,7 @@ public class CommentServiceImpl_getCommentById {
     }
 
     @Test
-    public void testCommentFound() {
+    public void testPositive() {
         Long id = anyLong();
         CommentEntity comment = new CommentEntity().setText("some text # 1");
         when(commentRepository.findById(id)).thenReturn(Optional.of(comment));

@@ -22,9 +22,16 @@ public class CommentMapperImpl implements CommentMapper {
 
     @Override
     public CommentResponse toResponse(CommentEntity commentEntity) {
-        return new CommentResponse()
-                .setId(commentEntity.getId())
+        CommentResponse result = new CommentResponse();
+        if (commentEntity.getTraineePosition() != null) {
+            result.setTraineePositionId(commentEntity.getTraineePosition().getId());
+        }
+        if (commentEntity.getCompany() != null) {
+            result.setCompanyId(commentEntity.getCompany().getId());
+        }
+        return result.setId(commentEntity.getId())
                 .setText(commentEntity.getText())
+                .setRating(commentEntity.getRating())
                 .setCreated(commentEntity.getCreated())
                 .setUpdated(commentEntity.getUpdated())
                 .setUserId(commentEntity.getUser().getId());
@@ -42,7 +49,12 @@ public class CommentMapperImpl implements CommentMapper {
 
     @Override
     public CommentEntity merge(CommentEntity source, CommentEntity target) {
-        target.setText(source.getText());
+        if (source.getText() != null) {
+            target.setText(source.getText());
+        }
+        if (source.getRating() != null) {
+            target.setRating(source.getRating());
+        }
         return target;
     }
 }
