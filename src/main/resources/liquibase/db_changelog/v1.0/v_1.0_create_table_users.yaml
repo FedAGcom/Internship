@@ -27,18 +27,6 @@ databaseChangeLog:
                     unique: true
                     nullable: false
               - column:
-                  name: password
-                  type: VARCHAR(255)
-                  constraints:
-                    unique: true
-                    nullable: false
-              - column:
-                  name: role
-                  type: VARCHAR(255)
-                  constraints:
-                    unique: true
-                    nullable: false
-              - column:
                   name: first_name
                   type: VARCHAR(255)
                   constraints:
@@ -53,3 +41,26 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
+
+  - changeSet:
+      id: 1.0.2
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: enabled
+                    type: VARCHAR(255)
+

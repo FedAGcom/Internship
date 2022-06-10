@@ -37,6 +37,7 @@ public class UserEntity {
     private String firstName;
     private String lastName;
     private String password;
+    private Boolean enabled;
 
     @Enumerated(EnumType.STRING)
     private Role role;
