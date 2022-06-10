@@ -41,4 +41,6 @@ public class ProposalCompanyEntity {
 
     @Enumerated(STRING)
     private Status status;
+
+    private String description;
 }

@@ -30,4 +30,12 @@ public class ProposalCompanyRequest {
     @NotBlank
     @Size(max = 255)
     private String name;
+
+    @Schema(description = "Описание компании",
+            maxLength = 500,
+            minLength = 1,
+            example = "some description")
+    @NotBlank
+    @Size(max = 255)
+    private String description;
 }
