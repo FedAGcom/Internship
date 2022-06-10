@@ -12,6 +12,7 @@ import com.fedag.internship.service.CompanyService;
 import com.fedag.internship.service.TraineePositionService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author damir.iusupov
  * @since 2022-06-01
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -37,23 +39,35 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentEntity getCommentById(Long id) {
-        return commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment", "id", id));
+        log.info("Получение комментария c Id: {}", id);
+        CommentEntity result = commentRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Комментарий с Id: {} не найден", id);
+                    throw new EntityNotFoundException("Comment", "id", id);
+                });
+        log.info("Комментарияй c Id: {} получен", id);
+        return result;
     }
 
     @Override
     public Page<CommentEntity> getAllComments(Pageable pageable) {
-        return commentRepository.findAll(pageable);
+        log.info("Получение страницы с комментариями");
+        Page<CommentEntity> result = commentRepository.findAll(pageable);
+        log.info("Страница с комментариями получена");
+        return result;
     }
 
     @Override
     @Transactional
     public CommentEntity createCommentForCompany(Long userId, Long companyId, CommentEntity commentEntity) {
+        log.info("Создание комментария для компании с Id {} от пользователя с Id: {}", companyId, userId);
         final UserEntity userEntity = userService.getUserById(userId);
         userEntity.addComments(commentEntity);
         final CompanyEntity companyEntity = companyService.getCompanyById(companyId);
         companyEntity.addComments(commentEntity);
-        return commentRepository.save(commentEntity);
+        CommentEntity result = commentRepository.save(commentEntity);
+        log.info("Комментарий для компании с Id {} от пользователя с Id: {} создан", companyId, userId);
+        return result;
     }
 
     @Override
@@ -61,27 +75,35 @@ public class CommentServiceImpl implements CommentService {
     public CommentEntity createCommentForTraineePosition(Long userId,
                                                          Long traineePositionId,
                                                          CommentEntity commentEntity) {
+        log.info("Создание комментария для позиции стажировки с Id {} от пользователя с Id: {}", traineePositionId, userId);
         final UserEntity userEntity = userService.getUserById(userId);
         userEntity.addComments(commentEntity);
         final TraineePositionEntity traineePosition = traineePositionService.getPositionById(traineePositionId);
         traineePosition.addComments(commentEntity);
-        return commentRepository.save(commentEntity);
+        CommentEntity result = commentRepository.save(commentEntity);
+        log.info("Комментарий для позиции стажировки с Id {} от пользователя с Id: {} создан", traineePositionId, userId);
+        return result;
     }
 
     @Override
     @Transactional
     public CommentEntity updateComment(Long id, CommentEntity commentEntity) {
+        log.info("Обновление комментария с Id: {}", id);
         CommentEntity target = this.getCommentById(id);
-        CommentEntity result = commentMapper.merge(commentEntity, target);
-        return commentRepository.save(result);
+        CommentEntity update = commentMapper.merge(commentEntity, target);
+        CommentEntity result = commentRepository.save(update);
+        log.info("Комментарий с Id: {} обновлен", id);
+        return result;
     }
 
     @Override
     @Transactional
     public void deleteComment(Long id) {
+        log.info("Удаление комментария с Id: {}", id);
         CommentEntity comment = this.getCommentById(id);
         final UserEntity userEntity = userService.getUserById(comment.getUser().getId());
         userEntity.removeComments(comment);
         commentRepository.deleteById(id);
+        log.info("Комментарий с Id: {} удален", id);
     }
 }
