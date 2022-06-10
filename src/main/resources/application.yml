@@ -32,3 +32,9 @@ spring:
     url: jdbc:postgresql://host.docker.internal:5432/intership-db
     user: postgres
     password: admin
+
+  # Spring security configuration
+  jwt:
+    header: Authorization
+    secret: secret
+    expiration: 604800
