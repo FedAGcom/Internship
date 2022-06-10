@@ -35,7 +35,7 @@ public class CommentServiceImpl_getAllComments {
     private CommentRepository commentRepository;
 
     @Test
-    public void testCommentPositive() {
+    public void testPositive() {
         CommentEntity comment1 = new CommentEntity().setText("some text # 1");
         CommentEntity comment2 = new CommentEntity().setText("some text # 2");
         CommentEntity comment3 = new CommentEntity().setText("some text # 3");

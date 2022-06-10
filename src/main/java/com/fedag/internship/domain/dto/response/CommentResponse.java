@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 /**
@@ -31,12 +33,26 @@ public class CommentResponse {
             example = "some text")
     private String text;
 
+    @Schema(description = "Рейтинг у комментария",
+            maximum = "10",
+            minimum = "1",
+            example = "2")
+    @Min(1)
+    @Max(10)
+    private Double rating;
+
     @Schema(description = "Дата создания комментария")
     private LocalDateTime created;
 
     @Schema(description = "Дата обновления комментария")
     private LocalDateTime updated;
 
-    @Schema(description = "Идентификатор пользователя компании", example = "1")
+    @Schema(description = "Идентификатор пользователя оставившего комментарий", example = "1")
     private Long userId;
+
+    @Schema(description = "Идентификатор позиции стажировки", example = "1")
+    private Long traineePositionId;
+
+    @Schema(description = "Идентификатор компании к которой оставлен комментарий", example = "1")
+    private Long companyId;
 }

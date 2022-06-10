@@ -50,3 +50,19 @@ databaseChangeLog:
             constraintName: fk_comments_users
             referencedColumnNames: id
             referencedTableName: users
+  - changeSet:
+      id: 1.2.3
+      author: damir.iusupov
+      changes:
+        - addColumn:
+            tableName: comments
+            columns:
+              - column:
+                  name: rating
+                  type: DOUBLE
+              - column:
+                  name: trainee_position_id
+                  type: BIGINT
+              - column:
+                  name: company_id
+                  type: BIGINT
