@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
@@ -25,7 +24,13 @@ public class ProposalCompanyRequestUpdate {
             maxLength = 255,
             minLength = 1,
             example = "some name upd")
-    @NotBlank
     @Size(max = 255)
     private String name;
+
+    @Schema(description = "Описание компании",
+            maxLength = 500,
+            minLength = 1,
+            example = "some description upd")
+    @Size(max = 500)
+    private String description;
 }

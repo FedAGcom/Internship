@@ -25,7 +25,8 @@ public class ProposalCompanyMapperImpl implements ProposalCompanyMapper {
         return new ProposalCompanyResponse()
                 .setId(proposalCompanyEntity.getId())
                 .setName(proposalCompanyEntity.getName())
-                .setStatus(proposalCompanyEntity.getStatus());
+                .setStatus(proposalCompanyEntity.getStatus())
+                .setDescription(proposalCompanyEntity.getDescription());
     }
 
     @Override
@@ -40,7 +41,12 @@ public class ProposalCompanyMapperImpl implements ProposalCompanyMapper {
 
     @Override
     public ProposalCompanyEntity merge(ProposalCompanyEntity source, ProposalCompanyEntity target) {
-        target.setName(source.getName());
+        if (source.getName() != null) {
+            target.setName(source.getName());
+        }
+        if (source.getDescription() != null) {
+            target.setDescription(source.getDescription());
+        }
         return target;
     }
 }

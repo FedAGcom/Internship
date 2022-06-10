@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.7.0
+      author: damir.iusupov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: trainee_position_id
+            baseTableName: comments
+            constraintName: fk_comments_trainee_position
+            referencedColumnNames: id
+            referencedTableName: trainee_positions
+  - changeSet:
+      id: 1.7.1
+      author: damir.iusupov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: company_id
+            baseTableName: comments
+            constraintName: fk_comments_company
+            referencedColumnNames: id
+            referencedTableName: company_profiles

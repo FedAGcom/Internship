@@ -35,4 +35,11 @@ public class ProposalCompanyResponse {
             minLength = 1,
             example = "NEW")
     private Status status;
+
+
+    @Schema(description = "Описание компании",
+            maxLength = 500,
+            minLength = 1,
+            example = "some description")
+    private String description;
 }
