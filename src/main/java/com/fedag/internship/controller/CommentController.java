@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -59,6 +60,7 @@ public class CommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("{id}")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<CommentResponse> findById(@PathVariable Long id) {
         CommentResponse result = Optional.of(id)
                 .map(commentService::getCommentById)
@@ -92,6 +94,7 @@ public class CommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<CommentResponse> create(@RequestParam Long userId,
                                                   @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse result = Optional.ofNullable(commentRequest)
@@ -113,6 +116,7 @@ public class CommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<CommentResponse> update(@PathVariable Long id,
                                                   @RequestBody @Valid CommentRequestUpdate commentRequestUpdate) {
         CommentResponse result = Optional.ofNullable(commentRequestUpdate)
@@ -132,6 +136,7 @@ public class CommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         commentService.deleteComment(id);
         return new ResponseEntity<>(OK);

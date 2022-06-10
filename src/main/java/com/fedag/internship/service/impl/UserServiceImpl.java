@@ -50,4 +50,10 @@ public class UserServiceImpl implements UserService {
         this.getUserById(id);
         userRepository.deleteById(id);
     }
+
+    @Override
+    public UserEntity getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User", "Email", email));
+    }
 }
