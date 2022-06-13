@@ -43,6 +43,9 @@ public class TraineePositionImpl implements TraineePositionMapper {
         if (source.getName() != null) {
             target.setName(source.getName());
         }
+        if (source.getDate() != null) {
+            target.setDate(source.getDate());
+        }
         if (source.getEmployeePosition() != null) {
             target.setEmployeePosition(source.getEmployeePosition());
         }

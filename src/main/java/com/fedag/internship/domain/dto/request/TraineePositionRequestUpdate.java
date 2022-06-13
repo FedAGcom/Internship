@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,6 +19,10 @@ public class TraineePositionRequestUpdate {
             example = "some name upd")
     @Size(max = 255)
     private String name;
+
+
+    @Schema(description = "Дата создания позиции")
+    private LocalDateTime date;
 
     @Schema(description = "Должность для стажировки",
             maxLength = 255,
