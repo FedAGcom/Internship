@@ -1,5 +1,6 @@
-package com.fedag.internship.register;
+package com.fedag.internship.service.impl;
 
+import com.fedag.internship.service.EmailSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

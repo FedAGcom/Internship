@@ -1,4 +1,4 @@
-package com.fedag.internship.register;
+package com.fedag.internship.service;
 
 import com.fedag.internship.domain.dto.request.UserRequest;
 

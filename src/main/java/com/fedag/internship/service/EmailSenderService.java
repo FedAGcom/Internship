@@ -1,4 +1,4 @@
-package com.fedag.internship.register;
+package com.fedag.internship.service;
 
 import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;

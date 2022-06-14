@@ -1,12 +1,15 @@
-package com.fedag.internship.register;
+package com.fedag.internship.service.impl;
 
 import com.fedag.internship.domain.dto.request.UserRequest;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.InvalidConfirmationTokenException;
 import com.fedag.internship.domain.mapper.UserMapper;
+import com.fedag.internship.domain.entity.ConfirmationTokenEntity;
+import com.fedag.internship.service.ConfirmationTokenService;
+import com.fedag.internship.service.EmailSenderService;
+import com.fedag.internship.service.RegistrationService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

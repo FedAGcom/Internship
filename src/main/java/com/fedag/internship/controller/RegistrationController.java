@@ -1,7 +1,7 @@
-package com.fedag.internship.register;
+package com.fedag.internship.controller;
 
 import com.fedag.internship.domain.dto.request.UserRequest;
-import lombok.Getter;
+import com.fedag.internship.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

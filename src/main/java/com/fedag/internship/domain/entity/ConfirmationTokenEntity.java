@@ -1,4 +1,4 @@
-package com.fedag.internship.register;
+package com.fedag.internship.domain.entity;
 
 import com.fedag.internship.domain.entity.UserEntity;
 import lombok.AllArgsConstructor;

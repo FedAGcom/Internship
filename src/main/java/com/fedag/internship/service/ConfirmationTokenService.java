@@ -1,6 +1,7 @@
-package com.fedag.internship.register;
+package com.fedag.internship.service;
 
 import com.fedag.internship.domain.entity.UserEntity;
+import com.fedag.internship.domain.entity.ConfirmationTokenEntity;
 
 public interface ConfirmationTokenService {
 

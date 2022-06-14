@@ -1,7 +1,10 @@
-package com.fedag.internship.register;
+package com.fedag.internship.service.impl;
 
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
+import com.fedag.internship.domain.entity.ConfirmationTokenEntity;
+import com.fedag.internship.repository.ConfirmationTokenRepository;
+import com.fedag.internship.service.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
