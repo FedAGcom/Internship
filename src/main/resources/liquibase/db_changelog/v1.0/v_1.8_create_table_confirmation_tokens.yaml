@@ -30,6 +30,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: expired
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
                   name: user_id
                   type: BIGINT
                   constraints:

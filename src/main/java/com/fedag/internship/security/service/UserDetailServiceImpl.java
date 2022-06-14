@@ -19,6 +19,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
         UserEntity userEntity = userService.getUserByEmail(email);
         return new User(userEntity.getEmail(),
                 userEntity.getPassword(),
+                userEntity.getEnabled(),
+                false,
+                false,
+                false,
                 userEntity.getRole().getAuthorities());
     }
 }

@@ -6,7 +6,6 @@ import com.fedag.internship.domain.dto.request.UserRequestUpdate;
 import com.fedag.internship.domain.dto.response.UserResponse;
 import com.fedag.internship.domain.entity.*;
 import com.fedag.internship.domain.mapper.UserMapper;
-import com.fedag.internship.register.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -46,14 +45,8 @@ public class UserMapperImpl implements UserMapper {
         return objectMapper.convertValue(userRequest, UserEntity.class);
     }
 
-    public UserEntity fromRegistrationRequest(RegistrationRequest registrationRequest) {
-        return objectMapper.convertValue(registrationRequest, UserEntity.class);
-    }
-
     public UserEntity fromRequestUpdate(UserRequestUpdate userRequestUpdate) {
-        UserEntity userEntity = objectMapper.convertValue(userRequestUpdate, UserEntity.class);
-        userEntity.setRole(Role.USER);
-        return userEntity;
+        return objectMapper.convertValue(userRequestUpdate, UserEntity.class);
     }
 
     @Override

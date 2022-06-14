@@ -30,8 +30,16 @@ public class ConfirmationTokenEntity {
     private Long id;
     private String token;
 
+    public ConfirmationTokenEntity(String token, UserEntity userEntity, LocalDateTime expiredAt) {
+        this.token = token;
+        this.userEntity = userEntity;
+        this.expiredAt = expiredAt;
+    }
+
     @CreatedDate
     private LocalDateTime createdAt;
+
+    private LocalDateTime expiredAt;
 
     @OneToOne
     @JoinColumn(name = "user_id")

@@ -46,6 +46,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserEntity createUser(UserEntity userEntity) {
         log.info("Создание пользователя");
+        if (userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
+            throw new RuntimeException("Пользователь с такой почтой уже существует");
+        }
         String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
         userEntity.setPassword(encodedPassword);
         UserEntity result = userRepository.save(userEntity);

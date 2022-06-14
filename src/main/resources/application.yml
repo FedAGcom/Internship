@@ -33,8 +33,12 @@ spring:
     user: postgres
     password: admin
 
-  # Spring security configuration
+  # Spring security
   jwt:
     header: Authorization
     secret: secret
     expiration: 604800
+
+  # Confirmation token
+  token:
+    minutes-to-expire: 60
