@@ -15,7 +15,8 @@ import java.util.UUID;
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
     @Value(("${token.minutes-to-expire}"))
-    private final Long MINUTES_TO_EXPIRE;
+    private long MINUTES_TO_EXPIRE;
+
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
     @Transactional
@@ -31,7 +32,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     public ConfirmationTokenEntity getByToken(String token) {
         return confirmationTokenRepository.findByToken(token)
                 .orElseThrow(() -> {
-                    throw new EntityNotFoundException("ConfirmationToken", "Token", token);
+                    throw new EntityNotFoundException("ConfirmationToken", "token", token);
                 });
     }
 

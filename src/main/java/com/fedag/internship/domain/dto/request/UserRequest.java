@@ -43,7 +43,7 @@ public class UserRequest {
     @Schema(description = "Роль пользователя",
             maxLength = 255,
             minLength = 1,
-            example = "user")
+            example = "USER")
     @NotBlank
     @Size(max = 255)
     private Role role;
@@ -51,7 +51,7 @@ public class UserRequest {
     @Schema(description = "Активированный пользователь или нет",
             maxLength = 255,
             minLength = 1,
-            example = "true")
+            example = "false")
     @NotBlank
     @Size(max = 255)
     private Boolean enabled;

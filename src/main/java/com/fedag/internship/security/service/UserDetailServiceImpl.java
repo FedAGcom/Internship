@@ -20,9 +20,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         return new User(userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getEnabled(),
-                false,
-                false,
-                false,
+                true,
+                true,
+                true,
                 userEntity.getRole().getAuthorities());
     }
 }

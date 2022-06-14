@@ -2,9 +2,11 @@ package com.fedag.internship.register;
 
 import com.fedag.internship.domain.dto.request.UserRequest;
 import com.fedag.internship.domain.entity.UserEntity;
+import com.fedag.internship.domain.exception.InvalidConfirmationTokenException;
 import com.fedag.internship.domain.mapper.UserMapper;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,9 @@ import static java.time.LocalDateTime.*;
 @RequiredArgsConstructor
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
+    private static final String EMAIL_SUBJECT = "Подтверждение аккаунта";
+    private final static String LINK = "http://localhost:8080/registration?token=";
+
     private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
     private final UserMapper userMapper;
@@ -25,8 +30,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void register(UserRequest request) {
         UserEntity userEntity = userMapper.fromRequest(request);
         userService.createUser(userEntity);
-        confirmationTokenService.createTokenForUser(userEntity);
-        emailSenderService.send(userEntity.getEmail(), "token");
+        ConfirmationTokenEntity token = confirmationTokenService.createTokenForUser(userEntity);
+        String text = LINK + token.getToken();
+        emailSenderService.send(userEntity.getEmail(), EMAIL_SUBJECT, text);
     }
 
     @Transactional
@@ -36,9 +42,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         LocalDateTime tokenExpiredDate = confirmationToken.getExpiredAt();
         if (tokenExpiredDate.isBefore(now())) {
             userService.deleteUser(confirmationToken.getUserEntity().getId());
-            throw new RuntimeException("token is expired");
+            throw new InvalidConfirmationTokenException("Token is expired");
         }
         confirmationToken.getUserEntity().setEnabled(true);
         confirmationTokenService.deleteToken(confirmationToken);
     }
+
 }
