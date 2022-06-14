@@ -1,6 +1,7 @@
 package com.fedag.internship.domain.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fedag.internship.domain.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,30 @@ public class UserRequest {
     @NotBlank
     @Size(max = 255)
     private String firstName;
+
+    @Schema(description = "Пароль пользователя",
+            maxLength = 255,
+            minLength = 1,
+            example = "qwerty")
+    @NotBlank
+    @Size(max = 255)
+    private String password;
+
+    @Schema(description = "Роль пользователя",
+            maxLength = 255,
+            minLength = 1,
+            example = "user")
+    @NotBlank
+    @Size(max = 255)
+    private Role role;
+
+    @Schema(description = "Активированный пользователь или нет",
+            maxLength = 255,
+            minLength = 1,
+            example = "true")
+    @NotBlank
+    @Size(max = 255)
+    private Boolean enabled;
 
     @Schema(description = "Фамилия пользователя",
             maxLength = 255,

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserEntity getUserById(Long id) {
@@ -44,6 +46,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserEntity createUser(UserEntity userEntity) {
         log.info("Создание пользователя");
+        if (userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
+            throw new RuntimeException("Пользователь с такой почтой уже существует");
+        }
+        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
+        userEntity.setPassword(encodedPassword);
         UserEntity result = userRepository.save(userEntity);
         log.info("Пользователь создан");
         return result;
@@ -67,5 +74,11 @@ public class UserServiceImpl implements UserService {
         this.getUserById(id);
         userRepository.deleteById(id);
         log.info("Пользователь с Id: {} удален", id);
+    }
+
+    @Override
+    public UserEntity getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User", "Email", email));
     }
 }
