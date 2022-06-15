@@ -44,6 +44,7 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<TraineePositionResponse> getPosition(@PathVariable Long id) {
         TraineePositionResponse companyResponse = Optional.of(id)
                 .map(positionService::getPositionById)
@@ -77,6 +78,7 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<TraineePositionResponse> createPosition(@RequestBody @Valid TraineePositionRequest request) {
         TraineePositionResponse positionResponse = Optional.ofNullable(request)
                 .map(positionMapper::fromRequest)
@@ -97,6 +99,7 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<TraineePositionResponse> updatePosition(@PathVariable Long id,
                                                                   @RequestBody TraineePositionRequestUpdate update) {
         TraineePositionResponse positionResponse = Optional.ofNullable(update)
@@ -116,6 +119,7 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> deletePosition(@PathVariable Long id) {
         positionService.deletePosition(id);
         return new ResponseEntity<>(OK);

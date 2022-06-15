@@ -14,6 +14,15 @@ import org.hibernate.search.bridge.builtin.IntegerBridge;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,7 +48,6 @@ public class TraineePositionEntity {
             parameters = {@Parameter(name = "sequence", value = "seq_trainee_positions_id")})
     private Long id;
 
-    @CreatedDate
     private LocalDateTime date;
 
     @Field

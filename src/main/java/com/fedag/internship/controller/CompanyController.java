@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -52,6 +53,7 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<CompanyResponse> getCompany(@PathVariable Long id) {
         CompanyResponse companyResponse = Optional.of(id)
                 .map(companyService::getCompanyById)
@@ -85,6 +87,7 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<CompanyResponse> createCompany(@RequestParam Long userId,
                                                          @RequestBody @Valid CompanyRequest companyRequest) {
         CompanyResponse companyResponse = Optional.ofNullable(companyRequest)
@@ -106,6 +109,7 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<CompanyResponse> updateCompany(@PathVariable Long id,
                                                          @RequestBody CompanyRequestUpdate companyRequestUpdate) {
         CompanyResponse companyResponse = Optional.ofNullable(companyRequestUpdate)
@@ -125,6 +129,7 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> deleteCompany(@PathVariable Long id) {
         companyService.deleteCompany(id);
         return new ResponseEntity<>(OK);
