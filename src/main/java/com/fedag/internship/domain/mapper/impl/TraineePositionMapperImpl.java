@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TraineePositionImpl implements TraineePositionMapper {
+public class TraineePositionMapperImpl implements TraineePositionMapper {
     private final ObjectMapper objectMapper;
 
     @Override

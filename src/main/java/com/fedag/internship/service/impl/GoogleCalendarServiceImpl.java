@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.format.DateTimeFormatter;
 
 import static com.fedag.internship.domain.util.GoogleCalendarConstants.APPLICATION_NAME;
 import static com.fedag.internship.domain.util.GoogleCalendarConstants.CREDENTIALS_FILE_PATH;
@@ -45,7 +46,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     private final TraineePositionService traineePositionService;
 
     @SneakyThrows
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) {
+    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) {
         log.info("Получение credintails");
         log.info("Загрузка данных из {}", CREDENTIALS_FILE_PATH);
         InputStream in = GoogleCalendarConstants.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
@@ -87,17 +88,23 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         log.info("Добавление стажировки в календарь пользователю");
         final TraineePositionEntity traineePosition = traineePositionService.getPositionById(traineePositionId);
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT)).setApplicationName(APPLICATION_NAME).build();
+        Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, this.getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
         log.info("Создание нового календаря от пользователя");
         var calendar = new com.google.api.services.calendar.model.Calendar();
-        calendar.setSummary("Trainee Position");
+        calendar.setSummary(traineePosition.getName());
         var executedCalendar = service.calendars().insert(calendar).execute();
         log.info("Календарь создан");
         log.info("Создание евента в виде стажировки и добавление в календарь");
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss");
         Event event = new Event();
-        event.setSummary(traineePosition.getName())
+        event.setSummary(traineePosition.getEmployeePosition())
                 .setStart(new EventDateTime()
-                        .setDateTime(new DateTime(traineePosition.getDate().toString())))
+                        .setDateTime(new DateTime(traineePosition.getDate().format(formatterDate) +
+                                "T" +
+                                traineePosition.getDate().minusHours(3).format(formatterTime))))
                 .setEnd(event.getStart());
         service.events().insert(executedCalendar.getId(), event).execute();
         log.info("Евент создан и добавлен в календарь");
