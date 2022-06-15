@@ -27,6 +27,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
 
 		<!-- Data -->
 		<dependency>
@@ -38,7 +43,7 @@
 			<artifactId>hibernate-search-orm</artifactId>
 			<version>5.11.10.Final</version>
 		</dependency>
-		<dependency>
+			<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
@@ -91,6 +96,13 @@
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<version>${mockito-junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- JWT -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
 		</dependency>
 
 	</dependencies>
