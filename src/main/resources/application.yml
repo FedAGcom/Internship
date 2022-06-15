@@ -36,3 +36,5 @@ spring:
   # Variables for @Value
 elasticsearch:
   url: localhost:9200
+  connect-timeout: 3000
+  socket-timeout: 60000

@@ -23,11 +23,19 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
     @Value("${elasticsearch.url}")
     public String elasticsearchUrl;
 
+    @Value("${elasticsearch.connect-timeout}")
+    public int elasticsearchConnectTimeout;
+
+    @Value("${elasticsearch.socket-timeout}")
+    public int elasticsearchSocketTimeout;
+
     @Bean
     @Override
     public RestHighLevelClient elasticsearchClient() {
         final ClientConfiguration config = ClientConfiguration.builder()
                 .connectedTo(elasticsearchUrl)
+                .withConnectTimeout(elasticsearchConnectTimeout)
+                .withSocketTimeout(elasticsearchSocketTimeout)
                 .build();
         return RestClients.create(config).rest();
     }
