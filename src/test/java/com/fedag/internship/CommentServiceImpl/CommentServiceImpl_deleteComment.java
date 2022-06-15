@@ -36,8 +36,6 @@ public class CommentServiceImpl_deleteComment {
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private CommentMapper commentMapper;
-    @Mock
     private UserService userService;
 
     @Test
@@ -53,15 +51,6 @@ public class CommentServiceImpl_deleteComment {
             verify(commentRepository, times(0)).deleteById(anyLong());
         }
     }
-
-    /**
-     * public void deleteComment(Long id) {
-     *         CommentEntity comment = this.getCommentById(id);
-     *         final UserEntity userEntity = userService.getUserById(comment.getUser().getId());
-     *         userEntity.removeComments(comment);
-     *         commentRepository.deleteById(id);
-     *     }
-     */
 
     @Test
     public void testPositive() {

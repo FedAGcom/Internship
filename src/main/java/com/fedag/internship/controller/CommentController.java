@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -59,6 +60,7 @@ public class CommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("{id}")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<CommentResponse> findById(@PathVariable Long id) {
         CommentResponse result = Optional.of(id)
                 .map(commentService::getCommentById)
@@ -81,7 +83,7 @@ public class CommentController {
         return new ResponseEntity<>(result, OK);
     }
 
-    @Operation(summary = "Создание комментария")
+    @Operation(summary = "Создание комментария для компании")
     @ApiResponse(responseCode = "201", description = "Комментарий создан",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CommentResponse.class))})
@@ -91,12 +93,36 @@ public class CommentController {
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PostMapping
-    public ResponseEntity<CommentResponse> create(@RequestParam Long userId,
-                                                  @RequestBody @Valid CommentRequest commentRequest) {
+    @PostMapping("/company")
+    @PreAuthorize("hasAuthority('write')")
+    public ResponseEntity<CommentResponse> createForCompany(@RequestParam Long userId,
+                                                            @RequestParam Long companyId,
+                                                            @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse result = Optional.ofNullable(commentRequest)
                 .map(commentMapper::fromRequest)
-                .map(comment -> commentService.createComment(userId, comment))
+                .map(comment -> commentService.createCommentForCompany(userId, companyId, comment))
+                .map(commentMapper::toResponse)
+                .orElseThrow();
+        return new ResponseEntity<>(result, CREATED);
+    }
+
+    @Operation(summary = "Создание комментария для позиции стажировки")
+    @ApiResponse(responseCode = "201", description = "Комментарий создан",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CommentResponse.class))})
+    @ApiResponse(responseCode = "400", description = "Ошибка валидации",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PostMapping("/trainee-position")
+    public ResponseEntity<CommentResponse> createForTraineePosition(@RequestParam Long userId,
+                                                                    @RequestParam Long positionId,
+                                                                    @RequestBody @Valid CommentRequest commentRequest) {
+        CommentResponse result = Optional.ofNullable(commentRequest)
+                .map(commentMapper::fromRequest)
+                .map(comment -> commentService.createCommentForTraineePosition(userId, positionId, comment))
                 .map(commentMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
@@ -113,6 +139,7 @@ public class CommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<CommentResponse> update(@PathVariable Long id,
                                                   @RequestBody @Valid CommentRequestUpdate commentRequestUpdate) {
         CommentResponse result = Optional.ofNullable(commentRequestUpdate)
@@ -132,6 +159,7 @@ public class CommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         commentService.deleteComment(id);
         return new ResponseEntity<>(OK);

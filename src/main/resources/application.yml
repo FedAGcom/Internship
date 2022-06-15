@@ -33,6 +33,19 @@ spring:
     user: postgres
     password: admin
 
+ # Variables for @Value elasticsearch
+elasticsearch:
+  url: localhost:9200
+  connect-timeout: 3000
+  socket-timeout: 60000
+  
+  # Spring security configuration
+jwt:
+  header: Authorization
+  secret: secret
+  expiration: 604800
+  
   #Spring Scheduler
   job:
     timeForScheduler: 3600000
+

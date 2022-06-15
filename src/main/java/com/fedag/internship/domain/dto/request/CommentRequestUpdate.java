@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 /**
@@ -24,7 +25,14 @@ public class CommentRequestUpdate {
             maxLength = 500,
             minLength = 1,
             example = "some text upd")
-    @NotBlank
     @Size(max = 500)
     private String text;
+
+    @Schema(description = "Рейтинг у комментария",
+            maximum = "10",
+            minimum = "1",
+            example = "2")
+    @Min(1)
+    @Max(10)
+    private Double rating;
 }

@@ -7,17 +7,15 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,7 +32,6 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Table(name = "trainee_positions")
-@EntityListeners(AuditingEntityListener.class)
 public class TraineePositionEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "seq_trainee_positions_id")
@@ -42,9 +39,7 @@ public class TraineePositionEntity {
             parameters = {@Parameter(name = "sequence", value = "seq_trainee_positions_id")})
     private Long id;
 
-    @CreatedDate
     private LocalDateTime date;
-
     private String name;
     private String employeePosition;
     private String status;
@@ -60,6 +55,10 @@ public class TraineePositionEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<UserEntity> users = new ArrayList<>();
 
+    @Setter(PRIVATE)
+    @OneToMany(mappedBy = "traineePosition", fetch = LAZY)
+    private List<CommentEntity> comments = new ArrayList<>();
+
     public void addFavouriteTraineePositionToUser(UserEntity userEntity) {
         this.users.add(userEntity);
         userEntity.getFavouriteTraineePositions().add(this);
@@ -68,5 +67,14 @@ public class TraineePositionEntity {
     public void removeFavouriteTraineePosition(UserEntity userEntity) {
         this.users.remove(userEntity);
         userEntity.getFavouriteTraineePositions().remove(this);
+    }
+
+    public void addComments(CommentEntity commentEntity) {
+        this.comments.add(commentEntity);
+        commentEntity.setTraineePosition(this);
+    }
+
+    public void removeComments(CommentEntity commentEntity) {
+        this.comments.remove(commentEntity);
     }
 }
