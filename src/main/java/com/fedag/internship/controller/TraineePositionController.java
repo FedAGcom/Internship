@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -51,6 +52,7 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<TraineePositionResponse> getPosition(@PathVariable Long id) {
         TraineePositionResponse companyResponse = Optional.of(id)
                 .map(positionService::getPositionById)
@@ -84,6 +86,7 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<TraineePositionResponse> createPosition(@RequestBody @Valid TraineePositionRequest request) {
         TraineePositionResponse positionResponse = Optional.ofNullable(request)
                 .map(positionMapper::fromRequest)
@@ -104,6 +107,7 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<TraineePositionResponse> updatePosition(@PathVariable Long id,
                                                                   @RequestBody TraineePositionRequestUpdate update) {
         TraineePositionResponse positionResponse = Optional.ofNullable(update)
@@ -123,6 +127,7 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> deletePosition(@PathVariable Long id) {
         positionService.deletePosition(id);
         return new ResponseEntity<>(OK);
