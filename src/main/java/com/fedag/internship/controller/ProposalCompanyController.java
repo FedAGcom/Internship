@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -59,6 +60,7 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<ProposalCompanyResponse> findById(@PathVariable Long id) {
         ProposalCompanyResponse result = Optional.of(id)
                 .map(proposalCompanyService::getProposalCompanyById)
@@ -75,6 +77,7 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Page<ProposalCompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
         Page<ProposalCompanyResponse> result = proposalCompanyService.getAllProposalCompanies(pageable)
                 .map(proposalCompanyMapper::toResponse);
@@ -92,6 +95,7 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<ProposalCompanyResponse> create(@RequestBody @Valid ProposalCompanyRequest request) {
         ProposalCompanyResponse result = Optional.ofNullable(request)
                 .map(proposalCompanyMapper::fromRequest)
@@ -112,6 +116,7 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<ProposalCompanyResponse> update(@PathVariable Long id,
                                                           @RequestBody @Valid ProposalCompanyRequestUpdate requestUpdate) {
         ProposalCompanyResponse result = Optional.ofNullable(requestUpdate)
@@ -133,6 +138,7 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/setStatusUnderReview")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<ProposalCompanyResponse> setProposalCompanyStatusUnderReview(@RequestParam Long id) {
         ProposalCompanyResponse result = Optional.of(id)
                 .map(company -> proposalCompanyService.setProposalCompanyStatusUnderReview(id))
@@ -152,6 +158,7 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/setStatusRefused")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<ProposalCompanyResponse> setProposalCompanyStatusRefused(@RequestParam Long id) {
         ProposalCompanyResponse result = Optional.of(id)
                 .map(company -> proposalCompanyService.setProposalCompanyStatusRefused(id))
@@ -171,6 +178,7 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/setStatusApproved")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<ProposalCompanyResponse> setProposalCompanyStatusApproved(@RequestParam Long id) {
         ProposalCompanyResponse result = Optional.of(id)
                 .map(company -> proposalCompanyService.setProposalCompanyStatusApproved(id))
@@ -188,6 +196,7 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         proposalCompanyService.deleteProposalCompany(id);
         return new ResponseEntity<>(OK);
