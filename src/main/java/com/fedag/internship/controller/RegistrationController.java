@@ -16,10 +16,10 @@ public class RegistrationController {
     @PostMapping
     public ResponseEntity<?> register(@RequestBody UserRequest request) {
         registrationService.register(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<?> confirm(@RequestParam String token) {
         registrationService.confirm(token);
         return new ResponseEntity<>(HttpStatus.OK);

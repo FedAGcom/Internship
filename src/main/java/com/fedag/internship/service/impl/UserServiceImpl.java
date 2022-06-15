@@ -1,5 +1,6 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.entity.Role;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityAlreadyExistsException;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
@@ -52,6 +53,7 @@ public class UserServiceImpl implements UserService {
             throw new EntityAlreadyExistsException("User", "email", userEntity.getEmail());
         }
         String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
+        userEntity.setRole(Role.USER);
         userEntity.setPassword(encodedPassword);
         UserEntity result = userRepository.save(userEntity);
         log.info("Пользователь создан");
