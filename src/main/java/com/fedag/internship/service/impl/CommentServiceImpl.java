@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
                     log.warn("Комментарий с Id: {} не найден", id);
                     throw new EntityNotFoundException("Comment", "id", id);
                 });
-        log.info("Комментарияй c Id: {} получен", id);
+        log.info("Комментарий c Id: {} получен", id);
         return result;
     }
 

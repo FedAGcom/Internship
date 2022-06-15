@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TraineePositionImpl implements TraineePositionMapper {
+public class TraineePositionMapperImpl implements TraineePositionMapper {
     private final ObjectMapper objectMapper;
 
     @Override
@@ -42,6 +42,9 @@ public class TraineePositionImpl implements TraineePositionMapper {
     public TraineePositionEntity merge(TraineePositionEntity source, TraineePositionEntity target) {
         if (source.getName() != null) {
             target.setName(source.getName());
+        }
+        if (source.getDate() != null) {
+            target.setDate(source.getDate());
         }
         if (source.getEmployeePosition() != null) {
             target.setEmployeePosition(source.getEmployeePosition());

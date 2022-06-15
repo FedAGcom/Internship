@@ -7,12 +7,9 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -35,7 +32,6 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Table(name = "trainee_positions")
-@EntityListeners(AuditingEntityListener.class)
 public class TraineePositionEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "seq_trainee_positions_id")
@@ -43,9 +39,7 @@ public class TraineePositionEntity {
             parameters = {@Parameter(name = "sequence", value = "seq_trainee_positions_id")})
     private Long id;
 
-    @CreatedDate
     private LocalDateTime date;
-
     private String name;
     private String employeePosition;
     private String status;
