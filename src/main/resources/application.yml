@@ -39,13 +39,17 @@ spring:
       secret: secret
       expiration: 604800
 
-  # Mail options
+  # Registration options
+    token:
+        minutes-to-expire: 60
+
+    # Mail options
     spring:
       mail:
-        host: smtp.mail.ru
+        host: smtp.gmail.com
         port: 465
-        username: Fedag@mail.ru
-        password: password
+        username: fedagedu@gmail.com
+        password:
         protocol: smtps
         properties:
           mail:
