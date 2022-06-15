@@ -19,7 +19,7 @@ public class RegistrationController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping("/confirm")
+    @GetMapping("/confirm")
     public ResponseEntity<?> confirm(@RequestParam String token) {
         registrationService.confirm(token);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -21,7 +21,7 @@ import static java.time.LocalDateTime.*;
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
     private static final String EMAIL_SUBJECT = "Подтверждение аккаунта";
-    private final static String LINK = "http://localhost:8080/registration?token=";
+    private final static String LINK = "http://localhost:8080/registration/confirm?token=";
 
     private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
