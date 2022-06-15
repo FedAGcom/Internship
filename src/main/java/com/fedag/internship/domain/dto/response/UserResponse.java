@@ -1,5 +1,6 @@
 package com.fedag.internship.domain.dto.response;
 
+import com.fedag.internship.domain.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
