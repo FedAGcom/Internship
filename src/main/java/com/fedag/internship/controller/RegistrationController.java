@@ -1,5 +1,6 @@
 package com.fedag.internship.controller;
 
+import com.fedag.internship.domain.dto.request.RegistrationRequest;
 import com.fedag.internship.domain.dto.request.UserRequest;
 import com.fedag.internship.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ public class RegistrationController {
     private final RegistrationService registrationService;
 
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody UserRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegistrationRequest request) {
         registrationService.register(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

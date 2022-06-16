@@ -1,5 +1,6 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.dto.request.RegistrationRequest;
 import com.fedag.internship.domain.dto.request.UserRequest;
 import com.fedag.internship.domain.entity.ConfirmationTokenEntity;
 import com.fedag.internship.domain.entity.UserEntity;
@@ -30,8 +31,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Transactional
     @Override
-    public void register(UserRequest request) {
-        UserEntity userEntity = userMapper.fromRequest(request);
+    public void register(RegistrationRequest request) {
+        UserEntity userEntity = userMapper.fromRegistrationRequest(request);
         userService.createUser(userEntity);
         ConfirmationTokenEntity token = confirmationTokenService.createTokenForUser(userEntity);
         String text = LINK + token.getToken();

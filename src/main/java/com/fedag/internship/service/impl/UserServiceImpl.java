@@ -52,7 +52,6 @@ public class UserServiceImpl implements UserService {
             throw new EntityAlreadyExistsException("User", "email", userEntity.getEmail());
         }
         String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
-        userEntity.setRole(Role.USER);
         userEntity.setPassword(encodedPassword);
         UserEntity result = userRepository.save(userEntity);
         log.info("Пользователь создан");
