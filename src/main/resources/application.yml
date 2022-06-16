@@ -1,66 +1,51 @@
-## Server
-#server:
-#  servlet:
-#    context-path: /intership/api/v1.0
-#  error:
-#    include-binding-errors: always
-#    include-message: always
-#    include-exception: true
-#  shutdown: graceful
+# Server
+server:
+  servlet:
+    context-path: /intership/api/v1.0
+  error:
+    include-binding-errors: always
+    include-message: always
+    include-exception: true
+  shutdown: graceful
 
 spring:
   # PostgreSQL
   datasource:
-    url: jdbc:postgresql://localhost:5432/test
+    url: jdbc:postgresql://host.docker.internal:5432/intership-db
+    driver-class-name: org.postgresql.Driver
     username: postgres
-    password: psotgres
+    password: admin
 
   # JPA
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
     show-sql: true
 
-#  # Liquibase
-#  liquibase:
-#    change-log: classpath:liquibase/db.changelog_master.yaml
-#    url: jdbc:postgresql://host.docker.internal:5432/intership-db
-#    user: postgres
-#    password: admin
+  # Liquibase
+  liquibase:
+    change-log: classpath:liquibase/db.changelog_master.yaml
+    url: jdbc:postgresql://host.docker.internal:5432/intership-db
+    user: postgres
+    password: admin
 
-#  # Variables for @Value elasticsearch
-#  elasticsearch:
-#    url: localhost:9200
-#    connect-timeout: 3000
-#    socket-timeout: 60000
-
+ # Variables for @Value elasticsearch
+elasticsearch:
+  url: localhost:9200
+  connect-timeout: 3000
+  socket-timeout: 60000
+  
   # Spring security configuration
-  jwt:
-    header: Authorization
-    secret: secret
-    expiration: 604800
+jwt:
+  header: Authorization
+  secret: secret
+  expiration: 604800
+  
+  #Spring Scheduler
+  job:
+    timeForScheduler: 3600000
 
-    # Registration options
-    token:
-      minutes-to-expire: 60
-
-    # Mail options
-      mail:
-        host: smtp.gmail.com
-        port: 465
-        username: fedagedu@gmail.com
-        password:
-        protocol: smtps
-        properties:
-          mail:
-            smtp:
-              auth: true
-              connectiontimeout: 1000
-              timeout: 1000
-              writetimeout: 1000
-              starttls:
-                enable: true
