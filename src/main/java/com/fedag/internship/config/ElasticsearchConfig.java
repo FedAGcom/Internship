@@ -1,7 +1,8 @@
 package com.fedag.internship.config;
 
+import lombok.RequiredArgsConstructor;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,25 +18,20 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
  * @since 2022-06-14
  */
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "com.fedag.internship.repository")
+@RequiredArgsConstructor
 @ComponentScan(basePackages = {"com.fedag.internship.service"})
+@EnableElasticsearchRepositories(basePackages = "com.fedag.internship.repository")
 public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
-    @Value("${elasticsearch.url}")
-    public String elasticsearchUrl;
-
-    @Value("${elasticsearch.connect-timeout}")
-    public int elasticsearchConnectTimeout;
-
-    @Value("${elasticsearch.socket-timeout}")
-    public int elasticsearchSocketTimeout;
+    private final ElasticsearchProperties elasticsearchProperties;
 
     @Bean
     @Override
     public RestHighLevelClient elasticsearchClient() {
         final ClientConfiguration config = ClientConfiguration.builder()
-                .connectedTo(elasticsearchUrl)
-                .withConnectTimeout(elasticsearchConnectTimeout)
-                .withSocketTimeout(elasticsearchSocketTimeout)
+                .connectedTo(elasticsearchProperties.getUris().get(0))
+                .withConnectTimeout(elasticsearchProperties.getConnectionTimeout())
+                .withSocketTimeout(elasticsearchProperties.getSocketTimeout())
+                .withBasicAuth(elasticsearchProperties.getUsername(), elasticsearchProperties.getPassword())
                 .build();
         return RestClients.create(config).rest();
     }

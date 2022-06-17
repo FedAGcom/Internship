@@ -8,8 +8,6 @@ import org.springframework.data.domain.Pageable;
 public interface UserService {
     UserEntity getUserById(Long id);
 
-    UserEntity getUserByEmail(String email);
-
     Page<UserEntity> getAllUsers(Pageable pageable);
 
     UserEntity createUser(UserEntity user);

@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
 
-    @Value(("${token.minutes-to-expire}"))
+    @Value("${token.minutes-to-expire}")
     private long MINUTES_TO_EXPIRE;
 
     private final ConfirmationTokenRepository confirmationTokenRepository;

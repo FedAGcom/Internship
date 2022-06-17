@@ -1,6 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1.8.0
+      author: vasyandd
       changes:
         - createSequence:
             dataType:  BIGINT
@@ -9,6 +10,7 @@ databaseChangeLog:
             startValue:  1
   - changeSet:
       id: 1.8.1
+      author: vasyandd
       changes:
         - createTable:
             tableName: confirmation_tokens
