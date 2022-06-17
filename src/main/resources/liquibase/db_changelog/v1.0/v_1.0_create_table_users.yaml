@@ -51,3 +51,8 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
+              - column:
+                  name: enabled
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false

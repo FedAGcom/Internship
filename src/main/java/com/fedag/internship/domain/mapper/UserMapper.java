@@ -1,5 +1,6 @@
 package com.fedag.internship.domain.mapper;
 
+import com.fedag.internship.domain.dto.request.RegistrationRequest;
 import com.fedag.internship.domain.dto.request.UserRequest;
 import com.fedag.internship.domain.dto.request.UserRequestUpdate;
 import com.fedag.internship.domain.dto.response.UserResponse;
@@ -13,4 +14,6 @@ public interface UserMapper {
     UserEntity fromRequestUpdate(UserRequestUpdate userRequestUpdate);
 
     UserEntity merge(UserEntity source, UserEntity target);
+
+    UserEntity fromRegistrationRequest(RegistrationRequest request);
 }
