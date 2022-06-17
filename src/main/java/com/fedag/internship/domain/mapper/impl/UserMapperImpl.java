@@ -1,13 +1,11 @@
 package com.fedag.internship.domain.mapper.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fedag.internship.domain.dto.request.RegistrationRequest;
 import com.fedag.internship.domain.dto.request.UserRequest;
 import com.fedag.internship.domain.dto.request.UserRequestUpdate;
 import com.fedag.internship.domain.dto.response.UserResponse;
-import com.fedag.internship.domain.entity.CommentEntity;
-import com.fedag.internship.domain.entity.CompanyEntity;
-import com.fedag.internship.domain.entity.TraineePositionEntity;
-import com.fedag.internship.domain.entity.UserEntity;
+import com.fedag.internship.domain.entity.*;
 import com.fedag.internship.domain.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -50,6 +48,13 @@ public class UserMapperImpl implements UserMapper {
 
     public UserEntity fromRequestUpdate(UserRequestUpdate userRequestUpdate) {
         return objectMapper.convertValue(userRequestUpdate, UserEntity.class);
+    }
+
+    @Override
+    public UserEntity fromRegistrationRequest(RegistrationRequest registrationRequest) {
+        UserEntity entity = objectMapper.convertValue(registrationRequest, UserEntity.class);
+        entity.setRole(Role.USER);
+        return entity;
     }
 
     @Override

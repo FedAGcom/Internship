@@ -1,5 +1,6 @@
 package com.fedag.internship.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 @Table(name = "users")
 @Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
     @Id
@@ -37,6 +39,7 @@ public class UserEntity {
     private String firstName;
     private String lastName;
     private String password;
+    private Boolean enabled;
 
     @Enumerated(EnumType.STRING)
     private Role role;

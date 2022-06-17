@@ -48,4 +48,25 @@ jwt:
   #Spring Scheduler
   job:
     timeForScheduler: 3600000
+  
+  # Registration options
+    token:
+      minutes-to-expire: 60
+
+  # Mail options
+    mail:
+      host: smtp.gmail.com
+      port: 465
+      username: fedagedu@gmail.com
+      password:
+      protocol: smtps
+      properties:
+        mail:
+          smtp:
+            auth: true
+            connectiontimeout: 1000
+            timeout: 1000
+            writetimeout: 1000
+            starttls:
+              enable: true
 
