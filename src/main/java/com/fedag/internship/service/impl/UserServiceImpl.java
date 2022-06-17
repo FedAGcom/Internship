@@ -1,6 +1,5 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.entity.Role;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityAlreadyExistsException;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
@@ -22,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserEntity getUserById(Long id) {
@@ -76,11 +75,5 @@ public class UserServiceImpl implements UserService {
         this.getUserById(id);
         userRepository.deleteById(id);
         log.info("Пользователь с Id: {} удален", id);
-    }
-
-    @Override
-    public UserEntity getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User", "Email", email));
     }
 }

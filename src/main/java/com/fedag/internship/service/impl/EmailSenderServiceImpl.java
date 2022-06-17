@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class EmailSenderServiceImpl implements EmailSenderService {
     private final JavaMailSender mailSender;
 
-    @Value(("${spring.mail.username}"))
+    @Value("${spring.mail.username}")
     private String FEDAG_USERNAME;
 
     @Override

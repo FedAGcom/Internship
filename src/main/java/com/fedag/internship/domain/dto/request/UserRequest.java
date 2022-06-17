@@ -1,9 +1,8 @@
 package com.fedag.internship.domain.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fedag.internship.validation.annotation.Email;
 import com.fedag.internship.domain.entity.Role;
-
+import com.fedag.internship.validation.annotation.Email;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

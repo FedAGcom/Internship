@@ -9,7 +9,13 @@ import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -33,13 +39,13 @@ public class ConfirmationTokenEntity {
     public ConfirmationTokenEntity(String token, UserEntity userEntity, LocalDateTime expiredAt) {
         this.token = token;
         this.userEntity = userEntity;
-        this.expiredAt = expiredAt;
+        this.expired = expiredAt;
     }
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    private LocalDateTime created;
 
-    private LocalDateTime expiredAt;
+    private LocalDateTime expired;
 
     @OneToOne
     @JoinColumn(name = "user_id")

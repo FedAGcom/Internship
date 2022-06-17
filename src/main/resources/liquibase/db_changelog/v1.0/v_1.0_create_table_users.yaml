@@ -53,6 +53,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: enabled
-                  type: VARCHAR(255)
+                  type: BOOLEAN
                   constraints:
                     nullable: false

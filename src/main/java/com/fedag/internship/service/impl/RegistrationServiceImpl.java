@@ -1,7 +1,6 @@
 package com.fedag.internship.service.impl;
 
 import com.fedag.internship.domain.dto.request.RegistrationRequest;
-import com.fedag.internship.domain.dto.request.UserRequest;
 import com.fedag.internship.domain.entity.ConfirmationTokenEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.InvalidConfirmationTokenException;
@@ -43,7 +42,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public void confirm(String token) {
         ConfirmationTokenEntity confirmationToken = confirmationTokenService.getByToken(token);
-        LocalDateTime tokenExpiredDate = confirmationToken.getExpiredAt();
+        LocalDateTime tokenExpiredDate = confirmationToken.getExpired();
         if (tokenExpiredDate.isBefore(now())) {
             userService.deleteUser(confirmationToken.getUserEntity().getId());
             throw new InvalidConfirmationTokenException("Token is expired");

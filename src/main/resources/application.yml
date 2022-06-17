@@ -33,12 +33,31 @@ spring:
     user: postgres
     password: admin
 
- # Variables for @Value elasticsearch
-elasticsearch:
-  url: localhost:9200
-  connect-timeout: 3000
-  socket-timeout: 60000
-  
+  # Elasticsearch
+  elasticsearch:
+    uris: localhost:9200
+    connection-timeout: 3
+    socket-timeout: 60
+    username: elastic
+    password: admin
+
+  # Mail options
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: fedagedu@gmail.com
+    password:
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 1000
+          timeout: 1000
+          writetimeout: 1000
+          starttls:
+            enable: true
+
   # Spring security configuration
 jwt:
   header: Authorization
@@ -46,27 +65,9 @@ jwt:
   expiration: 604800
   
   #Spring Scheduler
-  job:
-    timeForScheduler: 3600000
+job:
+  timeForScheduler: 3600000
   
   # Registration options
-    token:
-      minutes-to-expire: 60
-
-  # Mail options
-    mail:
-      host: smtp.gmail.com
-      port: 465
-      username: fedagedu@gmail.com
-      password:
-      protocol: smtps
-      properties:
-        mail:
-          smtp:
-            auth: true
-            connectiontimeout: 1000
-            timeout: 1000
-            writetimeout: 1000
-            starttls:
-              enable: true
-
+token:
+  minutes-to-expire: 60
