@@ -30,13 +30,11 @@ databaseChangeLog:
                   name: password
                   type: VARCHAR(255)
                   constraints:
-                    unique: true
                     nullable: false
               - column:
                   name: role
                   type: VARCHAR(255)
                   constraints:
-                    unique: true
                     nullable: false
               - column:
                   name: first_name
@@ -51,5 +49,10 @@ databaseChangeLog:
               - column:
                   name: created
                   type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: BOOLEAN
                   constraints:
                     nullable: false

@@ -1,5 +1,6 @@
 package com.fedag.internship.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,16 @@ import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +36,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 @Table(name = "users")
 @Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
     @Id
@@ -37,6 +48,7 @@ public class UserEntity {
     private String firstName;
     private String lastName;
     private String password;
+    private Boolean enabled;
 
     @Enumerated(EnumType.STRING)
     private Role role;

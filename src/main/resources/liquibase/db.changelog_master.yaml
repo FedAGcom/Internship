@@ -15,3 +15,5 @@ databaseChangeLog:
       file: classpath:liquibase/db_changelog/v1.0/v_1.6_create_table_favourite_companies.yaml
   - include:
       file: classpath:liquibase/db_changelog/v1.0/v_1.7_create_fk_for_comments.yaml
+  - include:
+      file: classpath:liquibase/db_changelog/v1.0/v_1.8_create_table_confirmation_tokens.yaml

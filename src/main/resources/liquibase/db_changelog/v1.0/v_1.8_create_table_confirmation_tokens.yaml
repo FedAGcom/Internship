@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.8.0
+      author: vasyandd
+      changes:
+        - createSequence:
+            dataType:  BIGINT
+            incrementBy:  1
+            sequenceName:  seq_confirmation_tokens_id
+            startValue:  1
+  - changeSet:
+      id: 1.8.1
+      author: vasyandd
+      changes:
+        - createTable:
+            tableName: confirmation_tokens
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: token
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expired
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    unique: true
+                    nullable: false
