@@ -2,6 +2,7 @@ package com.fedag.internship.service.impl;
 
 import com.fedag.internship.domain.dto.request.RegistrationRequest;
 import com.fedag.internship.domain.entity.ConfirmationTokenEntity;
+import com.fedag.internship.domain.entity.Role;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.InvalidConfirmationTokenException;
 import com.fedag.internship.domain.mapper.UserMapper;
@@ -32,6 +33,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public void register(RegistrationRequest request) {
         UserEntity userEntity = userMapper.fromRegistrationRequest(request);
+        userEntity.setRole(Role.USER);
         userService.createUser(userEntity);
         ConfirmationTokenEntity token = confirmationTokenService.createTokenForUser(userEntity);
         String head = String.format("<h1>Приветствуем вас, %s</h1>", userEntity.getEmail());

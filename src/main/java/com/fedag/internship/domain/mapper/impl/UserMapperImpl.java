@@ -7,7 +7,6 @@ import com.fedag.internship.domain.dto.request.UserRequestUpdate;
 import com.fedag.internship.domain.dto.response.UserResponse;
 import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
-import com.fedag.internship.domain.entity.Role;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.mapper.UserMapper;
@@ -31,6 +30,7 @@ public class UserMapperImpl implements UserMapper {
                 .setEmail(userEntity.getEmail())
                 .setFirstName(userEntity.getFirstName())
                 .setLastName(userEntity.getLastName())
+                .setRole(userEntity.getRole().name())
                 .setCreated(userEntity.getCreated())
                 .setCommentIds(userEntity.getComments()
                         .stream()
@@ -56,9 +56,7 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public UserEntity fromRegistrationRequest(RegistrationRequest registrationRequest) {
-        UserEntity entity = objectMapper.convertValue(registrationRequest, UserEntity.class);
-        entity.setRole(Role.USER);
-        return entity;
+        return objectMapper.convertValue(registrationRequest, UserEntity.class);
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.fedag.internship.job;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.repository.CommentRepository;
 import com.fedag.internship.repository.CompanyRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
