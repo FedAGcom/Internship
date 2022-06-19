@@ -1,11 +1,13 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.entity.CompanyELSEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.repository.CompanyRepository;
 import com.fedag.internship.service.CompanyService;
+import com.fedag.internship.service.ELSCompanyService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
     private final UserService userService;
+    private final ELSCompanyService elsCompanyService;
 
     @Override
     public CompanyEntity getCompanyById(Long id) {
@@ -51,6 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
         userEntity.setCompany(companyEntity);
         companyEntity.setUser(userEntity);
         CompanyEntity result = companyRepository.save(companyEntity);
+        elsCompanyService.saveCompany(companyEntity);
         log.info("Компания от пользователя с Id: {} создана", userId);
         return result;
     }
@@ -76,9 +80,9 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Page<CompanyEntity> searchCompanyByName(String keyword, Pageable pageable) {
+    public Page<CompanyELSEntity> searchCompanyByName(String keyword, Pageable pageable) {
         log.info("Получение страницы с компаниями по имени");
-        Page<CompanyEntity> result = companyRepository.search(keyword, "name", pageable);
+        Page<CompanyELSEntity> result = elsCompanyService.searchByName(pageable, keyword);
         log.info("Страница с компаниями по имени получена");
         return result;
     }
