@@ -53,7 +53,6 @@ public class UserServiceImpl implements UserService {
         }
         String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
         userEntity.setPassword(encodedPassword);
-        userEntity.setEnabled(false);
         UserEntity result = userRepository.save(userEntity);
         log.info("Пользователь создан");
         return result;
