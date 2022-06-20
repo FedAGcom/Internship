@@ -61,7 +61,7 @@ public class UserController {
         return new ResponseEntity<>(userResponse, OK);
     }
 
-    @Operation(summary = "Получение страницы с пользователями")
+    @Operation(summary = "Получение страницы с пользователями с ролью USER")
     @ApiResponse(responseCode = "200", description = "Пользователи найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
@@ -69,8 +69,8 @@ public class UserController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<UserResponse>> getAllUsers(@PageableDefault(size = 5) Pageable pageable) {
-        Page<UserResponse> users = userService.getAllUsers(pageable)
+    public ResponseEntity<Page<UserResponse>> getAllUsersWithRoleUser(@PageableDefault(size = 5) Pageable pageable) {
+        Page<UserResponse> users = userService.getAllUsersWithRoleUser(pageable)
                 .map(userMapper::toResponse);
         return new ResponseEntity<>(users, OK);
     }
@@ -116,20 +116,5 @@ public class UserController {
                 .map(userMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(userResponse, OK);
-    }
-
-    @Operation(summary = "Удаление пользователя")
-    @ApiResponse(responseCode = "200", description = "Пользователь удален")
-    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
-            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = DtoErrorInfo.class))})
-    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
-            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = DtoErrorInfo.class))})
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return new ResponseEntity<>(OK);
     }
 }

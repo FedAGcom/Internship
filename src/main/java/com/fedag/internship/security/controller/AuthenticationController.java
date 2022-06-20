@@ -1,7 +1,6 @@
 package com.fedag.internship.security.controller;
 
 import com.fedag.internship.domain.dto.DtoErrorInfo;
-import com.fedag.internship.domain.dto.response.UserResponse;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.security.dto.AuthenticationRequest;
 import com.fedag.internship.security.jwt.JwtTokenProvider;

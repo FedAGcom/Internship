@@ -13,7 +13,7 @@ public interface UserMapper {
 
     UserEntity fromRequestUpdate(UserRequestUpdate userRequestUpdate);
 
-    UserEntity merge(UserEntity source, UserEntity target);
-
     UserEntity fromRegistrationRequest(RegistrationRequest request);
+
+    UserEntity merge(UserEntity source, UserEntity target);
 }
