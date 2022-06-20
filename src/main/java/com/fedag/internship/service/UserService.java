@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 public interface UserService {
     UserEntity getUserById(Long id);
 
-    Page<UserEntity> getAllUsers(Pageable pageable);
+    Page<UserEntity> getAllUsersWithRoleUser(Pageable pageable);
+
+    Page<UserEntity> getAllUsersWithRoleDeleted(Pageable pageable);
 
     UserEntity createUser(UserEntity user);
 

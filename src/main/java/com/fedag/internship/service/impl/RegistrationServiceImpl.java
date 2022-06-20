@@ -2,6 +2,7 @@ package com.fedag.internship.service.impl;
 
 import com.fedag.internship.domain.dto.request.RegistrationRequest;
 import com.fedag.internship.domain.entity.ConfirmationTokenEntity;
+import com.fedag.internship.domain.entity.Role;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.InvalidConfirmationTokenException;
 import com.fedag.internship.domain.mapper.UserMapper;
@@ -20,22 +21,28 @@ import static java.time.LocalDateTime.now;
 @RequiredArgsConstructor
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
-    private static final String EMAIL_SUBJECT = "Подтверждение аккаунта";
-    private final static String LINK = "http://localhost:8080/registration/confirm?token=";
-
     private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
     private final UserMapper userMapper;
     private final EmailSenderService emailSenderService;
 
+    private final static String EMAIL_SUBJECT = "Подтверждение аккаунта";
+    private final static String LINK = "http://localhost:8080/registration/confirm?token=";
+
     @Transactional
     @Override
     public void register(RegistrationRequest request) {
         UserEntity userEntity = userMapper.fromRegistrationRequest(request);
+        userEntity.setRole(Role.USER);
         userService.createUser(userEntity);
         ConfirmationTokenEntity token = confirmationTokenService.createTokenForUser(userEntity);
-        String text = LINK + token.getToken();
-        emailSenderService.send(userEntity.getEmail(), EMAIL_SUBJECT, text);
+        String head = String.format("<h1>Приветствуем вас, %s</h1>", userEntity.getEmail());
+        String div1 = "<div>Добро пожаловать в FedAG Intership!</div>";
+        String div2 = "<div>Для активации аккаунта пройдите по ссылке ниже.</div><br>";
+        String linkWithToken = LINK + token.getToken();
+        String button = String.format("<a href=\"%s\">Activate link</a>", linkWithToken);
+        String resultMessage = head + div1 + div2 + button;
+        emailSenderService.send(userEntity.getEmail(), EMAIL_SUBJECT, resultMessage);
     }
 
     @Transactional
@@ -50,5 +57,4 @@ public class RegistrationServiceImpl implements RegistrationService {
         confirmationToken.getUserEntity().setEnabled(true);
         confirmationTokenService.deleteToken(confirmationToken);
     }
-
 }

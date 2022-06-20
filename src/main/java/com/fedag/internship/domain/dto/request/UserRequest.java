@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -33,6 +34,14 @@ public class UserRequest {
     @Size(max = 255)
     private String firstName;
 
+    @Schema(description = "Фамилия пользователя",
+            maxLength = 255,
+            minLength = 1,
+            example = "someSurname")
+    @NotBlank
+    @Size(max = 255)
+    private String lastName;
+
     @Schema(description = "Пароль пользователя",
             maxLength = 255,
             minLength = 1,
@@ -41,19 +50,13 @@ public class UserRequest {
     @Size(max = 255)
     private String password;
 
-    @Schema(description = "Роль пользователя",
-            maxLength = 255,
-            minLength = 1,
-            example = "USER")
-    @NotBlank
-    @Size(max = 255)
-    private Role role;
+    @Schema(description = "Статус пользователя",
+            example = "true")
+    @NotNull
+    private Boolean enabled;
 
-    @Schema(description = "Фамилия пользователя",
-            maxLength = 255,
-            minLength = 1,
-            example = "someSurname")
-    @NotBlank
-    @Size(max = 255)
-    private String lastName;
+    @Schema(description = "Роль пользователя",
+            example = "USER")
+    @NotNull
+    private Role role;
 }

@@ -10,9 +10,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.fedag.internship.domain.entity.Role.DELETED;
+import static com.fedag.internship.domain.entity.Role.USER;
 
 @Slf4j
 @Service
@@ -21,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
     @Override
     public UserEntity getUserById(Long id) {
@@ -36,10 +40,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserEntity> getAllUsers(Pageable pageable) {
-        log.info("Получение страницы с пользователями");
-        Page<UserEntity> result = userRepository.findAll(pageable);
-        log.info("Страница с пользователями получена");
+    public Page<UserEntity> getAllUsersWithRoleUser(Pageable pageable) {
+        log.info("Получение страницы с пользователями с ролью USER");
+        Page<UserEntity> result = userRepository.findAllByRole(USER, pageable);
+        log.info("Страница с пользователями с ролью USER получена");
+        return result;
+    }
+
+    @Override
+    public Page<UserEntity> getAllUsersWithRoleDeleted(Pageable pageable) {
+        log.info("Получение страницы с пользователями с ролью DELETED");
+        Page<UserEntity> result = userRepository.findAllByRole(DELETED, pageable);
+        log.info("Страница с пользователями с ролью DELETED получена");
         return result;
     }
 
