@@ -4,10 +4,10 @@ import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.dto.request.CompanyRequest;
 import com.fedag.internship.domain.dto.request.CompanyRequestUpdate;
 import com.fedag.internship.domain.dto.response.CompanyResponse;
-import com.fedag.internship.domain.entity.CompanyELSEntity;
+import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.service.CompanyService;
-import com.fedag.internship.service.ELSCompanyService;
+import com.fedag.internship.service.CompanyElasticSearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,7 +43,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class CompanyController {
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
-    private final ELSCompanyService elsCompanyService;
+    private final CompanyElasticSearchService companyElasticSearchService;
 
     @Operation(summary = "Получение компании по Id")
     @ApiResponse(responseCode = "200", description = "Компания найдена",
@@ -146,9 +146,9 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/search")
-    public ResponseEntity<Page<CompanyELSEntity>> search(@RequestParam String keyword, Pageable pageable) {
-        Page<CompanyELSEntity> companies = companyService.searchCompanyByName(keyword, pageable);
-              //  .map(companyMapper::toResponse);
+    public ResponseEntity<Page<CompanyResponse>> search(@RequestParam String keyword, Pageable pageable) {
+        Page<CompanyResponse> companies = companyService.searchCompanyByName(keyword, pageable)
+                .map(companyMapper::toResponse);
         return new ResponseEntity<>(companies, OK);
     }
 }

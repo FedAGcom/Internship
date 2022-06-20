@@ -1,9 +1,9 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.entity.CompanyELSEntity;
+import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
-import com.fedag.internship.repository.ELSCompanyRepository;
-import com.fedag.internship.service.ELSCompanyService;
+import com.fedag.internship.repository.CompanyElasticSearchRepository;
+import com.fedag.internship.service.CompanyElasticSearchService;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -14,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -26,21 +24,22 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ELSCompanyServiceImpl implements ELSCompanyService {
+public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchService {
     private static final String COMPANY_INDEX = "companies";
     private final ElasticsearchOperations elasticsearchOperations;
-    private final ELSCompanyRepository elsCompanyRepository;
+    private final CompanyElasticSearchRepository companyElasticSearchRepository;
 
     @Transactional
     @Override
-    public CompanyELSEntity saveCompany(CompanyEntity companyEntity) {
-        CompanyELSEntity elsEntity = new CompanyELSEntity(companyEntity.getName());
-        elsCompanyRepository.save(elsEntity);
+    public CompanyElasticSearchEntity saveCompany(CompanyEntity companyEntity) {
+        CompanyElasticSearchEntity elsEntity = new CompanyElasticSearchEntity(companyEntity.getName(), companyEntity.getId());
+        companyElasticSearchRepository.save(elsEntity);
         return elsEntity;
     }
 
+    @Transactional
     @Override
-    public Page<CompanyELSEntity> searchByName(Pageable pageable, String name) {
+    public Page<CompanyElasticSearchEntity> searchByName(Pageable pageable, String name) {
         QueryBuilder fuzzyQuery = QueryBuilders
                 .matchQuery("name", name)
                 .fuzziness(Fuzziness.AUTO);
@@ -57,9 +56,9 @@ public class ELSCompanyServiceImpl implements ELSCompanyService {
                 .withQuery(searchQuery)
                 .withPageable(pageable)
                 .build();
-        SearchHits<CompanyELSEntity> productHits = elasticsearchOperations
-                .search(query, CompanyELSEntity.class, IndexCoordinates.of(COMPANY_INDEX));
-        List<CompanyELSEntity> companies = new ArrayList<>();
+        SearchHits<CompanyElasticSearchEntity> productHits = elasticsearchOperations
+                .search(query, CompanyElasticSearchEntity.class, IndexCoordinates.of(COMPANY_INDEX));
+        List<CompanyElasticSearchEntity> companies = new ArrayList<>();
         productHits.forEach(searchHit-> {companies.add(searchHit.getContent());
             System.out.println(searchHit.getContent().getName());
         });

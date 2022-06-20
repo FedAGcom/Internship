@@ -1,4 +1,4 @@
-package com.fedag.internship.domain.entity;
+package com.fedag.internship.domain.elasticsearch;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,15 +14,16 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Document(indexName = "companies")
-public class CompanyELSEntity {
+public class CompanyElasticSearchEntity {
     @Id
     private String id;
     @Field
     private String name;
 
-    private Long company_id;
+    private Long companyEntityId;
 
-    public CompanyELSEntity(String name) {
+    public CompanyElasticSearchEntity(String name, Long companyEntityId) {
         this.name = name;
+        this.companyEntityId = companyEntityId;
     }
 }

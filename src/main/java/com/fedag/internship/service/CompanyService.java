@@ -1,6 +1,6 @@
 package com.fedag.internship.service;
 
-import com.fedag.internship.domain.entity.CompanyELSEntity;
+import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,5 +17,5 @@ public interface CompanyService {
 
     void deleteCompany(Long id);
 
-    Page<CompanyELSEntity> searchCompanyByName(String keyword, Pageable pageable);
+    Page<CompanyEntity> searchCompanyByName(String keyword, Pageable pageable);
 }
