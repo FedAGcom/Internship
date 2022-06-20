@@ -58,6 +58,7 @@ public class UserMapperImpl implements UserMapper {
     public UserEntity fromRegistrationRequest(RegistrationRequest registrationRequest) {
         UserEntity entity = objectMapper.convertValue(registrationRequest, UserEntity.class);
         entity.setRole(Role.USER);
+        entity.setEnabled(false);
         return entity;
     }
 

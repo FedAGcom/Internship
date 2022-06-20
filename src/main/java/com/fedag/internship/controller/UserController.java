@@ -87,7 +87,7 @@ public class UserController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
+    public ResponseEntity<UserResponse> createUser(@RequestBody  UserRequest userRequest) {
         UserResponse userResponse = Optional.ofNullable(userRequest)
                 .map(userMapper::fromRequest)
                 .map(userService::createUser)
