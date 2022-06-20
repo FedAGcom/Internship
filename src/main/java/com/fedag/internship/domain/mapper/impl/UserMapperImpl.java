@@ -56,7 +56,10 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public UserEntity fromRegistrationRequest(RegistrationRequest registrationRequest) {
-        return objectMapper.convertValue(registrationRequest, UserEntity.class);
+        UserEntity entity = objectMapper.convertValue(registrationRequest, UserEntity.class);
+        entity.setRole(Role.USER);
+        entity.setEnabled(false);
+        return entity;
     }
 
     @Override
