@@ -1,5 +1,6 @@
 package com.fedag.internship.controller;
 
+
 import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.dto.request.TraineePositionRequest;
 import com.fedag.internship.domain.dto.request.TraineePositionRequestUpdate;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -134,7 +136,7 @@ public class TraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/searchposition")
     public ResponseEntity<Page<TraineePositionResponse>> search(@RequestParam String keyword, Pageable pageable) {
-        Page<TraineePositionResponse> positions = positionService.findPositionByCompany(keyword, pageable)
+        Page<TraineePositionResponse> positions = positionService.searchPositionByCompany(keyword,pageable)
                 .map(positionMapper::toResponse);
         return new ResponseEntity<>(positions, OK);
     }

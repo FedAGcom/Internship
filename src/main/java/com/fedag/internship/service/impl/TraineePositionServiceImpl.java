@@ -1,9 +1,13 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
+import com.fedag.internship.domain.elasticsearch.PositionElasticSearchEntity;
+import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
 import com.fedag.internship.repository.TraineePositionRepository;
+import com.fedag.internship.service.PositionElasticSearchService;
 import com.fedag.internship.service.TraineePositionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +25,7 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     private final TraineePositionRepository positionRepository;
 
     private final TraineePositionMapper positionMapper;
+    private final PositionElasticSearchService positionElasticSearchService;
 
 
     @Override
@@ -47,7 +52,8 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     @Transactional
     public TraineePositionEntity createPosition(TraineePositionEntity positionEntity) {
         log.info("Создание позиции стажировки");
-        TraineePositionEntity result = positionRepository.save(positionEntity);
+        TraineePositionEntity result = (TraineePositionEntity) positionRepository.save(positionEntity);
+        positionElasticSearchService.savePosition(positionEntity);
         log.info("Позиция стажировки создана");
         return result;
     }
@@ -73,7 +79,12 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     }
 
     @Override
-    public Page<TraineePositionEntity> findPositionByCompany(String keyword, Pageable pageable) {
-        return positionRepository.search(keyword, "company", pageable);
+    @Transactional
+    public Page<TraineePositionEntity> searchPositionByCompany(String keyword, Pageable pageable){
+        log.info("Получение страницы с позициями по компании");
+        Page<PositionElasticSearchEntity> companiesFromElasticSearch = positionElasticSearchService.searchByCompany(pageable, keyword);
+        Page<TraineePositionEntity> result = companiesFromElasticSearch.map(el -> this.getPositionById(el.getCompanyEntityId()));
+        log.info("Страница с позициями по компании получена");
+        return result;
     }
 }
