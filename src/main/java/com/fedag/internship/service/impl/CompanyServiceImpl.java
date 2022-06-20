@@ -1,18 +1,24 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.repository.CompanyRepository;
 import com.fedag.internship.service.CompanyService;
+import com.fedag.internship.service.CompanyElasticSearchService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -22,6 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
     private final UserService userService;
+    private final CompanyElasticSearchService companyElasticSearchService;
 
     @Override
     public CompanyEntity getCompanyById(Long id) {
@@ -51,6 +58,7 @@ public class CompanyServiceImpl implements CompanyService {
         userEntity.setCompany(companyEntity);
         companyEntity.setUser(userEntity);
         CompanyEntity result = companyRepository.save(companyEntity);
+        companyElasticSearchService.saveCompany(companyEntity);
         log.info("Компания от пользователя с Id: {} создана", userId);
         return result;
     }
@@ -75,10 +83,13 @@ public class CompanyServiceImpl implements CompanyService {
         log.info("Компания с Id: {} удалена", id);
     }
 
+
     @Override
+    @Transactional
     public Page<CompanyEntity> searchCompanyByName(String keyword, Pageable pageable) {
         log.info("Получение страницы с компаниями по имени");
-        Page<CompanyEntity> result = companyRepository.search(keyword, "name", pageable);
+        Page<CompanyElasticSearchEntity> companiesFromElasticSearch = companyElasticSearchService.searchByName(pageable, keyword);
+        Page<CompanyEntity> result = companiesFromElasticSearch.map(el -> this.getCompanyById(el.getCompanyEntityId()));
         log.info("Страница с компаниями по имени получена");
         return result;
     }
