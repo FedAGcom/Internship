@@ -29,16 +29,17 @@ public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchServ
     private final ElasticsearchOperations elasticsearchOperations;
     private final CompanyElasticSearchRepository companyElasticSearchRepository;
 
-    @Transactional
     @Override
+    @Transactional
     public CompanyElasticSearchEntity saveCompany(CompanyEntity companyEntity) {
         CompanyElasticSearchEntity elsEntity = new CompanyElasticSearchEntity(companyEntity.getName(), companyEntity.getId());
         companyElasticSearchRepository.save(elsEntity);
         return elsEntity;
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public Page<CompanyElasticSearchEntity> searchByName(Pageable pageable, String name) {
         QueryBuilder fuzzyQuery = QueryBuilders
                 .matchQuery("name", name)
@@ -59,9 +60,7 @@ public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchServ
         SearchHits<CompanyElasticSearchEntity> productHits = elasticsearchOperations
                 .search(query, CompanyElasticSearchEntity.class, IndexCoordinates.of(COMPANY_INDEX));
         List<CompanyElasticSearchEntity> companies = new ArrayList<>();
-        productHits.forEach(searchHit-> {companies.add(searchHit.getContent());
-            System.out.println(searchHit.getContent().getName());
-        });
+        productHits.forEach(searchHit-> companies.add(searchHit.getContent()));
         return new PageImpl<>(companies, pageable, companies.size());
     }
 }

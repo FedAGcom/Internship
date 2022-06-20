@@ -83,14 +83,14 @@ public class CompanyServiceImpl implements CompanyService {
         log.info("Компания с Id: {} удалена", id);
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public Page<CompanyEntity> searchCompanyByName(String keyword, Pageable pageable) {
         log.info("Получение страницы с компаниями по имени");
-        Page<CompanyElasticSearchEntity> result = companyElasticSearchService.searchByName(pageable, keyword);
-        List<CompanyEntity> companies = new ArrayList<>();
-        result.forEach(e -> companies.add(companyRepository.findById(e.getCompanyEntityId()).get()));
+        Page<CompanyElasticSearchEntity> companiesFromElasticSearch = companyElasticSearchService.searchByName(pageable, keyword);
+        Page<CompanyEntity> result = companiesFromElasticSearch.map(el -> this.getCompanyById(el.getCompanyEntityId()));
         log.info("Страница с компаниями по имени получена");
-        return new PageImpl<>(companies, pageable, companies.size());
+        return result;
     }
 }

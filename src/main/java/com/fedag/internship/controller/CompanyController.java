@@ -90,7 +90,7 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    //@PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<CompanyResponse> createCompany(@RequestParam Long userId,
                                                          @RequestBody @Valid CompanyRequest companyRequest) {
         CompanyResponse companyResponse = Optional.ofNullable(companyRequest)
