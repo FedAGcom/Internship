@@ -18,6 +18,7 @@ public class TraineePositionMapperImpl implements TraineePositionMapper {
     public TraineePositionResponse toResponse(TraineePositionEntity positionEntity) {
         return new TraineePositionResponse()
                 .setId(positionEntity.getId())
+                .setCompanyId(positionEntity.getCompany().getId())
                 .setName(positionEntity.getName())
                 .setDate(positionEntity.getDate())
                 .setEmployeePosition(positionEntity.getEmployeePosition())

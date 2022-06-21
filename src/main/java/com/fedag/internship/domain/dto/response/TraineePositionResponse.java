@@ -18,6 +18,10 @@ public class TraineePositionResponse {
             example = "1")
     private Long id;
 
+    @Schema(description = "Идентификатор компании",
+            example = "1")
+    private Long companyId;
+
     @Schema(description = "Дата создания позиции")
     private LocalDateTime date;
 

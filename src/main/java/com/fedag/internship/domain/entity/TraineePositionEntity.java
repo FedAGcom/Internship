@@ -7,6 +7,9 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,6 +20,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Table(name = "trainee_positions")
+@EntityListeners(AuditingEntityListener.class)
 public class TraineePositionEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "seq_trainee_positions_id")
@@ -40,6 +45,12 @@ public class TraineePositionEntity {
     private Long id;
 
     private LocalDateTime date;
+
+    @Field
+    @ManyToOne
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private CompanyEntity company;
+
     private String name;
     private String employeePosition;
     private String status;
