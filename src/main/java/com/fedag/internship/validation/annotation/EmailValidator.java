@@ -34,10 +34,8 @@ public class EmailValidator implements ConstraintValidator<Email, String> {
         if (!matcher.find()) {
             return false;
         } else {
-            if (!mailBoxes.contains(matcher.group(2))) {
-                return false;
-            }
-            if (!regions.contains(matcher.group(3))) {
+            if (!mailBoxes.contains(matcher.group(2)) ||
+                    !regions.contains(matcher.group(3))) {
                 return false;
             }
         }
