@@ -1,6 +1,6 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
+import com.fedag.internship.domain.document.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.repository.CompanyElasticSearchRepository;
 import com.fedag.internship.service.CompanyElasticSearchService;
@@ -22,10 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.fedag.internship.domain.document.Indexes.COMPANY_INDEX;
+
 @RequiredArgsConstructor
 @Service
 public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchService {
-    private static final String COMPANY_INDEX = "companies";
     private final ElasticsearchOperations elasticsearchOperations;
     private final CompanyElasticSearchRepository companyElasticSearchRepository;
 

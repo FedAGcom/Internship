@@ -1,6 +1,6 @@
 package com.fedag.internship.repository;
 
-import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
+import com.fedag.internship.domain.document.CompanyElasticSearchEntity;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 

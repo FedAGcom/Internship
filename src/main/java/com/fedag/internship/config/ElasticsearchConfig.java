@@ -10,6 +10,7 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.http.HttpHeaders;
 
 /**
  * class ElasticsearchConfig
@@ -32,7 +33,15 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
                 .withConnectTimeout(elasticsearchProperties.getConnectionTimeout())
                 .withSocketTimeout(elasticsearchProperties.getSocketTimeout())
                 .withBasicAuth(elasticsearchProperties.getUsername(), elasticsearchProperties.getPassword())
+                .withDefaultHeaders(headers())
                 .build();
         return RestClients.create(config).rest();
+    }
+
+    private HttpHeaders headers() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.ACCEPT, "application/vnd.elasticsearch+json;compatible-with=7");
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.elasticsearch+json;compatible-with=7");
+        return headers;
     }
 }

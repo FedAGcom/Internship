@@ -1,6 +1,6 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
+import com.fedag.internship.domain.document.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
