@@ -1,4 +1,4 @@
-package com.fedag.internship.domain.elasticsearch;
+package com.fedag.internship.domain.document;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

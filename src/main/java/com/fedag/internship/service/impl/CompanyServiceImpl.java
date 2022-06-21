@@ -1,24 +1,20 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
+import com.fedag.internship.domain.document.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.repository.CompanyRepository;
-import com.fedag.internship.service.CompanyService;
 import com.fedag.internship.service.CompanyElasticSearchService;
+import com.fedag.internship.service.CompanyService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -82,7 +78,6 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.deleteById(id);
         log.info("Компания с Id: {} удалена", id);
     }
-
 
     @Override
     @Transactional

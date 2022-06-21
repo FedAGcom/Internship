@@ -36,8 +36,8 @@ spring:
   # Elasticsearch
   elasticsearch:
     uris: localhost:9200
-    connection-timeout: 3
-    socket-timeout: 60
+    connection-timeout: 3s
+    socket-timeout: 60s
     username: elastic
     password: admin
 

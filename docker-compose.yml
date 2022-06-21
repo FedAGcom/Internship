@@ -20,6 +20,8 @@ services:
       # Password for the 'elastic' user
       - ELASTIC_PASSWORD=admin
       - discovery.type=single-node
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - 9200:9200

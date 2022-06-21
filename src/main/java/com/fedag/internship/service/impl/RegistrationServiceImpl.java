@@ -34,6 +34,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void register(RegistrationRequest request) {
         UserEntity userEntity = userMapper.fromRegistrationRequest(request);
         userEntity.setRole(Role.USER);
+        userEntity.setEnabled(false);
         userService.createUser(userEntity);
         ConfirmationTokenEntity token = confirmationTokenService.createTokenForUser(userEntity);
         String head = String.format("<h1>Приветствуем вас, %s</h1>", userEntity.getEmail());
