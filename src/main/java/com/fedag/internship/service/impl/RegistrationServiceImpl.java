@@ -27,7 +27,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final EmailSenderService emailSenderService;
 
     private final static String EMAIL_SUBJECT = "Подтверждение аккаунта";
-    private final static String LINK = "http://localhost:8080/registration/confirm?token=";
+    private final static String LINK = "http://localhost:8080/intership/api/v1.0/registration/confirm?token=";
 
     @Transactional
     @Override
