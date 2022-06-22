@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users/favourite-trainee-positions")
+@SecurityRequirement(name = "bearer-token-auth")
 @Tag(name = "Избранные стажировки", description = "Работа с избранными стажировками пользователя")
 public class FavouriteTraineePositionController {
     private final FavouriteTraineePositionService favouriteTraineePositionService;

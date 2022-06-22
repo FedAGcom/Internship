@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,7 @@ public class CommentController {
     private final CommentMapper commentMapper;
 
     @Operation(summary = "Получение комментариев по Id")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Комментарий найден",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CommentResponse.class))})
@@ -84,6 +86,7 @@ public class CommentController {
     }
 
     @Operation(summary = "Создание комментария для компании")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "201", description = "Комментарий создан",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CommentResponse.class))})
@@ -107,6 +110,7 @@ public class CommentController {
     }
 
     @Operation(summary = "Создание комментария для позиции стажировки")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "201", description = "Комментарий создан",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CommentResponse.class))})
@@ -116,6 +120,7 @@ public class CommentController {
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PreAuthorize("hasAuthority('write')")
     @PostMapping("/trainee-position")
     public ResponseEntity<CommentResponse> createForTraineePosition(@RequestParam Long userId,
                                                                     @RequestParam Long positionId,
@@ -129,6 +134,7 @@ public class CommentController {
     }
 
     @Operation(summary = "Обновление комментария")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Комментарий обновлен",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CommentResponse.class))})
@@ -151,6 +157,7 @@ public class CommentController {
     }
 
     @Operation(summary = "Удаление комментария")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Комментарий удален")
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

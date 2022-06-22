@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,6 +37,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/tasks")
+@SecurityRequirement(name = "bearer-token-auth")
 @Tag(name = "Задание", description = "Работа с заданиями")
 public class TaskController {
     private final TaskService taskService;
@@ -50,6 +53,7 @@ public class TaskController {
     @ApiResponse(responseCode = "404", description = "Задание не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PreAuthorize("hasAuthority('write')")
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> getTask(@PathVariable String id) {
         TaskResponse result = Optional.of(id)
@@ -66,6 +70,7 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PreAuthorize("hasAuthority('write')")
     @GetMapping
     public ResponseEntity<Page<TaskResponse>> getAllTasks(@PageableDefault(size = 5) Pageable pageable) {
         Page<TaskResponse> result = taskService.getAllTasks(pageable)
@@ -83,6 +88,7 @@ public class TaskController {
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PreAuthorize("hasAuthority('write')")
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(@RequestBody @Valid TaskRequest taskRequest) {
         TaskResponse result = Optional.ofNullable(taskRequest)
@@ -103,6 +109,7 @@ public class TaskController {
     @ApiResponse(responseCode = "404", description = "Задание не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PreAuthorize("hasAuthority('write')")
     @PatchMapping("/{id}")
     public ResponseEntity<TaskResponse> updateTask(@PathVariable String id,
                                                    @RequestBody @Valid TaskRequestUpdate taskRequestUpdate) {
@@ -122,6 +129,7 @@ public class TaskController {
     @ApiResponse(responseCode = "404", description = "Задание не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PreAuthorize("hasAuthority('write')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTask(@PathVariable String id) {
         taskService.deleteTask(id);

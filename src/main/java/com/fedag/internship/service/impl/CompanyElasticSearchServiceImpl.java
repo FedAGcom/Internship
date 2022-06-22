@@ -38,7 +38,6 @@ public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchServ
         return elsEntity;
     }
 
-
     @Override
     @Transactional
     public Page<CompanyElasticSearchEntity> searchByName(Pageable pageable, String name) {
@@ -46,7 +45,7 @@ public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchServ
                 .matchQuery("name", name)
                 .fuzziness(Fuzziness.AUTO);
         QueryBuilder wildcardQuery = QueryBuilders
-                .wildcardQuery("name",  "*"+ name + "*");
+                .wildcardQuery("name", "*" + name + "*");
         QueryBuilder allQuery = QueryBuilders
                 .matchAllQuery();
         QueryBuilder searchQuery = QueryBuilders
@@ -61,7 +60,7 @@ public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchServ
         SearchHits<CompanyElasticSearchEntity> productHits = elasticsearchOperations
                 .search(query, CompanyElasticSearchEntity.class, IndexCoordinates.of(COMPANY_INDEX));
         List<CompanyElasticSearchEntity> companies = new ArrayList<>();
-        productHits.forEach(searchHit-> companies.add(searchHit.getContent()));
+        productHits.forEach(searchHit -> companies.add(searchHit.getContent()));
         return new PageImpl<>(companies, pageable, companies.size());
     }
 }

@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
+import static org.springframework.util.StringUtils.hasText;
+
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
@@ -71,6 +73,11 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader(authorizationHeader);
+        String token = null;
+        String bearer = request.getHeader(authorizationHeader);
+        if (hasText(bearer) && bearer.startsWith("Bearer ")) {
+            token = bearer.substring(7);
+        }
+        return token;
     }
 }

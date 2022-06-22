@@ -1,4 +1,4 @@
-package com.fedag.internship.domain.elasticsearch;
+package com.fedag.internship.domain.document;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 
 import javax.persistence.Id;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

@@ -1,8 +1,7 @@
 package com.fedag.internship.service.impl;
 
-
-import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
-import com.fedag.internship.domain.elasticsearch.PositionElasticSearchEntity;
+import com.fedag.internship.domain.document.Indexes;
+import com.fedag.internship.domain.document.PositionElasticSearchEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.repository.PositionElasticSearcherRepository;
 import com.fedag.internship.service.PositionElasticSearchService;
@@ -24,11 +23,11 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.fedag.internship.domain.document.Indexes.POSITION_INDEX;
+
 @RequiredArgsConstructor
 @Service
 public class PositionElasticSearchServiceImpl implements PositionElasticSearchService {
-
-    private static final String POSITION_INDEX = "positions";
     private final ElasticsearchOperations elasticsearchOperations;
     private final PositionElasticSearcherRepository positionElasticSearcherRepository;
 
