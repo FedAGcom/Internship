@@ -46,7 +46,7 @@ spring:
     host: smtp.gmail.com
     port: 465
     username: fedagedu@gmail.com
-    password: Pedofil2005
+    password:
     protocol: smtps
     properties:
       mail:
