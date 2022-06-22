@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,7 @@ public class CompanyController {
     private final CompanyElasticSearchService companyElasticSearchService;
 
     @Operation(summary = "Получение компании по Id")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Компания найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CompanyResponse.class))})
@@ -79,6 +81,7 @@ public class CompanyController {
     }
 
     @Operation(summary = "Создание компании")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "201", description = "Компания создана",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CompanyResponse.class))})
@@ -101,6 +104,7 @@ public class CompanyController {
     }
 
     @Operation(summary = "Обновление компании")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Компания обновлена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CompanyResponse.class))})
@@ -123,6 +127,7 @@ public class CompanyController {
     }
 
     @Operation(summary = "Удаление компании")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Компания удалена")
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,7 @@ public class ProposalCompanyController {
     private final ProposalCompanyMapper proposalCompanyMapper;
 
     @Operation(summary = "Получение предложения по Id")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение о компании найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ProposalCompanyResponse.class))})
@@ -70,6 +72,7 @@ public class ProposalCompanyController {
     }
 
     @Operation(summary = "Получение страницы с предложениями")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложения найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
@@ -85,6 +88,7 @@ public class ProposalCompanyController {
     }
 
     @Operation(summary = "Создание предложения")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "201", description = "Предложение создано",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ProposalCompanyResponse.class))})
@@ -106,6 +110,7 @@ public class ProposalCompanyController {
     }
 
     @Operation(summary = "Обновление предложения")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение обновлено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ProposalCompanyResponse.class))})
@@ -128,6 +133,7 @@ public class ProposalCompanyController {
     }
 
     @Operation(summary = "Обновление статуса предложения на UNDER_REVIEW")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение обновлено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ProposalCompanyResponse.class))})
@@ -148,6 +154,7 @@ public class ProposalCompanyController {
     }
 
     @Operation(summary = "Обновление статуса предложения на REFUSED")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение обновлено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ProposalCompanyResponse.class))})
@@ -168,6 +175,7 @@ public class ProposalCompanyController {
     }
 
     @Operation(summary = "Обновление статуса предложения на APPROVED")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение обновлено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ProposalCompanyResponse.class))})
@@ -188,6 +196,7 @@ public class ProposalCompanyController {
     }
 
     @Operation(summary = "Удаление предложения")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение удалено")
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,

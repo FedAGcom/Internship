@@ -8,5 +8,6 @@ package com.fedag.internship.domain.document;
  */
 public interface Indexes {
     String COMPANY_INDEX = "companies";
+    String POSITION_INDEX = "positions";
     String TASK_INDEX = "tasks";
 }

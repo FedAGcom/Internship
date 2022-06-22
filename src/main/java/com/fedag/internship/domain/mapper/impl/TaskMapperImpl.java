@@ -10,11 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
-* class TaskMapperImpl
-*
-* @author damir.iusupov
-* @since 2022-06-14
-*/
+ * class TaskMapperImpl
+ *
+ * @author damir.iusupov
+ * @since 2022-06-14
+ */
 @Component
 @RequiredArgsConstructor
 public class TaskMapperImpl implements TaskMapper {
