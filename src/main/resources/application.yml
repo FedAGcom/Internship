@@ -71,3 +71,9 @@ job:
   # Registration options
 token:
   minutes-to-expire: 60
+
+  #JDoodle Api
+jdoodle:
+  compiler-url: https://api.jdoodle.com/v1/execute
+  client-id: 6cb34a262060d9b524aa0eb32ed6faa9
+  client-secret: 8e923e7fbd6ea3f8a500085bb4354ca807a318258fc6423d249f9fa4f19d825d
