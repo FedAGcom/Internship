@@ -9,6 +9,11 @@ public class CompilerApiService {
     private static final String COMPILER_URL = "https://api.jdoodle.com/v1/execute";
 
     public static ResponseEntity<String> execute(CompilerRequest compilerRequest) {
-        return new RestTemplate().postForEntity(COMPILER_URL, compilerRequest, String.class);
+        return new RestTemplate().postForEntity(COMPILER_URL,setCredentials(compilerRequest), String.class);
+    }
+    private static CompilerRequest setCredentials(CompilerRequest compilerRequest){
+//        compilerRequest.setClientId();
+//        compilerRequest.setClientSecret();
+        return compilerRequest;
     }
 }
