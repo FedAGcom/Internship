@@ -12,6 +12,8 @@ public interface UserService {
 
     Page<UserEntity> findAllByRoleDeleted(Pageable pageable);
 
+    Page<UserEntity> findAll(Pageable pageable);
+
     UserEntity create(UserEntity user);
 
     UserEntity update(Long id, UserEntity user);

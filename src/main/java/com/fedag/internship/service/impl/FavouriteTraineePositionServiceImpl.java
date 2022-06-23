@@ -45,11 +45,12 @@ public class FavouriteTraineePositionServiceImpl implements FavouriteTraineePosi
 
     @Override
     @Transactional
-    public void removeFavouriteTraineePosition(Long userId, Long traineeId) {
+    public UserEntity removeFavouriteTraineePosition(Long userId, Long traineeId) {
         log.info("Удаление стажировки с Id: {} из избранного у пользователя с Id: {}", traineeId, userId);
         UserEntity userEntity = userService.findById(userId);
         TraineePositionEntity traineePositionEntity = traineePositionService.findById(traineeId);
         traineePositionEntity.removeFavouriteTraineePositionFromUser(userEntity);
         log.info("Стажировка с Id: {} удалена из избранного у пользователя с Id: {}", traineeId, userId);
+        return userEntity;
     }
 }

@@ -5,7 +5,6 @@ import com.fedag.internship.domain.entity.UpdatingPasswordToken;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.InvalidConfirmationTokenException;
 import com.fedag.internship.domain.exception.InvalidOldPasswordException;
-import com.fedag.internship.security.service.UserDetailServiceImpl;
 import com.fedag.internship.service.EmailSenderService;
 import com.fedag.internship.service.UpdatingPasswordService;
 import com.fedag.internship.service.UpdatingPasswordTokenService;

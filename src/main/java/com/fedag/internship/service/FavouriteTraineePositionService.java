@@ -10,5 +10,5 @@ public interface FavouriteTraineePositionService {
 
     UserEntity addFavouriteTraineePosition(Long userId, Long traineeId);
 
-    void removeFavouriteTraineePosition(Long userId, Long traineeId);
+    UserEntity removeFavouriteTraineePosition(Long userId, Long traineeId);
 }

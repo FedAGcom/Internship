@@ -1,9 +1,9 @@
-package com.fedag.internship.controller;
+package com.fedag.internship.controller.admin;
 
 import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.dto.request.ProposalCompanyRequest;
 import com.fedag.internship.domain.dto.request.ProposalCompanyRequestUpdate;
-import com.fedag.internship.domain.dto.response.ProposalCompanyResponse;
+import com.fedag.internship.domain.dto.response.admin.AdminProposalCompanyResponse;
 import com.fedag.internship.domain.entity.ProposalCompanyEntity;
 import com.fedag.internship.domain.mapper.ProposalCompanyMapper;
 import com.fedag.internship.service.ProposalCompanyService;
@@ -33,6 +33,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import static com.fedag.internship.domain.util.UrlConstants.ADMIN;
+import static com.fedag.internship.domain.util.UrlConstants.ID;
+import static com.fedag.internship.domain.util.UrlConstants.MAIN_URL;
+import static com.fedag.internship.domain.util.UrlConstants.PROPOSAL_COMPANY_URL;
+import static com.fedag.internship.domain.util.UrlConstants.PROPOSAL_STATUS_APPROVED_URL;
+import static com.fedag.internship.domain.util.UrlConstants.PROPOSAL_STATUS_REFUSED_URL;
+import static com.fedag.internship.domain.util.UrlConstants.PROPOSAL_STATUS_UNDER_REVIEW_URL;
+import static com.fedag.internship.domain.util.UrlConstants.VERSION;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -44,35 +52,34 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/proposal-company")
-@Tag(name = "Предложение о компании", description = "Работа с предложением")
-public class ProposalCompanyController {
+@RequestMapping(MAIN_URL + VERSION + ADMIN + PROPOSAL_COMPANY_URL)
+@PreAuthorize("hasAuthority('admin')")
+@SecurityRequirement(name = "bearer-token-auth")
+@Tag(name = "Админка Предложения о компании", description = "Админка для работы с предложением")
+public class AdminProposalCompanyController {
     private final ProposalCompanyService proposalCompanyService;
     private final ProposalCompanyMapper proposalCompanyMapper;
 
     @Operation(summary = "Получение предложения по Id")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение о компании найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ProposalCompanyResponse.class))})
+                    schema = @Schema(implementation = AdminProposalCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Предложение о компании не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @GetMapping("{id}")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> findById(@PathVariable Long id) {
-        ProposalCompanyResponse result = Optional.of(id)
+    @GetMapping(ID)
+    public ResponseEntity<AdminProposalCompanyResponse> findById(@PathVariable Long id) {
+        AdminProposalCompanyResponse result = Optional.of(id)
                 .map(proposalCompanyService::findById)
-                .map(proposalCompanyMapper::toResponse)
+                .map(proposalCompanyMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
     }
 
     @Operation(summary = "Получение страницы с предложениями")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложения найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
@@ -80,18 +87,16 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<Page<ProposalCompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
-        Page<ProposalCompanyResponse> result = proposalCompanyService.findAll(pageable)
-                .map(proposalCompanyMapper::toResponse);
+    public ResponseEntity<Page<AdminProposalCompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
+        Page<AdminProposalCompanyResponse> result = proposalCompanyService.findAll(pageable)
+                .map(proposalCompanyMapper::toAdminResponse);
         return new ResponseEntity<>(result, OK);
     }
 
     @Operation(summary = "Создание предложения")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "201", description = "Предложение создано",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ProposalCompanyResponse.class))})
+                    schema = @Schema(implementation = AdminProposalCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Ошибка валидации",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
@@ -99,104 +104,94 @@ public class ProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> create(@RequestBody @Valid ProposalCompanyRequest request) {
-        ProposalCompanyResponse result = Optional.ofNullable(request)
+    public ResponseEntity<AdminProposalCompanyResponse> create(@RequestBody @Valid ProposalCompanyRequest request) {
+        AdminProposalCompanyResponse result = Optional.ofNullable(request)
                 .map(proposalCompanyMapper::fromRequest)
                 .map(proposalCompanyService::create)
-                .map(proposalCompanyMapper::toResponse)
+                .map(proposalCompanyMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
     }
 
     @Operation(summary = "Обновление предложения")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение обновлено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ProposalCompanyResponse.class))})
+                    schema = @Schema(implementation = AdminProposalCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Предложение о компании не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> update(@PathVariable Long id,
-                                                          @RequestBody @Valid ProposalCompanyRequestUpdate requestUpdate) {
-        ProposalCompanyResponse result = Optional.ofNullable(requestUpdate)
+    @PatchMapping(ID)
+    public ResponseEntity<AdminProposalCompanyResponse> update(@PathVariable Long id,
+                                                               @RequestBody @Valid ProposalCompanyRequestUpdate requestUpdate) {
+        AdminProposalCompanyResponse result = Optional.ofNullable(requestUpdate)
                 .map(proposalCompanyMapper::fromRequestUpdate)
                 .map(company -> proposalCompanyService.update(id, company))
-                .map(proposalCompanyMapper::toResponse)
+                .map(proposalCompanyMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
     }
 
     @Operation(summary = "Обновление статуса предложения на UNDER_REVIEW")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение обновлено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ProposalCompanyResponse.class))})
+                    schema = @Schema(implementation = AdminProposalCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Предложение о компании не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PatchMapping("/setStatusUnderReview")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> setStatusUnderReview(@RequestParam Long id) {
-        ProposalCompanyResponse result = Optional.of(id)
+    @PatchMapping(PROPOSAL_STATUS_UNDER_REVIEW_URL)
+    public ResponseEntity<AdminProposalCompanyResponse> setStatusUnderReview(@RequestParam Long id) {
+        AdminProposalCompanyResponse result = Optional.of(id)
                 .map(company -> proposalCompanyService.setStatusUnderReview(id))
-                .map(proposalCompanyMapper::toResponse)
+                .map(proposalCompanyMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
     }
 
     @Operation(summary = "Обновление статуса предложения на REFUSED")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение обновлено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ProposalCompanyResponse.class))})
+                    schema = @Schema(implementation = AdminProposalCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Предложение о компании не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PatchMapping("/setStatusRefused")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> setStatusRefused(@RequestParam Long id) {
-        ProposalCompanyResponse result = Optional.of(id)
+    @PatchMapping(PROPOSAL_STATUS_REFUSED_URL)
+    public ResponseEntity<AdminProposalCompanyResponse> setStatusRefused(@RequestParam Long id) {
+        AdminProposalCompanyResponse result = Optional.of(id)
                 .map(company -> proposalCompanyService.setStatusRefused(id))
-                .map(proposalCompanyMapper::toResponse)
+                .map(proposalCompanyMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
     }
 
     @Operation(summary = "Обновление статуса предложения на APPROVED")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение обновлено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ProposalCompanyResponse.class))})
+                    schema = @Schema(implementation = AdminProposalCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Предложение о компании не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PatchMapping("/setStatusApproved")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> setStatusApproved(@RequestParam Long id) {
-        ProposalCompanyResponse result = Optional.of(id)
+    @PatchMapping(PROPOSAL_STATUS_APPROVED_URL)
+    public ResponseEntity<AdminProposalCompanyResponse> setStatusApproved(@RequestParam Long id) {
+        AdminProposalCompanyResponse result = Optional.of(id)
                 .map(company -> proposalCompanyService.setStatusApproved(id))
-                .map(proposalCompanyMapper::toResponse)
+                .map(proposalCompanyMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
     }
 
     @Operation(summary = "Удаление предложения")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Предложение удалено")
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -204,8 +199,7 @@ public class ProposalCompanyController {
     @ApiResponse(responseCode = "404", description = "Предложение о компании не найдено",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('write')")
+    @DeleteMapping(ID)
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         proposalCompanyService.deleteById(id);
         return new ResponseEntity<>(OK);

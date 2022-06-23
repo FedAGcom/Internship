@@ -1,4 +1,4 @@
-package com.fedag.internship.domain.dto.response;
+package com.fedag.internship.domain.dto.response.admin;
 
 import com.fedag.internship.domain.entity.CommentEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
-@Schema(name = "Комментарий", description = "Информация о комментарии")
-public class CommentResponse {
+@Schema(name = "Комментарий для админа", description = "Информация о комментарии")
+public class AdminCommentResponse {
     @Schema(description = "Идентификатор Комментария",
             example = "1")
     private Long id;

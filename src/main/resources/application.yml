@@ -1,7 +1,5 @@
 # Server
 server:
-  servlet:
-    context-path: /intership/api/v1.0
   error:
     include-binding-errors: always
     include-message: always

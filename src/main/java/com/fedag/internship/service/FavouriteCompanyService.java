@@ -10,5 +10,5 @@ public interface FavouriteCompanyService {
 
     UserEntity addFavouriteCompany(Long userId, Long companyId);
 
-    void removeFavouriteCompany(Long userId, Long companyId);
+    UserEntity removeFavouriteCompany(Long userId, Long companyId);
 }

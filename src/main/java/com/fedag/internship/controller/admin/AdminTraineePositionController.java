@@ -1,10 +1,9 @@
-package com.fedag.internship.controller;
-
+package com.fedag.internship.controller.admin;
 
 import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.dto.request.TraineePositionRequest;
 import com.fedag.internship.domain.dto.request.TraineePositionRequestUpdate;
-import com.fedag.internship.domain.dto.response.TraineePositionResponse;
+import com.fedag.internship.domain.dto.response.admin.AdminTraineePositionResponse;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
 import com.fedag.internship.service.TraineePositionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,34 +32,40 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import static com.fedag.internship.domain.util.UrlConstants.ADMIN;
+import static com.fedag.internship.domain.util.UrlConstants.ID;
+import static com.fedag.internship.domain.util.UrlConstants.MAIN_URL;
+import static com.fedag.internship.domain.util.UrlConstants.POSITION_URL;
+import static com.fedag.internship.domain.util.UrlConstants.SEARCH_BY_COMPANY_URL;
+import static com.fedag.internship.domain.util.UrlConstants.VERSION;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/positions")
-@Tag(name = "Позиция для стажировки", description = "Работа с позициями для стажировки")
-public class TraineePositionController {
+@RequestMapping(MAIN_URL + VERSION + ADMIN + POSITION_URL)
+@PreAuthorize("hasAuthority('admin')")
+@SecurityRequirement(name = "bearer-token-auth")
+@Tag(name = "Админка Позиции для стажировки", description = "Админка для работы с позициями для стажировки")
+public class AdminTraineePositionController {
     private final TraineePositionService positionService;
     private final TraineePositionMapper positionMapper;
 
     @Operation(summary = "Получение позиции по Id")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Позиция найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = TraineePositionResponse.class))})
+                    schema = @Schema(implementation = AdminTraineePositionResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Позиция не найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<TraineePositionResponse> findById(@PathVariable Long id) {
-        TraineePositionResponse companyResponse = Optional.of(id)
+    @GetMapping(ID)
+    public ResponseEntity<AdminTraineePositionResponse> findById(@PathVariable Long id) {
+        AdminTraineePositionResponse companyResponse = Optional.of(id)
                 .map(positionService::findById)
-                .map(positionMapper::toResponse)
+                .map(positionMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(companyResponse, OK);
     }
@@ -73,17 +78,16 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<TraineePositionResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
-        Page<TraineePositionResponse> positions = positionService.findAll(pageable)
-                .map(positionMapper::toResponse);
+    public ResponseEntity<Page<AdminTraineePositionResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
+        Page<AdminTraineePositionResponse> positions = positionService.findAll(pageable)
+                .map(positionMapper::toAdminResponse);
         return new ResponseEntity<>(positions, OK);
     }
 
     @Operation(summary = "Создание позиции")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "201", description = "Позиция создана",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = TraineePositionResponse.class))})
+                    schema = @Schema(implementation = AdminTraineePositionResponse.class))})
     @ApiResponse(responseCode = "400", description = "Ошибка валидации",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
@@ -91,41 +95,37 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<TraineePositionResponse> create(@RequestBody @Valid TraineePositionRequest request) {
-        TraineePositionResponse positionResponse = Optional.ofNullable(request)
+    public ResponseEntity<AdminTraineePositionResponse> create(@RequestBody @Valid TraineePositionRequest request) {
+        AdminTraineePositionResponse positionResponse = Optional.ofNullable(request)
                 .map(positionMapper::fromRequest)
                 .map(positionService::create)
-                .map(positionMapper::toResponse)
+                .map(positionMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(positionResponse, CREATED);
     }
 
     @Operation(summary = "Обновление позиции")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Позиция обновлена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = TraineePositionResponse.class))})
+                    schema = @Schema(implementation = AdminTraineePositionResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Позиция не найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<TraineePositionResponse> update(@PathVariable Long id,
-                                                          @RequestBody TraineePositionRequestUpdate update) {
-        TraineePositionResponse positionResponse = Optional.ofNullable(update)
+    @PatchMapping(ID)
+    public ResponseEntity<AdminTraineePositionResponse> update(@PathVariable Long id,
+                                                               @RequestBody TraineePositionRequestUpdate update) {
+        AdminTraineePositionResponse positionResponse = Optional.ofNullable(update)
                 .map(positionMapper::fromRequestUpdate)
                 .map(position -> positionService.update(id, position))
-                .map(positionMapper::toResponse)
+                .map(positionMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(positionResponse, OK);
     }
 
     @Operation(summary = "Удаление позиции")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Позиция удалена")
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -133,8 +133,7 @@ public class TraineePositionController {
     @ApiResponse(responseCode = "404", description = "Позиция не найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('write')")
+    @DeleteMapping(ID)
     public ResponseEntity<?> deletePosition(@PathVariable Long id) {
         positionService.deleteById(id);
         return new ResponseEntity<>(OK);
@@ -147,12 +146,12 @@ public class TraineePositionController {
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @GetMapping("/searchposition")
-    public ResponseEntity<Page<TraineePositionResponse>> searchByCompany(@RequestParam String keyword,
-                                                                         Pageable pageable) {
-        Page<TraineePositionResponse> positions = positionService
+    @GetMapping(SEARCH_BY_COMPANY_URL)
+    public ResponseEntity<Page<AdminTraineePositionResponse>> searchByCompany(@RequestParam String keyword,
+                                                                              Pageable pageable) {
+        Page<AdminTraineePositionResponse> positions = positionService
                 .searchByCompany(keyword, pageable)
-                .map(positionMapper::toResponse);
+                .map(positionMapper::toAdminResponse);
         return new ResponseEntity<>(positions, OK);
     }
 }

@@ -55,6 +55,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<UserEntity> findAll(Pageable pageable) {
+        log.info("Получение страницы с пользователями");
+        Page<UserEntity> result = userRepository.findAll(pageable);
+        log.info("Страница с пользователями получена");
+        return result;
+    }
+
+    @Override
     @Transactional
     public UserEntity create(UserEntity userEntity) {
         log.info("Создание пользователя");

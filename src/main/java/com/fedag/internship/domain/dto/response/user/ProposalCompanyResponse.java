@@ -1,4 +1,4 @@
-package com.fedag.internship.domain.dto.response;
+package com.fedag.internship.domain.dto.response.user;
 
 import com.fedag.internship.domain.entity.ProposalCompanyEntity;
 import com.fedag.internship.domain.entity.Status;

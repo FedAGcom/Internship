@@ -1,9 +1,7 @@
-package com.fedag.internship.controller;
+package com.fedag.internship.controller.user;
 
 import com.fedag.internship.domain.dto.DtoErrorInfo;
-import com.fedag.internship.domain.dto.request.UserRequest;
-import com.fedag.internship.domain.dto.request.UserRequestUpdate;
-import com.fedag.internship.domain.dto.response.UserResponse;
+import com.fedag.internship.domain.dto.response.user.UserResponse;
 import com.fedag.internship.domain.mapper.UserMapper;
 import com.fedag.internship.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,29 +18,30 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import static com.fedag.internship.domain.util.UrlConstants.ID;
+import static com.fedag.internship.domain.util.UrlConstants.MAIN_URL;
+import static com.fedag.internship.domain.util.UrlConstants.USER;
+import static com.fedag.internship.domain.util.UrlConstants.USER_URL;
+import static com.fedag.internship.domain.util.UrlConstants.VERSION;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping(MAIN_URL + VERSION + USER_URL)
+@PreAuthorize("hasAuthority('user')")
+@SecurityRequirement(name = "bearer-token-auth")
 @Tag(name = "Пользователь", description = "Работа с пользователями")
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
     @Operation(summary = "Получение пользователя по Id")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Пользователь найден",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = UserResponse.class))})
@@ -52,14 +51,13 @@ public class UserController {
     @ApiResponse(responseCode = "404", description = "Пользователь не найден",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('read')")
+    @GetMapping(ID)
     public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
-        UserResponse userResponse = Optional.of(id)
+        UserResponse result = Optional.of(id)
                 .map(userService::findById)
                 .map(userMapper::toResponse)
                 .orElseThrow();
-        return new ResponseEntity<>(userResponse, OK);
+        return new ResponseEntity<>(result, OK);
     }
 
     @Operation(summary = "Получение страницы с пользователями с ролью USER")
@@ -69,55 +67,24 @@ public class UserController {
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @GetMapping
+    @GetMapping(USER)
     public ResponseEntity<Page<UserResponse>> findAllByRoleUser(@PageableDefault(size = 5) Pageable pageable) {
         Page<UserResponse> users = userService.findAllByRoleUser(pageable)
                 .map(userMapper::toResponse);
         return new ResponseEntity<>(users, OK);
     }
 
-    @Operation(summary = "Создание пользователя")
-    @SecurityRequirement(name = "bearer-token-auth")
-    @ApiResponse(responseCode = "201", description = "Пользователь создан",
+    @Operation(summary = "Получение страницы с пользователями")
+    @ApiResponse(responseCode = "200", description = "Пользователи найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = UserResponse.class))})
-    @ApiResponse(responseCode = "400", description = "Ошибка валидации",
-            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = DtoErrorInfo.class))})
+                    schema = @Schema(implementation = Page.class))})
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PostMapping
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<UserResponse> create(@RequestBody @Valid UserRequest userRequest) {
-        UserResponse userResponse = Optional.ofNullable(userRequest)
-                .map(userMapper::fromRequest)
-                .map(userService::create)
-                .map(userMapper::toResponse)
-                .orElseThrow();
-        return new ResponseEntity<>(userResponse, CREATED);
-    }
-
-    @Operation(summary = "Обновление пользователя")
-    @SecurityRequirement(name = "bearer-token-auth")
-    @ApiResponse(responseCode = "200", description = "Пользователь обновлен",
-            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = UserResponse.class))})
-    @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
-            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = DtoErrorInfo.class))})
-    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
-            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id,
-                                               @RequestBody @Valid UserRequestUpdate userRequestUpdate) {
-        UserResponse userResponse = Optional.ofNullable(userRequestUpdate)
-                .map(userMapper::fromRequestUpdate)
-                .map(user -> userService.update(id, user))
-                .map(userMapper::toResponse)
-                .orElseThrow();
-        return new ResponseEntity<>(userResponse, OK);
+    @GetMapping
+    public ResponseEntity<Page<UserResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
+        Page<UserResponse> users = userService.findAll(pageable)
+                .map(userMapper::toResponse);
+        return new ResponseEntity<>(users, OK);
     }
 }
