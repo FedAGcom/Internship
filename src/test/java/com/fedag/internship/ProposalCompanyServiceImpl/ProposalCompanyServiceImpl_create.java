@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
  * @since 2022-06-09
  */
 @ExtendWith(MockitoExtension.class)
-public class ProposalCompanyServiceImpl_createProposalCompany {
+public class ProposalCompanyServiceImpl_create {
     @InjectMocks
     private ProposalCompanyServiceImpl proposalCompanyService;
 
@@ -34,7 +34,7 @@ public class ProposalCompanyServiceImpl_createProposalCompany {
     public void testPositive() {
         ProposalCompanyEntity company = new ProposalCompanyEntity().setName("some name # 1");
         when(proposalCompanyRepository.save(company)).thenReturn(company);
-        ProposalCompanyEntity result = proposalCompanyService.createProposalCompany(company);
+        ProposalCompanyEntity result = proposalCompanyService.create(company);
         assertEquals("some name # 1", result.getName());
         assertEquals(NEW, result.getStatus());
         verify(proposalCompanyRepository, times(1)).save(any());

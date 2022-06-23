@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.fedag.internship.domain.entity.Status.NEW;
-import static com.fedag.internship.domain.entity.Status.REFUSED;
+import static com.fedag.internship.domain.entity.Status.UNDER_REVIEW;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -22,13 +22,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * class ProposalCompanyServiceImpl_setProposalCompanyStatusRefused
+ * class ProposalCompanyServiceImpl_setProposalCompanyStatusUnderReview
  *
  * @author damir.iusupov
  * @since 2022-06-09
  */
 @ExtendWith(MockitoExtension.class)
-public class ProposalCompanyServiceImpl_setProposalCompanyStatusRefused {
+public class ProposalCompanyServiceImpl_setStatusUnderReview {
     @InjectMocks
     private ProposalCompanyServiceImpl proposalCompanyService;
 
@@ -40,7 +40,7 @@ public class ProposalCompanyServiceImpl_setProposalCompanyStatusRefused {
         Long id = anyLong();
         when(proposalCompanyRepository.findById(id)).thenReturn(Optional.empty());
         try {
-            proposalCompanyService.setProposalCompanyStatusRefused(id);
+            proposalCompanyService.setStatusUnderReview(id);
         } catch (EntityNotFoundException exception) {
             assertEquals(String.format("%s with %s: %s not found", "ProposalCompany", "Id", id),
                     exception.getMessage());
@@ -56,9 +56,9 @@ public class ProposalCompanyServiceImpl_setProposalCompanyStatusRefused {
                 .setStatus(NEW);
         when(proposalCompanyRepository.findById(id)).thenReturn(Optional.of(company));
         when(proposalCompanyRepository.save(company)).thenReturn(company);
-        ProposalCompanyEntity result = proposalCompanyService.setProposalCompanyStatusRefused(id);
+        ProposalCompanyEntity result = proposalCompanyService.setStatusUnderReview(id);
         assertEquals("some name", result.getName());
-        assertEquals(REFUSED, result.getStatus());
+        assertEquals(UNDER_REVIEW, result.getStatus());
         verify(proposalCompanyRepository, times(1)).save(any(ProposalCompanyEntity.class));
     }
 }

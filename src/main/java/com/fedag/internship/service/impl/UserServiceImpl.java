@@ -22,16 +22,16 @@ import static com.fedag.internship.domain.entity.Role.USER;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserEntity getUserById(Long id) {
+    public UserEntity findById(Long id) {
         log.info("Получение пользователя c Id: {}", id);
         UserEntity result = userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Пользователь с Id: {} не найден", id);
+                    log.error("Пользователь с Id: {} не найден", id);
                     throw new EntityNotFoundException("User", "Id", id);
                 });
         log.info("Пользователь c Id: {} получен", id);
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserEntity> getAllUsersWithRoleUser(Pageable pageable) {
+    public Page<UserEntity> findAllByRoleUser(Pageable pageable) {
         log.info("Получение страницы с пользователями с ролью USER");
         Page<UserEntity> result = userRepository.findAllByRole(USER, pageable);
         log.info("Страница с пользователями с ролью USER получена");
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserEntity> getAllUsersWithRoleDeleted(Pageable pageable) {
+    public Page<UserEntity> findAllByRoleDeleted(Pageable pageable) {
         log.info("Получение страницы с пользователями с ролью DELETED");
         Page<UserEntity> result = userRepository.findAllByRole(DELETED, pageable);
         log.info("Страница с пользователями с ролью DELETED получена");
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserEntity createUser(UserEntity userEntity) {
+    public UserEntity create(UserEntity userEntity) {
         log.info("Создание пользователя");
         if (userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
             throw new EntityAlreadyExistsException("User", "email", userEntity.getEmail());
@@ -70,9 +70,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserEntity updateUser(Long id, UserEntity userEntity) {
+    public UserEntity update(Long id, UserEntity userEntity) {
         log.info("Обновление пользователя с Id: {}", id);
-        UserEntity target = this.getUserById(id);
+        UserEntity target = this.findById(id);
         UserEntity update = userMapper.merge(userEntity, target);
         UserEntity result = userRepository.save(update);
         log.info("Пользователь с Id: {} обновлен", id);
@@ -81,9 +81,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(Long id) {
+    public void deleteById(Long id) {
         log.info("Удаление пользователя с Id: {}", id);
-        this.getUserById(id);
+        this.findById(id);
         userRepository.deleteById(id);
         log.info("Пользователь с Id: {} удален", id);
     }

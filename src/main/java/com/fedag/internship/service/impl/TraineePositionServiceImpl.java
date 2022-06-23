@@ -1,6 +1,5 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.document.PositionElasticSearchEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
@@ -24,11 +23,11 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     private final TraineePositionMapper positionMapper;
 
     @Override
-    public TraineePositionEntity getPositionById(Long id) {
+    public TraineePositionEntity findById(Long id) {
         log.info("Получение позиции стажировки c Id: {}", id);
         TraineePositionEntity result = positionRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Позиция стажировки с Id: {} не найдена", id);
+                    log.error("Позиция стажировки с Id: {} не найдена", id);
                     throw new EntityNotFoundException("TraineePosition", "Id", id);
                 });
         log.info("Позиция стажировки c Id: {} получена", id);
@@ -36,7 +35,7 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     }
 
     @Override
-    public Page<TraineePositionEntity> getAllPositions(Pageable pageable) {
+    public Page<TraineePositionEntity> findAll(Pageable pageable) {
         log.info("Получение страницы с позициями стажировки");
         Page<TraineePositionEntity> result = positionRepository.findAll(pageable);
         log.info("Страница с позициями стажировки получена");
@@ -45,19 +44,19 @@ public class TraineePositionServiceImpl implements TraineePositionService {
 
     @Override
     @Transactional
-    public TraineePositionEntity createPosition(TraineePositionEntity positionEntity) {
+    public TraineePositionEntity create(TraineePositionEntity positionEntity) {
         log.info("Создание позиции стажировки");
-        TraineePositionEntity result = (TraineePositionEntity) positionRepository.save(positionEntity);
-        positionElasticSearchService.savePosition(positionEntity);
+        TraineePositionEntity result = positionRepository.save(positionEntity);
+        positionElasticSearchService.save(positionEntity);
         log.info("Позиция стажировки создана");
         return result;
     }
 
     @Override
     @Transactional
-    public TraineePositionEntity updatePosition(Long id, TraineePositionEntity positionEntity) {
+    public TraineePositionEntity update(Long id, TraineePositionEntity positionEntity) {
         log.info("Обновление позиции стажировки с Id: {}", id);
-        TraineePositionEntity target = this.getPositionById(id);
+        TraineePositionEntity target = this.findById(id);
         TraineePositionEntity update = positionMapper.merge(positionEntity, target);
         TraineePositionEntity result = positionRepository.save(update);
         log.info("Позиция стажировки с Id: {} обновлена", id);
@@ -66,19 +65,20 @@ public class TraineePositionServiceImpl implements TraineePositionService {
 
     @Override
     @Transactional
-    public void deletePosition(Long id) {
+    public void deleteById(Long id) {
         log.info("Удаление позиции стажировки с Id: {}", id);
-        this.getPositionById(id);
+        this.findById(id);
         positionRepository.deleteById(id);
         log.info("Позиция стажировки с Id: {} удалена", id);
     }
 
     @Override
     @Transactional
-    public Page<TraineePositionEntity> searchPositionByCompany(String keyword, Pageable pageable) {
+    public Page<TraineePositionEntity> searchByCompany(String keyword, Pageable pageable) {
         log.info("Получение страницы с позициями по компании");
-        Page<PositionElasticSearchEntity> companiesFromElasticSearch = positionElasticSearchService.searchByCompany(pageable, keyword);
-        Page<TraineePositionEntity> result = companiesFromElasticSearch.map(el -> this.getPositionById(el.getCompanyEntityId()));
+        Page<TraineePositionEntity> result = positionElasticSearchService
+                .elasticsearchByCompany(pageable, keyword)
+                .map(el -> this.findById(el.getCompanyEntityId()));
         log.info("Страница с позициями по компании получена");
         return result;
     }

@@ -55,9 +55,9 @@ public class TaskController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PreAuthorize("hasAuthority('write')")
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> getTask(@PathVariable String id) {
+    public ResponseEntity<TaskResponse> findById(@PathVariable String id) {
         TaskResponse result = Optional.of(id)
-                .map(taskService::getTaskById)
+                .map(taskService::findById)
                 .map(taskMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -72,8 +72,8 @@ public class TaskController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PreAuthorize("hasAuthority('write')")
     @GetMapping
-    public ResponseEntity<Page<TaskResponse>> getAllTasks(@PageableDefault(size = 5) Pageable pageable) {
-        Page<TaskResponse> result = taskService.getAllTasks(pageable)
+    public ResponseEntity<Page<TaskResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
+        Page<TaskResponse> result = taskService.findAll(pageable)
                 .map(taskMapper::toResponse);
         return new ResponseEntity<>(result, OK);
     }
@@ -90,10 +90,10 @@ public class TaskController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PreAuthorize("hasAuthority('write')")
     @PostMapping
-    public ResponseEntity<TaskResponse> createTask(@RequestBody @Valid TaskRequest taskRequest) {
+    public ResponseEntity<TaskResponse> create(@RequestBody @Valid TaskRequest taskRequest) {
         TaskResponse result = Optional.ofNullable(taskRequest)
                 .map(taskMapper::fromRequest)
-                .map(taskService::createTask)
+                .map(taskService::create)
                 .map(taskMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
@@ -111,11 +111,11 @@ public class TaskController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PreAuthorize("hasAuthority('write')")
     @PatchMapping("/{id}")
-    public ResponseEntity<TaskResponse> updateTask(@PathVariable String id,
-                                                   @RequestBody @Valid TaskRequestUpdate taskRequestUpdate) {
+    public ResponseEntity<TaskResponse> update(@PathVariable String id,
+                                               @RequestBody @Valid TaskRequestUpdate taskRequestUpdate) {
         TaskResponse result = Optional.ofNullable(taskRequestUpdate)
                 .map(taskMapper::fromRequestUpdate)
-                .map(task -> taskService.updateTask(id, task))
+                .map(task -> taskService.update(id, task))
                 .map(taskMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -131,8 +131,8 @@ public class TaskController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PreAuthorize("hasAuthority('write')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTask(@PathVariable String id) {
-        taskService.deleteTask(id);
+    public ResponseEntity<?> deleteById(@PathVariable String id) {
+        taskService.deleteById(id);
         return new ResponseEntity<>(OK);
     }
 }

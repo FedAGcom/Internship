@@ -9,8 +9,8 @@ import com.fedag.internship.security.service.UserDetailServiceImpl;
 import com.fedag.internship.service.EmailSenderService;
 import com.fedag.internship.service.UpdatingPasswordService;
 import com.fedag.internship.service.UpdatingPasswordTokenService;
-import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UpdatingPasswordServiceImpl implements UpdatingPasswordService {
@@ -29,17 +30,19 @@ public class UpdatingPasswordServiceImpl implements UpdatingPasswordService {
     private final UserDetailServiceImpl userDetailService;
     private final UpdatingPasswordTokenService updatingPasswordTokenService;
     private final EmailSenderService emailSenderService;
-    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void changeUserPassword(String newPassword, String oldPassword) {
+        log.info("Получение пользователя из контекста Security");
         UserEntity userEntity = userDetailService
                 .getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        log.info("Пользователь из контекста Security получен");
+        log.info("Создание запроса на изменение пароля пользователя с email: {}", userEntity.getEmail());
         if (passwordEncoder.matches(oldPassword, userEntity.getPassword())) {
             String password = passwordEncoder.encode(newPassword);
-            UpdatingPasswordToken token = updatingPasswordTokenService.createTokenForUser(userEntity, password);
+            UpdatingPasswordToken token = updatingPasswordTokenService.create(userEntity, password);
             String head = String.format("<h1>Приветствуем вас, %s</h1>", userEntity.getEmail());
             String div1 = "<div>Добро пожаловать в FedAG Intership!</div>";
             String div2 = "<div>Для подтверждения смены пароля пройдите по ссылке ниже.</div><br>";
@@ -47,23 +50,28 @@ public class UpdatingPasswordServiceImpl implements UpdatingPasswordService {
             String button = String.format("<a href=\"%s\">Activate link</a>", linkWithToken);
             String resultMessage = head + div1 + div2 + button;
             emailSenderService.send(userEntity.getEmail(), EMAIL_SUBJECT, resultMessage);
+            log.info("Запрос на изменение пароля пользователя с email: {} создан", userEntity.getEmail());
         } else {
+            log.error("Запрос на изменение пароля пользователя с email: {} отклонен " +
+                    "(старый пароль введен неверно)", userEntity.getEmail());
             throw new InvalidOldPasswordException("Invalid password");
         }
     }
 
     @Override
     public UserEntity confirm(String token) {
-        UpdatingPasswordToken updatingPasswordToken = updatingPasswordTokenService.getByToken(token);
+        log.info("Подтверждение изменения пароля через токен");
+        UpdatingPasswordToken updatingPasswordToken = updatingPasswordTokenService.findByToken(token);
         LocalDateTime tokenExpiredDate = updatingPasswordToken.getExpired();
         if (tokenExpiredDate.isBefore(now())) {
-            updatingPasswordTokenService.deleteToken(updatingPasswordToken);
+            log.error("Время действия токена истекло");
+            updatingPasswordTokenService.delete(updatingPasswordToken);
             throw new InvalidConfirmationTokenException("Token is expired");
         }
         UserEntity result = updatingPasswordToken.getUserEntity();
         result.setPassword(updatingPasswordToken.getPassword());
-        updatingPasswordTokenService.deleteToken(updatingPasswordToken);
+        updatingPasswordTokenService.delete(updatingPasswordToken);
+        log.info("Подтверждение изменения пароля через токен пройдено");
         return result;
     }
-
 }

@@ -65,7 +65,7 @@ public class ProposalCompanyController {
     @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<ProposalCompanyResponse> findById(@PathVariable Long id) {
         ProposalCompanyResponse result = Optional.of(id)
-                .map(proposalCompanyService::getProposalCompanyById)
+                .map(proposalCompanyService::findById)
                 .map(proposalCompanyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -82,7 +82,7 @@ public class ProposalCompanyController {
     @GetMapping
     @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<Page<ProposalCompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
-        Page<ProposalCompanyResponse> result = proposalCompanyService.getAllProposalCompanies(pageable)
+        Page<ProposalCompanyResponse> result = proposalCompanyService.findAll(pageable)
                 .map(proposalCompanyMapper::toResponse);
         return new ResponseEntity<>(result, OK);
     }
@@ -103,7 +103,7 @@ public class ProposalCompanyController {
     public ResponseEntity<ProposalCompanyResponse> create(@RequestBody @Valid ProposalCompanyRequest request) {
         ProposalCompanyResponse result = Optional.ofNullable(request)
                 .map(proposalCompanyMapper::fromRequest)
-                .map(proposalCompanyService::createProposalCompany)
+                .map(proposalCompanyService::create)
                 .map(proposalCompanyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
@@ -126,7 +126,7 @@ public class ProposalCompanyController {
                                                           @RequestBody @Valid ProposalCompanyRequestUpdate requestUpdate) {
         ProposalCompanyResponse result = Optional.ofNullable(requestUpdate)
                 .map(proposalCompanyMapper::fromRequestUpdate)
-                .map(company -> proposalCompanyService.updateProposalCompany(id, company))
+                .map(company -> proposalCompanyService.update(id, company))
                 .map(proposalCompanyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -145,9 +145,9 @@ public class ProposalCompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/setStatusUnderReview")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> setProposalCompanyStatusUnderReview(@RequestParam Long id) {
+    public ResponseEntity<ProposalCompanyResponse> setStatusUnderReview(@RequestParam Long id) {
         ProposalCompanyResponse result = Optional.of(id)
-                .map(company -> proposalCompanyService.setProposalCompanyStatusUnderReview(id))
+                .map(company -> proposalCompanyService.setStatusUnderReview(id))
                 .map(proposalCompanyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -166,9 +166,9 @@ public class ProposalCompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/setStatusRefused")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> setProposalCompanyStatusRefused(@RequestParam Long id) {
+    public ResponseEntity<ProposalCompanyResponse> setStatusRefused(@RequestParam Long id) {
         ProposalCompanyResponse result = Optional.of(id)
-                .map(company -> proposalCompanyService.setProposalCompanyStatusRefused(id))
+                .map(company -> proposalCompanyService.setStatusRefused(id))
                 .map(proposalCompanyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -187,9 +187,9 @@ public class ProposalCompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/setStatusApproved")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<ProposalCompanyResponse> setProposalCompanyStatusApproved(@RequestParam Long id) {
+    public ResponseEntity<ProposalCompanyResponse> setStatusApproved(@RequestParam Long id) {
         ProposalCompanyResponse result = Optional.of(id)
-                .map(company -> proposalCompanyService.setProposalCompanyStatusApproved(id))
+                .map(company -> proposalCompanyService.setStatusApproved(id))
                 .map(proposalCompanyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -206,8 +206,8 @@ public class ProposalCompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        proposalCompanyService.deleteProposalCompany(id);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        proposalCompanyService.deleteById(id);
         return new ResponseEntity<>(OK);
     }
 }

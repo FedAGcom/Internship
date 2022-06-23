@@ -5,15 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CompanyService {
-    CompanyEntity getCompanyById(Long id);
+    CompanyEntity findById(Long id);
 
-    Page<CompanyEntity> getAllCompanies(Pageable pageable);
+    Page<CompanyEntity> findAll(Pageable pageable);
 
-    CompanyEntity createCompany(Long userId, CompanyEntity companyDto);
+    CompanyEntity create(Long userId, CompanyEntity companyDto);
 
-    CompanyEntity updateCompany(Long id, CompanyEntity companyDto);
+    CompanyEntity update(Long id, CompanyEntity companyDto);
 
-    void deleteCompany(Long id);
+    void deleteById(Long id);
 
-    Page<CompanyEntity> searchCompanyByName(String keyword, Pageable pageable);
+    Page<CompanyEntity> searchByName(String keyword, Pageable pageable);
 }

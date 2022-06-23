@@ -5,6 +5,7 @@ import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.repository.CompanyElasticSearchRepository;
 import com.fedag.internship.service.CompanyElasticSearchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -24,23 +25,27 @@ import java.util.List;
 
 import static com.fedag.internship.domain.document.Indexes.COMPANY_INDEX;
 
-@RequiredArgsConstructor
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchService {
     private final ElasticsearchOperations elasticsearchOperations;
     private final CompanyElasticSearchRepository companyElasticSearchRepository;
 
     @Override
     @Transactional
-    public CompanyElasticSearchEntity saveCompany(CompanyEntity companyEntity) {
+    public CompanyElasticSearchEntity save(CompanyEntity companyEntity) {
+        log.info("Сохранение компании в Elasticsearch");
         CompanyElasticSearchEntity elsEntity = new CompanyElasticSearchEntity(companyEntity.getName(), companyEntity.getId());
         companyElasticSearchRepository.save(elsEntity);
+        log.info("Компания в Elasticsearch сохранена");
         return elsEntity;
     }
 
     @Override
     @Transactional
-    public Page<CompanyElasticSearchEntity> searchByName(Pageable pageable, String name) {
+    public Page<CompanyElasticSearchEntity> elasticsearchByName(Pageable pageable, String name) {
+        log.info("Полнотекстовый поиск компаний по имени: {}", name);
         QueryBuilder fuzzyQuery = QueryBuilders
                 .matchQuery("name", name)
                 .fuzziness(Fuzziness.AUTO);
@@ -61,6 +66,8 @@ public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchServ
                 .search(query, CompanyElasticSearchEntity.class, IndexCoordinates.of(COMPANY_INDEX));
         List<CompanyElasticSearchEntity> companies = new ArrayList<>();
         productHits.forEach(searchHit -> companies.add(searchHit.getContent()));
-        return new PageImpl<>(companies, pageable, companies.size());
+        PageImpl<CompanyElasticSearchEntity> result = new PageImpl<>(companies, pageable, companies.size());
+        log.info("Список компаний по имени: {} получен", name);
+        return result;
     }
 }

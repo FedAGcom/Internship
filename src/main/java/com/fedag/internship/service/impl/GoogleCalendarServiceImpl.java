@@ -47,11 +47,11 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
     @SneakyThrows
     private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) {
-        log.info("Получение credintails");
+        log.info("Получение credentials");
         log.info("Загрузка данных из {}", CREDENTIALS_FILE_PATH);
         InputStream in = GoogleCalendarConstants.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
-            log.warn("Данные из {} не найдены", CREDENTIALS_FILE_PATH);
+            log.error("Данные из {} не найдены", CREDENTIALS_FILE_PATH);
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
@@ -86,7 +86,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     @SneakyThrows
     public void addEventToCalendar(Long traineePositionId) {
         log.info("Добавление стажировки в календарь пользователю");
-        final TraineePositionEntity traineePosition = traineePositionService.getPositionById(traineePositionId);
+        final TraineePositionEntity traineePosition = traineePositionService.findById(traineePositionId);
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, this.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)

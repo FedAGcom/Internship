@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PositionElasticSearchService {
-    PositionElasticSearchEntity savePosition(TraineePositionEntity positionEntity);
+    PositionElasticSearchEntity save(TraineePositionEntity positionEntity);
 
-    Page<PositionElasticSearchEntity> searchByCompany(Pageable pageable, String name);
+    Page<PositionElasticSearchEntity> elasticsearchByCompany(Pageable pageable, String name);
 }

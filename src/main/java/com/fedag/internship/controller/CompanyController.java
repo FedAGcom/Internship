@@ -5,7 +5,6 @@ import com.fedag.internship.domain.dto.request.CompanyRequest;
 import com.fedag.internship.domain.dto.request.CompanyRequestUpdate;
 import com.fedag.internship.domain.dto.response.CompanyResponse;
 import com.fedag.internship.domain.mapper.CompanyMapper;
-import com.fedag.internship.service.CompanyElasticSearchService;
 import com.fedag.internship.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,7 +42,6 @@ import static org.springframework.http.HttpStatus.OK;
 public class CompanyController {
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
-    private final CompanyElasticSearchService companyElasticSearchService;
 
     @Operation(summary = "Получение компании по Id")
     @SecurityRequirement(name = "bearer-token-auth")
@@ -58,9 +56,9 @@ public class CompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<CompanyResponse> getCompany(@PathVariable Long id) {
+    public ResponseEntity<CompanyResponse> findById(@PathVariable Long id) {
         CompanyResponse companyResponse = Optional.of(id)
-                .map(companyService::getCompanyById)
+                .map(companyService::findById)
                 .map(companyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(companyResponse, OK);
@@ -74,8 +72,8 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<CompanyResponse>> getAllCompanies(@PageableDefault(size = 5) Pageable pageable) {
-        Page<CompanyResponse> companies = companyService.getAllCompanies(pageable)
+    public ResponseEntity<Page<CompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
+        Page<CompanyResponse> companies = companyService.findAll(pageable)
                 .map(companyMapper::toResponse);
         return new ResponseEntity<>(companies, OK);
     }
@@ -93,11 +91,11 @@ public class CompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<CompanyResponse> createCompany(@RequestParam Long userId,
-                                                         @RequestBody @Valid CompanyRequest companyRequest) {
+    public ResponseEntity<CompanyResponse> create(@RequestParam Long userId,
+                                                  @RequestBody @Valid CompanyRequest companyRequest) {
         CompanyResponse companyResponse = Optional.ofNullable(companyRequest)
                 .map(companyMapper::fromRequest)
-                .map(companyEntity -> companyService.createCompany(userId, companyEntity))
+                .map(companyEntity -> companyService.create(userId, companyEntity))
                 .map(companyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(companyResponse, CREATED);
@@ -116,11 +114,11 @@ public class CompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<CompanyResponse> updateCompany(@PathVariable Long id,
-                                                         @RequestBody CompanyRequestUpdate companyRequestUpdate) {
+    public ResponseEntity<CompanyResponse> update(@PathVariable Long id,
+                                                  @RequestBody CompanyRequestUpdate companyRequestUpdate) {
         CompanyResponse companyResponse = Optional.ofNullable(companyRequestUpdate)
                 .map(companyMapper::fromRequestUpdate)
-                .map(company -> companyService.updateCompany(id, company))
+                .map(company -> companyService.update(id, company))
                 .map(companyMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(companyResponse, OK);
@@ -137,8 +135,8 @@ public class CompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<?> deleteCompany(@PathVariable Long id) {
-        companyService.deleteCompany(id);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        companyService.deleteById(id);
         return new ResponseEntity<>(OK);
     }
 
@@ -150,8 +148,9 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/search")
-    public ResponseEntity<Page<CompanyResponse>> search(@RequestParam String keyword, Pageable pageable) {
-        Page<CompanyResponse> companies = companyService.searchCompanyByName(keyword, pageable)
+    public ResponseEntity<Page<CompanyResponse>> searchByName(@RequestParam String keyword, Pageable pageable) {
+        Page<CompanyResponse> companies = companyService
+                .searchByName(keyword, pageable)
                 .map(companyMapper::toResponse);
         return new ResponseEntity<>(companies, OK);
     }

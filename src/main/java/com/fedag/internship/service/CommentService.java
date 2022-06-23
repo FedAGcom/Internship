@@ -11,17 +11,17 @@ import org.springframework.data.domain.Pageable;
  * @since 2022-06-01
  */
 public interface CommentService {
-    CommentEntity getCommentById(Long id);
+    CommentEntity findById(Long id);
 
-    Page<CommentEntity> getAllComments(Pageable pageable);
+    Page<CommentEntity> findAll(Pageable pageable);
 
-    CommentEntity createCommentForCompany(Long userId, Long companyId, CommentEntity commentEntity);
+    CommentEntity createForCompany(Long userId, Long companyId, CommentEntity commentEntity);
 
-    CommentEntity createCommentForTraineePosition(Long userId,
-                                                  Long traineePositionId,
-                                                  CommentEntity commentEntity);
+    CommentEntity createForTraineePosition(Long userId,
+                                           Long traineePositionId,
+                                           CommentEntity commentEntity);
 
-    CommentEntity updateComment(Long id, CommentEntity commentEntity);
+    CommentEntity update(Long id, CommentEntity commentEntity);
 
-    void deleteComment(Long id);
+    void deleteById(Long id);
 }

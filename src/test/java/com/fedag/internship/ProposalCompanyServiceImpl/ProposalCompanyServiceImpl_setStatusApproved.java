@@ -12,21 +12,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.fedag.internship.domain.entity.Status.APPROVED;
 import static com.fedag.internship.domain.entity.Status.NEW;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * class ProposalCompanyServiceImpl_deleteProposalCompany
+ * class ProposalCompanyServiceImpl_setProposalCompanyStatusApproved
  *
  * @author damir.iusupov
  * @since 2022-06-09
  */
 @ExtendWith(MockitoExtension.class)
-public class ProposalCompanyServiceImpl_deleteProposalCompany {
+public class ProposalCompanyServiceImpl_setStatusApproved {
     @InjectMocks
     private ProposalCompanyServiceImpl proposalCompanyService;
 
@@ -34,15 +36,15 @@ public class ProposalCompanyServiceImpl_deleteProposalCompany {
     private ProposalCompanyRepository proposalCompanyRepository;
 
     @Test
-    public void testCommentNotFound() {
+    public void testCompanyNotFound() {
         Long id = anyLong();
         when(proposalCompanyRepository.findById(id)).thenReturn(Optional.empty());
         try {
-            proposalCompanyService.deleteProposalCompany(id);
+            proposalCompanyService.setStatusApproved(id);
         } catch (EntityNotFoundException exception) {
             assertEquals(String.format("%s with %s: %s not found", "ProposalCompany", "Id", id),
                     exception.getMessage());
-            verify(proposalCompanyRepository, times(0)).deleteById(anyLong());
+            verify(proposalCompanyRepository, times(0)).save(any(ProposalCompanyEntity.class));
         }
     }
 
@@ -50,10 +52,13 @@ public class ProposalCompanyServiceImpl_deleteProposalCompany {
     public void testPositive() {
         Long id = anyLong();
         ProposalCompanyEntity company = new ProposalCompanyEntity()
-                .setName("some name # 1")
+                .setName("some name")
                 .setStatus(NEW);
         when(proposalCompanyRepository.findById(id)).thenReturn(Optional.of(company));
-        proposalCompanyService.deleteProposalCompany(id);
-        verify(proposalCompanyRepository, times(1)).deleteById(anyLong());
+        when(proposalCompanyRepository.save(company)).thenReturn(company);
+        ProposalCompanyEntity result = proposalCompanyService.setStatusApproved(id);
+        assertEquals("some name", result.getName());
+        assertEquals(APPROVED, result.getStatus());
+        verify(proposalCompanyRepository, times(1)).save(any(ProposalCompanyEntity.class));
     }
 }

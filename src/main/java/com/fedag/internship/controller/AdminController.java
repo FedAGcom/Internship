@@ -49,8 +49,8 @@ public class AdminController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<UserResponse>> getAllUsersWithRoleDeleted(@PageableDefault(size = 5) Pageable pageable) {
-        Page<UserResponse> users = userService.getAllUsersWithRoleDeleted(pageable)
+    public ResponseEntity<Page<UserResponse>> findAllByRoleDeleted(@PageableDefault(size = 5) Pageable pageable) {
+        Page<UserResponse> users = userService.findAllByRoleDeleted(pageable)
                 .map(userMapper::toResponse);
         return new ResponseEntity<>(users, OK);
     }
@@ -65,8 +65,8 @@ public class AdminController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        userService.deleteById(id);
         return new ResponseEntity<>(OK);
     }
 }
