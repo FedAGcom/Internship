@@ -57,9 +57,9 @@ public class TraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<TraineePositionResponse> getPosition(@PathVariable Long id) {
+    public ResponseEntity<TraineePositionResponse> findById(@PathVariable Long id) {
         TraineePositionResponse companyResponse = Optional.of(id)
-                .map(positionService::getPositionById)
+                .map(positionService::findById)
                 .map(positionMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(companyResponse, OK);
@@ -73,8 +73,8 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<TraineePositionResponse>> getAllPosition(@PageableDefault(size = 5) Pageable pageable) {
-        Page<TraineePositionResponse> positions = positionService.getAllPositions(pageable)
+    public ResponseEntity<Page<TraineePositionResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
+        Page<TraineePositionResponse> positions = positionService.findAll(pageable)
                 .map(positionMapper::toResponse);
         return new ResponseEntity<>(positions, OK);
     }
@@ -92,10 +92,10 @@ public class TraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<TraineePositionResponse> createPosition(@RequestBody @Valid TraineePositionRequest request) {
+    public ResponseEntity<TraineePositionResponse> create(@RequestBody @Valid TraineePositionRequest request) {
         TraineePositionResponse positionResponse = Optional.ofNullable(request)
                 .map(positionMapper::fromRequest)
-                .map(positionService::createPosition)
+                .map(positionService::create)
                 .map(positionMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(positionResponse, CREATED);
@@ -114,11 +114,11 @@ public class TraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<TraineePositionResponse> updatePosition(@PathVariable Long id,
-                                                                  @RequestBody TraineePositionRequestUpdate update) {
+    public ResponseEntity<TraineePositionResponse> update(@PathVariable Long id,
+                                                          @RequestBody TraineePositionRequestUpdate update) {
         TraineePositionResponse positionResponse = Optional.ofNullable(update)
                 .map(positionMapper::fromRequestUpdate)
-                .map(position -> positionService.updatePosition(id, position))
+                .map(position -> positionService.update(id, position))
                 .map(positionMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(positionResponse, OK);
@@ -136,7 +136,7 @@ public class TraineePositionController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('write')")
     public ResponseEntity<?> deletePosition(@PathVariable Long id) {
-        positionService.deletePosition(id);
+        positionService.deleteById(id);
         return new ResponseEntity<>(OK);
     }
 
@@ -148,8 +148,10 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/searchposition")
-    public ResponseEntity<Page<TraineePositionResponse>> search(@RequestParam String keyword, Pageable pageable) {
-        Page<TraineePositionResponse> positions = positionService.searchPositionByCompany(keyword, pageable)
+    public ResponseEntity<Page<TraineePositionResponse>> searchByCompany(@RequestParam String keyword,
+                                                                         Pageable pageable) {
+        Page<TraineePositionResponse> positions = positionService
+                .searchByCompany(keyword, pageable)
                 .map(positionMapper::toResponse);
         return new ResponseEntity<>(positions, OK);
     }

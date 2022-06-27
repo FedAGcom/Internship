@@ -65,7 +65,7 @@ public class CommentController {
     @PreAuthorize("hasAuthority('read')")
     public ResponseEntity<CommentResponse> findById(@PathVariable Long id) {
         CommentResponse result = Optional.of(id)
-                .map(commentService::getCommentById)
+                .map(commentService::findById)
                 .map(commentMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -80,7 +80,7 @@ public class CommentController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
     public ResponseEntity<Page<CommentResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
-        Page<CommentResponse> result = commentService.getAllComments(pageable)
+        Page<CommentResponse> result = commentService.findAll(pageable)
                 .map(commentMapper::toResponse);
         return new ResponseEntity<>(result, OK);
     }
@@ -103,7 +103,7 @@ public class CommentController {
                                                             @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse result = Optional.ofNullable(commentRequest)
                 .map(commentMapper::fromRequest)
-                .map(comment -> commentService.createCommentForCompany(userId, companyId, comment))
+                .map(comment -> commentService.createForCompany(userId, companyId, comment))
                 .map(commentMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
@@ -127,7 +127,7 @@ public class CommentController {
                                                                     @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse result = Optional.ofNullable(commentRequest)
                 .map(commentMapper::fromRequest)
-                .map(comment -> commentService.createCommentForTraineePosition(userId, positionId, comment))
+                .map(comment -> commentService.createForTraineePosition(userId, positionId, comment))
                 .map(commentMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
@@ -150,7 +150,7 @@ public class CommentController {
                                                   @RequestBody @Valid CommentRequestUpdate commentRequestUpdate) {
         CommentResponse result = Optional.ofNullable(commentRequestUpdate)
                 .map(commentMapper::fromRequestUpdate)
-                .map(comment -> commentService.updateComment(id, comment))
+                .map(comment -> commentService.update(id, comment))
                 .map(commentMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, OK);
@@ -167,8 +167,8 @@ public class CommentController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        commentService.deleteComment(id);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        commentService.deleteById(id);
         return new ResponseEntity<>(OK);
     }
 }

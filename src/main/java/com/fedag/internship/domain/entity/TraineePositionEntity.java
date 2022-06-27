@@ -75,7 +75,7 @@ public class TraineePositionEntity {
         userEntity.getFavouriteTraineePositions().add(this);
     }
 
-    public void removeFavouriteTraineePosition(UserEntity userEntity) {
+    public void removeFavouriteTraineePositionFromUser(UserEntity userEntity) {
         this.users.remove(userEntity);
         userEntity.getFavouriteTraineePositions().remove(this);
     }

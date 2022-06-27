@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
  * @since 2022-06-07
  */
 @ExtendWith(MockitoExtension.class)
-public class CommentServiceImpl_updateComment {
+public class CommentServiceImpl_update {
     @InjectMocks
     private CommentServiceImpl commentService;
 
@@ -42,7 +42,7 @@ public class CommentServiceImpl_updateComment {
         CommentEntity commentEntity = new CommentEntity();
         when(commentRepository.findById(id)).thenReturn(Optional.empty());
         try {
-            commentService.updateComment(id, commentEntity);
+            commentService.update(id, commentEntity);
         } catch (EntityNotFoundException exception) {
             assertEquals(String.format("%s with %s: %s not found", "Comment", "id", id),
                     exception.getMessage());
@@ -59,7 +59,7 @@ public class CommentServiceImpl_updateComment {
         when(commentRepository.findById(id)).thenReturn(Optional.of(oldComment));
         when(commentMapper.merge(newComment, oldComment)).thenReturn(newComment);
         when(commentRepository.save(newComment)).thenReturn(newComment);
-        CommentEntity result = commentService.updateComment(id, newComment);
+        CommentEntity result = commentService.update(id, newComment);
         assertEquals("updated text", result.getText());
         verify(commentMapper, times(1)).merge(any(CommentEntity.class), any(CommentEntity.class));
         verify(commentRepository, times(1)).save(any(CommentEntity.class));

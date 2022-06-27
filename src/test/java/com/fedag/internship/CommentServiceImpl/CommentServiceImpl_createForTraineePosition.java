@@ -1,12 +1,10 @@
 package com.fedag.internship.CommentServiceImpl;
 
 import com.fedag.internship.domain.entity.CommentEntity;
-import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.repository.CommentRepository;
-import com.fedag.internship.service.CompanyService;
 import com.fedag.internship.service.TraineePositionService;
 import com.fedag.internship.service.UserService;
 import com.fedag.internship.service.impl.CommentServiceImpl;
@@ -24,13 +22,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * class CommentServiceImpl_createCommentForCompany
+ * class CommentServiceImpl_createCommentForTraineePosition
  *
  * @author damir.iusupov
  * @since 2022-06-07
  */
 @ExtendWith(MockitoExtension.class)
-public class CommentServiceImpl_createCommentForCompany {
+public class CommentServiceImpl_createForTraineePosition {
     @InjectMocks
     private CommentServiceImpl commentService;
 
@@ -39,28 +37,28 @@ public class CommentServiceImpl_createCommentForCompany {
     @Mock
     private UserService userService;
     @Mock
-    private CompanyService companyService;
+    private TraineePositionService traineePositionService;
 
     @Test
     public void testUserNotFound() {
         Long userId = 123L;
-        Long companyId = 321L;
+        Long traineePositionId = 321L;
         CommentEntity commentEntity = new CommentEntity();
-        when(userService.getUserById(userId)).thenThrow(new EntityNotFoundException("User", "id", userId));
+        when(userService.findById(userId)).thenThrow(new EntityNotFoundException("User", "id", userId));
         try {
-            commentService.createCommentForCompany(userId, companyId, commentEntity);
+            commentService.createForTraineePosition(userId, traineePositionId, commentEntity);
         } catch (EntityNotFoundException exception) {
             assertEquals(String.format("%s with %s: %s not found", "User", "id", userId),
                     exception.getMessage());
             verify(commentRepository, times(0)).save(any(CommentEntity.class));
-            verify(companyService, times(0)).getCompanyById(anyLong());
+            verify(traineePositionService, times(0)).findById(anyLong());
         }
     }
 
     @Test
-    public void testCompanyNotFound() {
+    public void testTraineePositionNotFound() {
         Long userId = 123L;
-        Long companyId = 321L;
+        Long traineePositionId = 321L;
         CommentEntity commentEntity = new CommentEntity();
         String email = "some1@email.com";
         String firstName = "some name";
@@ -69,13 +67,13 @@ public class CommentServiceImpl_createCommentForCompany {
                 .setEmail(email)
                 .setFirstName(firstName)
                 .setLastName(lastName);
-        when(userService.getUserById(userId)).thenReturn(userEntity);
-        when(companyService.getCompanyById(companyId))
-                .thenThrow(new EntityNotFoundException("Company", "id", companyId));
+        when(userService.findById(userId)).thenReturn(userEntity);
+        when(traineePositionService.findById(traineePositionId))
+                .thenThrow(new EntityNotFoundException("TraineePosition", "id", traineePositionId));
         try {
-            commentService.createCommentForCompany(userId, companyId, commentEntity);
+            commentService.createForTraineePosition(userId, traineePositionId, commentEntity);
         } catch (EntityNotFoundException exception) {
-            assertEquals(String.format("%s with %s: %s not found", "Company", "id", companyId),
+            assertEquals(String.format("%s with %s: %s not found", "TraineePosition", "id", traineePositionId),
                     exception.getMessage());
             verify(commentRepository, times(0)).save(any(CommentEntity.class));
         }
@@ -84,7 +82,7 @@ public class CommentServiceImpl_createCommentForCompany {
     @Test
     public void testPositive() {
         Long userId = 123L;
-        Long companyId = 321L;
+        Long traineePositionId = 321L;
         String email = "some1@email.com";
         String firstName = "some name";
         String lastName = "some surname";
@@ -93,21 +91,21 @@ public class CommentServiceImpl_createCommentForCompany {
                 .setFirstName(firstName)
                 .setLastName(lastName);
         String name = "some name";
-        String description = "some description";
-        CompanyEntity companyEntity = new CompanyEntity()
+        String empPos = "some position";
+        TraineePositionEntity traineePosition = new TraineePositionEntity()
                 .setName(name)
-                .setDescription(description);
+                .setEmployeePosition(empPos);
         CommentEntity commentEntity = new CommentEntity()
                 .setText("some text # 1")
                 .setRating(6D);
-        when(userService.getUserById(userId)).thenReturn(userEntity);
-        when(companyService.getCompanyById(companyId)).thenReturn(companyEntity);
+        when(userService.findById(userId)).thenReturn(userEntity);
+        when(traineePositionService.findById(traineePositionId)).thenReturn(traineePosition);
         when(commentRepository.save(commentEntity)).thenReturn(commentEntity);
-        CommentEntity result = commentService.createCommentForCompany(userId, companyId, commentEntity);
+        CommentEntity result = commentService.createForTraineePosition(userId, traineePositionId, commentEntity);
         assertEquals("some text # 1", result.getText());
         assertEquals(6D, result.getRating());
         assertEquals(userEntity, result.getUser());
-        assertEquals(companyEntity, result.getCompany());
+        assertEquals(traineePosition, result.getTraineePosition());
         verify(commentRepository, times(1)).save(any(CommentEntity.class));
     }
 }

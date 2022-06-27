@@ -48,11 +48,11 @@ public class FavouriteTraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
     @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<Page<TraineePositionResponse>> getAllFavouriteTraineePositions(
+    public ResponseEntity<Page<TraineePositionResponse>> getFavouriteTraineePositions(
             Long userId,
             @PageableDefault(size = 5) Pageable pageable) {
         Page<TraineePositionResponse> page = favouriteTraineePositionService
-                .getAllFavouriteTraineePositions(userId, pageable)
+                .getFavouriteTraineePositions(userId, pageable)
                 .map(traineePositionMapper::toResponse);
         return new ResponseEntity<>(page, OK);
     }
@@ -86,9 +86,9 @@ public class FavouriteTraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<?> deleteFavouriteTraineePosition(@RequestParam Long userId,
+    public ResponseEntity<?> removeFavouriteTraineePosition(@RequestParam Long userId,
                                                             @RequestParam Long traineeId) {
-        favouriteTraineePositionService.deleteFavouriteTraineePosition(userId, traineeId);
+        favouriteTraineePositionService.removeFavouriteTraineePosition(userId, traineeId);
         return new ResponseEntity<>(OK);
     }
 }

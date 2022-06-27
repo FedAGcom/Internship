@@ -10,10 +10,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
 public class UserServiceImpl_createUser {
@@ -23,14 +23,14 @@ public class UserServiceImpl_createUser {
     private UserRepository userRepository;
 
     @Test
-    public void testPositive(){
-        UserEntity userEntity=new UserEntity()
+    public void testPositive() {
+        UserEntity userEntity = new UserEntity()
                 .setEmail("smth@gmail.com")
                 .setFirstName("name")
                 .setLastName("last name");
-       when(userRepository.save(userEntity)).thenReturn(userEntity);
-       UserEntity result=userService.createUser(userEntity);
-       assertEquals(userEntity,result);
-       verify(userRepository,times(1)).save(any(UserEntity.class));
+        when(userRepository.save(userEntity)).thenReturn(userEntity);
+        UserEntity result = userService.create(userEntity);
+        assertEquals(userEntity, result);
+        verify(userRepository, times(1)).save(any(UserEntity.class));
     }
 }

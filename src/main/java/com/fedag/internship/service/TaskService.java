@@ -11,13 +11,13 @@ import org.springframework.data.domain.Pageable;
  * @since 2022-06-13
  */
 public interface TaskService {
-    Task getTaskById(String id);
+    Task findById(String id);
 
-    Page<Task> getAllTasks(Pageable pageable);
+    Page<Task> findAll(Pageable pageable);
 
-    Task createTask(Task task);
+    Task create(Task task);
 
-    Task updateTask(String id, Task task);
+    Task update(String id, Task task);
 
-    void deleteTask(String id);
+    void deleteById(String id);
 }

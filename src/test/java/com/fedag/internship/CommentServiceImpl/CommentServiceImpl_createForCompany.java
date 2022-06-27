@@ -1,11 +1,11 @@
 package com.fedag.internship.CommentServiceImpl;
 
 import com.fedag.internship.domain.entity.CommentEntity;
-import com.fedag.internship.domain.entity.TraineePositionEntity;
+import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.repository.CommentRepository;
-import com.fedag.internship.service.TraineePositionService;
+import com.fedag.internship.service.CompanyService;
 import com.fedag.internship.service.UserService;
 import com.fedag.internship.service.impl.CommentServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -22,13 +22,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * class CommentServiceImpl_createCommentForTraineePosition
+ * class CommentServiceImpl_createCommentForCompany
  *
  * @author damir.iusupov
  * @since 2022-06-07
  */
 @ExtendWith(MockitoExtension.class)
-public class CommentServiceImpl_createCommentForTraineePosition {
+public class CommentServiceImpl_createForCompany {
     @InjectMocks
     private CommentServiceImpl commentService;
 
@@ -37,28 +37,28 @@ public class CommentServiceImpl_createCommentForTraineePosition {
     @Mock
     private UserService userService;
     @Mock
-    private TraineePositionService traineePositionService;
+    private CompanyService companyService;
 
     @Test
     public void testUserNotFound() {
         Long userId = 123L;
-        Long traineePositionId = 321L;
+        Long companyId = 321L;
         CommentEntity commentEntity = new CommentEntity();
-        when(userService.getUserById(userId)).thenThrow(new EntityNotFoundException("User", "id", userId));
+        when(userService.findById(userId)).thenThrow(new EntityNotFoundException("User", "id", userId));
         try {
-            commentService.createCommentForTraineePosition(userId, traineePositionId, commentEntity);
+            commentService.createForCompany(userId, companyId, commentEntity);
         } catch (EntityNotFoundException exception) {
             assertEquals(String.format("%s with %s: %s not found", "User", "id", userId),
                     exception.getMessage());
             verify(commentRepository, times(0)).save(any(CommentEntity.class));
-            verify(traineePositionService, times(0)).getPositionById(anyLong());
+            verify(companyService, times(0)).findById(anyLong());
         }
     }
 
     @Test
-    public void testTraineePositionNotFound() {
+    public void testCompanyNotFound() {
         Long userId = 123L;
-        Long traineePositionId = 321L;
+        Long companyId = 321L;
         CommentEntity commentEntity = new CommentEntity();
         String email = "some1@email.com";
         String firstName = "some name";
@@ -67,13 +67,13 @@ public class CommentServiceImpl_createCommentForTraineePosition {
                 .setEmail(email)
                 .setFirstName(firstName)
                 .setLastName(lastName);
-        when(userService.getUserById(userId)).thenReturn(userEntity);
-        when(traineePositionService.getPositionById(traineePositionId))
-                .thenThrow(new EntityNotFoundException("TraineePosition", "id", traineePositionId));
+        when(userService.findById(userId)).thenReturn(userEntity);
+        when(companyService.findById(companyId))
+                .thenThrow(new EntityNotFoundException("Company", "id", companyId));
         try {
-            commentService.createCommentForTraineePosition(userId, traineePositionId, commentEntity);
+            commentService.createForCompany(userId, companyId, commentEntity);
         } catch (EntityNotFoundException exception) {
-            assertEquals(String.format("%s with %s: %s not found", "TraineePosition", "id", traineePositionId),
+            assertEquals(String.format("%s with %s: %s not found", "Company", "id", companyId),
                     exception.getMessage());
             verify(commentRepository, times(0)).save(any(CommentEntity.class));
         }
@@ -82,7 +82,7 @@ public class CommentServiceImpl_createCommentForTraineePosition {
     @Test
     public void testPositive() {
         Long userId = 123L;
-        Long traineePositionId = 321L;
+        Long companyId = 321L;
         String email = "some1@email.com";
         String firstName = "some name";
         String lastName = "some surname";
@@ -91,21 +91,21 @@ public class CommentServiceImpl_createCommentForTraineePosition {
                 .setFirstName(firstName)
                 .setLastName(lastName);
         String name = "some name";
-        String empPos = "some position";
-        TraineePositionEntity traineePosition = new TraineePositionEntity()
+        String description = "some description";
+        CompanyEntity companyEntity = new CompanyEntity()
                 .setName(name)
-                .setEmployeePosition(empPos);
+                .setDescription(description);
         CommentEntity commentEntity = new CommentEntity()
                 .setText("some text # 1")
                 .setRating(6D);
-        when(userService.getUserById(userId)).thenReturn(userEntity);
-        when(traineePositionService.getPositionById(traineePositionId)).thenReturn(traineePosition);
+        when(userService.findById(userId)).thenReturn(userEntity);
+        when(companyService.findById(companyId)).thenReturn(companyEntity);
         when(commentRepository.save(commentEntity)).thenReturn(commentEntity);
-        CommentEntity result = commentService.createCommentForTraineePosition(userId, traineePositionId, commentEntity);
+        CommentEntity result = commentService.createForCompany(userId, companyId, commentEntity);
         assertEquals("some text # 1", result.getText());
         assertEquals(6D, result.getRating());
         assertEquals(userEntity, result.getUser());
-        assertEquals(traineePosition, result.getTraineePosition());
+        assertEquals(companyEntity, result.getCompany());
         verify(commentRepository, times(1)).save(any(CommentEntity.class));
     }
 }

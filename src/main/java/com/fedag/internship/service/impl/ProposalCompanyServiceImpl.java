@@ -35,11 +35,11 @@ public class ProposalCompanyServiceImpl implements ProposalCompanyService {
     private final ProposalCompanyMapper proposalCompanyMapper;
 
     @Override
-    public ProposalCompanyEntity getProposalCompanyById(Long id) {
+    public ProposalCompanyEntity findById(Long id) {
         log.info("Получение заявки на создание компании c Id: {}", id);
         ProposalCompanyEntity result = proposalCompanyRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Заявка на создание компании с Id: {} не найдена", id);
+                    log.error("Заявка на создание компании с Id: {} не найдена", id);
                     throw new EntityNotFoundException("ProposalCompany", "Id", id);
                 });
         log.info("Заявка на создание компании c Id: {} получена", id);
@@ -47,7 +47,7 @@ public class ProposalCompanyServiceImpl implements ProposalCompanyService {
     }
 
     @Override
-    public Page<ProposalCompanyEntity> getAllProposalCompanies(Pageable pageable) {
+    public Page<ProposalCompanyEntity> findAll(Pageable pageable) {
         log.info("Получение страницы с заявками на создание компании");
         Page<ProposalCompanyEntity> result = proposalCompanyRepository.findAll(pageable);
         log.info("Страница с заявками на создание компании получена");
@@ -56,7 +56,7 @@ public class ProposalCompanyServiceImpl implements ProposalCompanyService {
 
     @Override
     @Transactional
-    public ProposalCompanyEntity createProposalCompany(ProposalCompanyEntity proposalCompanyEntity) {
+    public ProposalCompanyEntity create(ProposalCompanyEntity proposalCompanyEntity) {
         log.info("Создание заявки на создание компании");
         proposalCompanyEntity.setStatus(NEW);
         ProposalCompanyEntity result = proposalCompanyRepository.save(proposalCompanyEntity);
@@ -66,9 +66,9 @@ public class ProposalCompanyServiceImpl implements ProposalCompanyService {
 
     @Override
     @Transactional
-    public ProposalCompanyEntity updateProposalCompany(Long id, ProposalCompanyEntity source) {
+    public ProposalCompanyEntity update(Long id, ProposalCompanyEntity source) {
         log.info("Обновление заявки на создание компании c Id: {}", id);
-        ProposalCompanyEntity target = this.getProposalCompanyById(id);
+        ProposalCompanyEntity target = this.findById(id);
         ProposalCompanyEntity update = proposalCompanyMapper.merge(source, target);
         ProposalCompanyEntity result = proposalCompanyRepository.save(update);
         log.info("Заявка на создание компании c Id: {} обновлена", id);
@@ -77,9 +77,9 @@ public class ProposalCompanyServiceImpl implements ProposalCompanyService {
 
     @Override
     @Transactional
-    public ProposalCompanyEntity setProposalCompanyStatusUnderReview(Long id) {
+    public ProposalCompanyEntity setStatusUnderReview(Long id) {
         log.info("Обновление статуса заявки на создание компании c Id: {} на статус {}", id, UNDER_REVIEW.name());
-        ProposalCompanyEntity target = this.getProposalCompanyById(id);
+        ProposalCompanyEntity target = this.findById(id);
         target.setStatus(UNDER_REVIEW);
         ProposalCompanyEntity result = proposalCompanyRepository.save(target);
         log.info("Статус заявки на создание компании c Id: {} изменен на статус {}", id, result.getStatus().name());
@@ -88,9 +88,9 @@ public class ProposalCompanyServiceImpl implements ProposalCompanyService {
 
     @Override
     @Transactional
-    public ProposalCompanyEntity setProposalCompanyStatusRefused(Long id) {
+    public ProposalCompanyEntity setStatusRefused(Long id) {
         log.info("Обновление статуса заявки на создание компании c Id: {} на статус {}", id, REFUSED.name());
-        ProposalCompanyEntity target = this.getProposalCompanyById(id);
+        ProposalCompanyEntity target = this.findById(id);
         target.setStatus(REFUSED);
         ProposalCompanyEntity result = proposalCompanyRepository.save(target);
         log.info("Статус заявки на создание компании c Id: {} изменен на статус {}", id, result.getStatus().name());
@@ -99,21 +99,20 @@ public class ProposalCompanyServiceImpl implements ProposalCompanyService {
 
     @Override
     @Transactional
-    public ProposalCompanyEntity setProposalCompanyStatusApproved(Long id) {
+    public ProposalCompanyEntity setStatusApproved(Long id) {
         log.info("Обновление статуса заявки на создание компании c Id: {} на статус {}", id, APPROVED.name());
-        ProposalCompanyEntity target = this.getProposalCompanyById(id);
+        ProposalCompanyEntity target = this.findById(id);
         target.setStatus(APPROVED);
         ProposalCompanyEntity result = proposalCompanyRepository.save(target);
         log.info("Статус заявки на создание компании c Id: {} изменен на статус {}", id, result.getStatus().name());
         return result;
     }
 
-
     @Override
     @Transactional
-    public void deleteProposalCompany(Long id) {
+    public void deleteById(Long id) {
         log.info("Удаление заявки на создание компании с Id: {}", id);
-        this.getProposalCompanyById(id);
+        this.findById(id);
         proposalCompanyRepository.deleteById(id);
         log.info("Заявка на создание компании с Id: {} удалена", id);
     }

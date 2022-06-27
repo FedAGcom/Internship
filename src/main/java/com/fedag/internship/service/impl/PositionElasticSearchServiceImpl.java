@@ -5,6 +5,7 @@ import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.repository.PositionElasticSearcherRepository;
 import com.fedag.internship.service.PositionElasticSearchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -24,23 +25,28 @@ import java.util.List;
 
 import static com.fedag.internship.domain.document.Indexes.POSITION_INDEX;
 
-@RequiredArgsConstructor
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class PositionElasticSearchServiceImpl implements PositionElasticSearchService {
     private final ElasticsearchOperations elasticsearchOperations;
     private final PositionElasticSearcherRepository positionElasticSearcherRepository;
 
     @Override
     @Transactional
-    public PositionElasticSearchEntity savePosition(TraineePositionEntity positionEntity) {
-        PositionElasticSearchEntity posEntity = new PositionElasticSearchEntity(positionEntity.getName(), positionEntity.getId());
+    public PositionElasticSearchEntity save(TraineePositionEntity positionEntity) {
+        log.info("Сохранение позиции для стажировки в Elasticsearch");
+        PositionElasticSearchEntity posEntity =
+                new PositionElasticSearchEntity(positionEntity.getName(), positionEntity.getId());
         positionElasticSearcherRepository.save(posEntity);
+        log.info("Позиция для стажировки в Elasticsearch сохранена");
         return posEntity;
     }
 
     @Override
     @Transactional
-    public Page<PositionElasticSearchEntity> searchByCompany(Pageable pageable, String name) {
+    public Page<PositionElasticSearchEntity> elasticsearchByCompany(Pageable pageable, String name) {
+        log.info("Полнотекстовый поиск позиций для стажировки по имени: {}", name);
         QueryBuilder fuzzyQuery = QueryBuilders
                 .matchQuery("name", name)
                 .fuzziness(Fuzziness.AUTO);
@@ -61,7 +67,9 @@ public class PositionElasticSearchServiceImpl implements PositionElasticSearchSe
                 .search(query, PositionElasticSearchEntity.class, IndexCoordinates.of(POSITION_INDEX));
         List<PositionElasticSearchEntity> positions = new ArrayList<>();
         productHits.forEach(searchHit -> positions.add(searchHit.getContent()));
-        return new PageImpl<>(positions, pageable, positions.size());
+        PageImpl<PositionElasticSearchEntity> result = new PageImpl<>(positions, pageable, positions.size());
+        log.info("Список позиций для стажировки по имени: {} получен", name);
+        return result;
     }
 }
 

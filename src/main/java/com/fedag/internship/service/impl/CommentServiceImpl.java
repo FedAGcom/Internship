@@ -38,11 +38,11 @@ public class CommentServiceImpl implements CommentService {
     private final TraineePositionService traineePositionService;
 
     @Override
-    public CommentEntity getCommentById(Long id) {
+    public CommentEntity findById(Long id) {
         log.info("Получение комментария c Id: {}", id);
         CommentEntity result = commentRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Комментарий с Id: {} не найден", id);
+                    log.error("Комментарий с Id: {} не найден", id);
                     throw new EntityNotFoundException("Comment", "id", id);
                 });
         log.info("Комментарий c Id: {} получен", id);
@@ -50,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page<CommentEntity> getAllComments(Pageable pageable) {
+    public Page<CommentEntity> findAll(Pageable pageable) {
         log.info("Получение страницы с комментариями");
         Page<CommentEntity> result = commentRepository.findAll(pageable);
         log.info("Страница с комментариями получена");
@@ -59,11 +59,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentEntity createCommentForCompany(Long userId, Long companyId, CommentEntity commentEntity) {
+    public CommentEntity createForCompany(Long userId, Long companyId, CommentEntity commentEntity) {
         log.info("Создание комментария для компании с Id {} от пользователя с Id: {}", companyId, userId);
-        final UserEntity userEntity = userService.getUserById(userId);
+        final UserEntity userEntity = userService.findById(userId);
         userEntity.addComments(commentEntity);
-        final CompanyEntity companyEntity = companyService.getCompanyById(companyId);
+        final CompanyEntity companyEntity = companyService.findById(companyId);
         companyEntity.addComments(commentEntity);
         CommentEntity result = commentRepository.save(commentEntity);
         log.info("Комментарий для компании с Id {} от пользователя с Id: {} создан", companyId, userId);
@@ -72,13 +72,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentEntity createCommentForTraineePosition(Long userId,
-                                                         Long traineePositionId,
-                                                         CommentEntity commentEntity) {
+    public CommentEntity createForTraineePosition(Long userId,
+                                                  Long traineePositionId,
+                                                  CommentEntity commentEntity) {
         log.info("Создание комментария для позиции стажировки с Id {} от пользователя с Id: {}", traineePositionId, userId);
-        final UserEntity userEntity = userService.getUserById(userId);
+        final UserEntity userEntity = userService.findById(userId);
         userEntity.addComments(commentEntity);
-        final TraineePositionEntity traineePosition = traineePositionService.getPositionById(traineePositionId);
+        final TraineePositionEntity traineePosition = traineePositionService.findById(traineePositionId);
         traineePosition.addComments(commentEntity);
         CommentEntity result = commentRepository.save(commentEntity);
         log.info("Комментарий для позиции стажировки с Id {} от пользователя с Id: {} создан", traineePositionId, userId);
@@ -87,9 +87,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentEntity updateComment(Long id, CommentEntity commentEntity) {
+    public CommentEntity update(Long id, CommentEntity commentEntity) {
         log.info("Обновление комментария с Id: {}", id);
-        CommentEntity target = this.getCommentById(id);
+        CommentEntity target = this.findById(id);
         CommentEntity update = commentMapper.merge(commentEntity, target);
         CommentEntity result = commentRepository.save(update);
         log.info("Комментарий с Id: {} обновлен", id);
@@ -98,10 +98,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteComment(Long id) {
+    public void deleteById(Long id) {
         log.info("Удаление комментария с Id: {}", id);
-        CommentEntity comment = this.getCommentById(id);
-        final UserEntity userEntity = userService.getUserById(comment.getUser().getId());
+        CommentEntity comment = this.findById(id);
+        final UserEntity userEntity = userService.findById(comment.getUser().getId());
         userEntity.removeComments(comment);
         commentRepository.deleteById(id);
         log.info("Комментарий с Id: {} удален", id);

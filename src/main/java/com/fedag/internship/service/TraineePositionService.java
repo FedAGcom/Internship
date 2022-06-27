@@ -5,15 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface TraineePositionService {
-    TraineePositionEntity getPositionById(Long id);
+    TraineePositionEntity findById(Long id);
 
-    Page<TraineePositionEntity> getAllPositions(Pageable pageable);
+    Page<TraineePositionEntity> findAll(Pageable pageable);
 
-    TraineePositionEntity createPosition(TraineePositionEntity positionEntity);
+    TraineePositionEntity create(TraineePositionEntity positionEntity);
 
-    TraineePositionEntity updatePosition(Long id, TraineePositionEntity positionEntity);
+    TraineePositionEntity update(Long id, TraineePositionEntity positionEntity);
 
-    void deletePosition(Long id);
+    void deleteById(Long id);
 
-    Page<TraineePositionEntity> searchPositionByCompany(String keyword, Pageable pageable);
+    Page<TraineePositionEntity> searchByCompany(String keyword, Pageable pageable);
 }

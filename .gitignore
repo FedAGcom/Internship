@@ -31,5 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
-/com.fedag.internship.domain.entity.CompanyEntity/
 /tokens/

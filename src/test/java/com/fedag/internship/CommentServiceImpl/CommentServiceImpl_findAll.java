@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
  * @since 2022-06-07
  */
 @ExtendWith(MockitoExtension.class)
-public class CommentServiceImpl_getAllComments {
+public class CommentServiceImpl_findAll {
     @InjectMocks
     private CommentServiceImpl commentService;
 
@@ -41,7 +41,7 @@ public class CommentServiceImpl_getAllComments {
         CommentEntity comment3 = new CommentEntity().setText("some text # 3");
         Page<CommentEntity> page = new PageImpl<>(List.of(comment1, comment2, comment3));
         when(commentRepository.findAll(Pageable.ofSize(5))).thenReturn(page);
-        Page<CommentEntity> result = commentService.getAllComments(Pageable.ofSize(5));
+        Page<CommentEntity> result = commentService.findAll(Pageable.ofSize(5));
         assertEquals(3, result.getTotalElements());
         assertEquals(1, result.getTotalPages());
         assertEquals("some text # 1", result.getContent().get(0).getText());

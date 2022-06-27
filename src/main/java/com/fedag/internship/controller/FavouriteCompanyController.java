@@ -48,10 +48,10 @@ public class FavouriteCompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
     @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<Page<CompanyResponse>> getAllFavouriteCompanies(Long userId,
-                                                                          @PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<Page<CompanyResponse>> getFavouriteCompanies(Long userId,
+                                                                       @PageableDefault(size = 5) Pageable pageable) {
         Page<CompanyResponse> page = favouriteCompanyService
-                .getAllFavouriteCompanies(userId, pageable)
+                .getFavouriteCompanies(userId, pageable)
                 .map(companyMapper::toResponse);
         return new ResponseEntity<>(page, OK);
     }
@@ -85,9 +85,9 @@ public class FavouriteCompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<?> deleteFavouriteCompany(@RequestParam Long userId,
+    public ResponseEntity<?> removeFavouriteCompany(@RequestParam Long userId,
                                                     @RequestParam Long companyId) {
-        favouriteCompanyService.deleteFavouriteCompany(userId, companyId);
+        favouriteCompanyService.removeFavouriteCompany(userId, companyId);
         return new ResponseEntity<>(OK);
     }
 }

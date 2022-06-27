@@ -54,9 +54,9 @@ public class UserController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
         UserResponse userResponse = Optional.of(id)
-                .map(userService::getUserById)
+                .map(userService::findById)
                 .map(userMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(userResponse, OK);
@@ -70,8 +70,8 @@ public class UserController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<UserResponse>> getAllUsersWithRoleUser(@PageableDefault(size = 5) Pageable pageable) {
-        Page<UserResponse> users = userService.getAllUsersWithRoleUser(pageable)
+    public ResponseEntity<Page<UserResponse>> findAllByRoleUser(@PageableDefault(size = 5) Pageable pageable) {
+        Page<UserResponse> users = userService.findAllByRoleUser(pageable)
                 .map(userMapper::toResponse);
         return new ResponseEntity<>(users, OK);
     }
@@ -89,10 +89,10 @@ public class UserController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
+    public ResponseEntity<UserResponse> create(@RequestBody @Valid UserRequest userRequest) {
         UserResponse userResponse = Optional.ofNullable(userRequest)
                 .map(userMapper::fromRequest)
-                .map(userService::createUser)
+                .map(userService::create)
                 .map(userMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(userResponse, CREATED);
@@ -111,11 +111,11 @@ public class UserController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping("/{id}")
     @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
-                                                   @RequestBody @Valid UserRequestUpdate userRequestUpdate) {
+    public ResponseEntity<UserResponse> update(@PathVariable Long id,
+                                               @RequestBody @Valid UserRequestUpdate userRequestUpdate) {
         UserResponse userResponse = Optional.ofNullable(userRequestUpdate)
                 .map(userMapper::fromRequestUpdate)
-                .map(user -> userService.updateUser(id, user))
+                .map(user -> userService.update(id, user))
                 .map(userMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(userResponse, OK);
