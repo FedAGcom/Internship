@@ -14,6 +14,8 @@ public interface UrlConstants {
     String USER = "/user";
     String DELETED = "/deleted";
 
+    String ACTIVE = "/active";
+
     String ID = "/{id}";
     String CONFIRM_URL = "/confirm";
 

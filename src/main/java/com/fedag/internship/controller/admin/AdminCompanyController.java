@@ -32,8 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import static com.fedag.internship.domain.util.UrlConstants.ACTIVE;
 import static com.fedag.internship.domain.util.UrlConstants.ADMIN;
 import static com.fedag.internship.domain.util.UrlConstants.COMPANY_URL;
+import static com.fedag.internship.domain.util.UrlConstants.DELETED;
 import static com.fedag.internship.domain.util.UrlConstants.ID;
 import static com.fedag.internship.domain.util.UrlConstants.MAIN_URL;
 import static com.fedag.internship.domain.util.UrlConstants.SEARCH_BY_NAME_URL;
@@ -80,6 +82,36 @@ public class AdminCompanyController {
     @GetMapping
     public ResponseEntity<Page<AdminCompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
         Page<AdminCompanyResponse> companies = companyService.findAll(pageable)
+                .map(companyMapper::toAdminResponse);
+        return new ResponseEntity<>(companies, OK);
+    }
+
+    @Operation(summary = "Получение страницы с компаниями со статусом ACTIVE")
+    @ApiResponse(responseCode = "200", description = "Компании найдены",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Page.class))})
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @GetMapping(ACTIVE)
+    public ResponseEntity<Page<AdminCompanyResponse>> findAllByActiveTrue(
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<AdminCompanyResponse> companies = companyService.findAllByActiveTrue(pageable)
+                .map(companyMapper::toAdminResponse);
+        return new ResponseEntity<>(companies, OK);
+    }
+
+    @Operation(summary = "Получение страницы с компаниями со статусом DELETED")
+    @ApiResponse(responseCode = "200", description = "Компании найдены",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Page.class))})
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @GetMapping(DELETED)
+    public ResponseEntity<Page<AdminCompanyResponse>> findAllByActiveFalse(
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<AdminCompanyResponse> companies = companyService.findAllByActiveFalse(pageable)
                 .map(companyMapper::toAdminResponse);
         return new ResponseEntity<>(companies, OK);
     }

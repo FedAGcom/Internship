@@ -12,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.fedag.internship.domain.entity.Status.NEW;
-import static com.fedag.internship.domain.entity.Status.REFUSED;
+import static com.fedag.internship.domain.entity.ProposalCompanyStatus.NEW;
+import static com.fedag.internship.domain.entity.ProposalCompanyStatus.REFUSED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
  * @since 2022-06-09
  */
 @ExtendWith(MockitoExtension.class)
-public class ProposalCompanyServiceImpl_setStatusRefused {
+public class ProposalCompanyServiceImpl_setProposalCompanyStatusRefused {
     @InjectMocks
     private ProposalCompanyServiceImpl proposalCompanyService;
 

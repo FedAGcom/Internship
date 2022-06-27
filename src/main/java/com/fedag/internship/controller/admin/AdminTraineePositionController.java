@@ -32,7 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import static com.fedag.internship.domain.util.UrlConstants.ACTIVE;
 import static com.fedag.internship.domain.util.UrlConstants.ADMIN;
+import static com.fedag.internship.domain.util.UrlConstants.DELETED;
 import static com.fedag.internship.domain.util.UrlConstants.ID;
 import static com.fedag.internship.domain.util.UrlConstants.MAIN_URL;
 import static com.fedag.internship.domain.util.UrlConstants.POSITION_URL;
@@ -80,6 +82,36 @@ public class AdminTraineePositionController {
     @GetMapping
     public ResponseEntity<Page<AdminTraineePositionResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
         Page<AdminTraineePositionResponse> positions = positionService.findAll(pageable)
+                .map(positionMapper::toAdminResponse);
+        return new ResponseEntity<>(positions, OK);
+    }
+
+    @Operation(summary = "Получение страницы с позициями со статусом ACTIVE")
+    @ApiResponse(responseCode = "200", description = "Позиции найдены",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Page.class))})
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @GetMapping(ACTIVE)
+    public ResponseEntity<Page<AdminTraineePositionResponse>> findAllByActiveTrue(
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<AdminTraineePositionResponse> positions = positionService.findAllByActiveTrue(pageable)
+                .map(positionMapper::toAdminResponse);
+        return new ResponseEntity<>(positions, OK);
+    }
+
+    @Operation(summary = "Получение страницы с позициями со статусом DELETED")
+    @ApiResponse(responseCode = "200", description = "Позиции найдены",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Page.class))})
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @GetMapping(DELETED)
+    public ResponseEntity<Page<AdminTraineePositionResponse>> findAllByActiveFalse(
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<AdminTraineePositionResponse> positions = positionService.findAllByActiveFalse(pageable)
                 .map(positionMapper::toAdminResponse);
         return new ResponseEntity<>(positions, OK);
     }

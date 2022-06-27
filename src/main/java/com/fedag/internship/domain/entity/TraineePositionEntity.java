@@ -58,6 +58,7 @@ public class TraineePositionEntity {
     private String documents;
     private String url;
     private String text;
+    private Boolean active;
 
     @Setter(PRIVATE)
     @ManyToMany(cascade = CascadeType.ALL, fetch = LAZY)

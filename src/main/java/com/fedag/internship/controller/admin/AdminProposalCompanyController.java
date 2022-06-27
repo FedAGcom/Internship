@@ -124,8 +124,9 @@ public class AdminProposalCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping(ID)
-    public ResponseEntity<AdminProposalCompanyResponse> update(@PathVariable Long id,
-                                                               @RequestBody @Valid ProposalCompanyRequestUpdate requestUpdate) {
+    public ResponseEntity<AdminProposalCompanyResponse> update(
+            @PathVariable Long id,
+            @RequestBody @Valid ProposalCompanyRequestUpdate requestUpdate) {
         AdminProposalCompanyResponse result = Optional.ofNullable(requestUpdate)
                 .map(proposalCompanyMapper::fromRequestUpdate)
                 .map(company -> proposalCompanyService.update(id, company))

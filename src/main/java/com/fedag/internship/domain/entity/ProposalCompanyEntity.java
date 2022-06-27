@@ -40,7 +40,7 @@ public class ProposalCompanyEntity {
     private String name;
 
     @Enumerated(STRING)
-    private Status status;
+    private ProposalCompanyStatus status;
 
     private String description;
 }

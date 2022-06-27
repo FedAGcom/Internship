@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -66,4 +67,11 @@ public class TraineePositionResponse {
             minLength = 1,
             example = "some text")
     private String text;
+
+    @Schema(description = "Список идентификаторов пользователей у которых позиция в избранном",
+            example = "[1, 2, 3]")
+    private List<Long> favouritePositionForUserIds;
+
+    @Schema(description = "Список идентификаторов комментариев позиции", example = "[1, 2, 3]")
+    private List<Long> commentIds;
 }

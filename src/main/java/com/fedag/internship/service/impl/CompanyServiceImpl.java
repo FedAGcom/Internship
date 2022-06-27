@@ -46,9 +46,26 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public Page<CompanyEntity> findAllByActiveTrue(Pageable pageable) {
+        log.info("Получение страницы с компаниями со статусом ACTIVE");
+        Page<CompanyEntity> result = companyRepository.findAllByActive(true, pageable);
+        log.info("Страница с компаниями со статусом ACTIVE получена");
+        return result;
+    }
+
+    @Override
+    public Page<CompanyEntity> findAllByActiveFalse(Pageable pageable) {
+        log.info("Получение страницы с компаниями со статусом DELETED");
+        Page<CompanyEntity> result = companyRepository.findAllByActive(false, pageable);
+        log.info("Страница с компаниями со статусом DELETED получена");
+        return result;
+    }
+
+    @Override
     @Transactional
     public CompanyEntity create(Long userId, CompanyEntity companyEntity) {
         log.info("Создание компании от пользователя с Id: {}", userId);
+        companyEntity.setActive(true);
         final UserEntity userEntity = userService.findById(userId);
         userEntity.setCompany(companyEntity);
         companyEntity.setUser(userEntity);

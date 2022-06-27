@@ -1,4 +1,4 @@
-package com.fedag.internship.validation.annotation;
+package com.fedag.internship.validation.validator;
 
 /**
  * enum Regions

@@ -5,10 +5,14 @@ import com.fedag.internship.domain.dto.request.TraineePositionRequest;
 import com.fedag.internship.domain.dto.request.TraineePositionRequestUpdate;
 import com.fedag.internship.domain.dto.response.admin.AdminTraineePositionResponse;
 import com.fedag.internship.domain.dto.response.user.TraineePositionResponse;
+import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
+import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +31,15 @@ public class TraineePositionMapperImpl implements TraineePositionMapper {
                 .setLocation(positionEntity.getLocation())
                 .setStatus(positionEntity.getStatus())
                 .setUrl(positionEntity.getUrl())
-                .setText(positionEntity.getText());
+                .setText(positionEntity.getText())
+                .setFavouritePositionForUserIds(positionEntity.getUsers()
+                        .stream()
+                        .map(UserEntity::getId)
+                        .collect(Collectors.toList()))
+                .setCommentIds(positionEntity.getComments()
+                        .stream()
+                        .map(CommentEntity::getId)
+                        .collect(Collectors.toList()));
     }
 
     @Override
@@ -42,7 +54,16 @@ public class TraineePositionMapperImpl implements TraineePositionMapper {
                 .setLocation(positionEntity.getLocation())
                 .setStatus(positionEntity.getStatus())
                 .setUrl(positionEntity.getUrl())
-                .setText(positionEntity.getText());
+                .setText(positionEntity.getText())
+                .setActive(positionEntity.getActive())
+                .setFavouritePositionForUserIds(positionEntity.getUsers()
+                        .stream()
+                        .map(UserEntity::getId)
+                        .collect(Collectors.toList()))
+                .setCommentIds(positionEntity.getComments()
+                        .stream()
+                        .map(CommentEntity::getId)
+                        .collect(Collectors.toList()));
     }
 
     @Override

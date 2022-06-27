@@ -1,7 +1,7 @@
 package com.fedag.internship.domain.dto.response.admin;
 
 import com.fedag.internship.domain.entity.ProposalCompanyEntity;
-import com.fedag.internship.domain.entity.Status;
+import com.fedag.internship.domain.entity.ProposalCompanyStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,8 +34,7 @@ public class AdminProposalCompanyResponse {
             maxLength = 100,
             minLength = 1,
             example = "NEW")
-    private Status status;
-
+    private ProposalCompanyStatus status;
 
     @Schema(description = "Описание компании",
             maxLength = 500,

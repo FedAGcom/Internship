@@ -9,6 +9,10 @@ public interface TraineePositionService {
 
     Page<TraineePositionEntity> findAll(Pageable pageable);
 
+    Page<TraineePositionEntity> findAllByActiveTrue(Pageable pageable);
+
+    Page<TraineePositionEntity> findAllByActiveFalse(Pageable pageable);
+
     TraineePositionEntity create(TraineePositionEntity positionEntity);
 
     TraineePositionEntity update(Long id, TraineePositionEntity positionEntity);

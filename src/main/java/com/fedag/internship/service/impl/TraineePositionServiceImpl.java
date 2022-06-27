@@ -43,9 +43,26 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     }
 
     @Override
+    public Page<TraineePositionEntity> findAllByActiveTrue(Pageable pageable) {
+        log.info("Получение страницы с позициями стажировки со статусом ACTIVE");
+        Page<TraineePositionEntity> result = positionRepository.findAllByActive(true, pageable);
+        log.info("Страница с позициями стажировки со статусом ACTIVE получена");
+        return result;
+    }
+
+    @Override
+    public Page<TraineePositionEntity> findAllByActiveFalse(Pageable pageable) {
+        log.info("Получение страницы с позициями стажировки со статусом DELETED");
+        Page<TraineePositionEntity> result = positionRepository.findAllByActive(false, pageable);
+        log.info("Страница с позициями стажировки со статусом DELETED получена");
+        return result;
+    }
+
+    @Override
     @Transactional
     public TraineePositionEntity create(TraineePositionEntity positionEntity) {
         log.info("Создание позиции стажировки");
+        positionEntity.setActive(true);
         TraineePositionEntity result = positionRepository.save(positionEntity);
         positionElasticSearchService.save(positionEntity);
         log.info("Позиция стажировки создана");

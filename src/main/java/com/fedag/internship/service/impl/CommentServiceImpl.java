@@ -103,6 +103,14 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity comment = this.findById(id);
         final UserEntity userEntity = userService.findById(comment.getUser().getId());
         userEntity.removeComments(comment);
+        if (comment.getCompany() != null) {
+            final CompanyEntity companyEntity = comment.getCompany();
+            companyEntity.removeComments(comment);
+        }
+        if (comment.getTraineePosition() != null) {
+            final TraineePositionEntity traineePosition = comment.getTraineePosition();
+            traineePosition.removeComments(comment);
+        }
         commentRepository.deleteById(id);
         log.info("Комментарий с Id: {} удален", id);
     }

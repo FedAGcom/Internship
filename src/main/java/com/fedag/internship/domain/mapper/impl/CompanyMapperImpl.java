@@ -5,10 +5,14 @@ import com.fedag.internship.domain.dto.request.CompanyRequest;
 import com.fedag.internship.domain.dto.request.CompanyRequestUpdate;
 import com.fedag.internship.domain.dto.response.admin.AdminCompanyResponse;
 import com.fedag.internship.domain.dto.response.user.CompanyResponse;
+import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
+import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +28,15 @@ public class CompanyMapperImpl implements CompanyMapper {
                 .setRating(companyEntity.getRating())
                 .setLocation(companyEntity.getLocation())
                 .setLink(companyEntity.getLink())
-                .setUserId(companyEntity.getUser().getId());
+                .setUserId(companyEntity.getUser().getId())
+                .setFavouriteCompanyForUserIds(companyEntity.getUsers()
+                        .stream()
+                        .map(UserEntity::getId)
+                        .collect(Collectors.toList()))
+                .setCommentIds(companyEntity.getComments()
+                        .stream()
+                        .map(CommentEntity::getId)
+                        .collect(Collectors.toList()));
     }
 
     @Override
@@ -36,7 +48,16 @@ public class CompanyMapperImpl implements CompanyMapper {
                 .setRating(companyEntity.getRating())
                 .setLocation(companyEntity.getLocation())
                 .setLink(companyEntity.getLink())
-                .setUserId(companyEntity.getUser().getId());
+                .setActive(companyEntity.getActive())
+                .setUserId(companyEntity.getUser().getId())
+                .setFavouriteCompanyForUserIds(companyEntity.getUsers()
+                        .stream()
+                        .map(UserEntity::getId)
+                        .collect(Collectors.toList()))
+                .setCommentIds(companyEntity.getComments()
+                        .stream()
+                        .map(CommentEntity::getId)
+                        .collect(Collectors.toList()));
     }
 
     public CompanyEntity fromRequest(CompanyRequest companyRequest) {

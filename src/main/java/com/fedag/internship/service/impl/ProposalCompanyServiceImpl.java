@@ -12,10 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.fedag.internship.domain.entity.Status.APPROVED;
-import static com.fedag.internship.domain.entity.Status.NEW;
-import static com.fedag.internship.domain.entity.Status.REFUSED;
-import static com.fedag.internship.domain.entity.Status.UNDER_REVIEW;
+import static com.fedag.internship.domain.entity.ProposalCompanyStatus.APPROVED;
+import static com.fedag.internship.domain.entity.ProposalCompanyStatus.NEW;
+import static com.fedag.internship.domain.entity.ProposalCompanyStatus.REFUSED;
+import static com.fedag.internship.domain.entity.ProposalCompanyStatus.UNDER_REVIEW;
 
 /**
  * class ProposalCompanyServiceImpl for create connections between
