@@ -1,7 +1,5 @@
 package com.fedag.internship.service.impl;
 
-
-import com.fedag.internship.domain.elasticsearch.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.elasticsearch.PositionElasticSearchEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.repository.PositionElasticSearcherRepository;
