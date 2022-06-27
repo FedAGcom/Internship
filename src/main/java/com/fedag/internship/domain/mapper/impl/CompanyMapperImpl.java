@@ -3,7 +3,8 @@ package com.fedag.internship.domain.mapper.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fedag.internship.domain.dto.request.CompanyRequest;
 import com.fedag.internship.domain.dto.request.CompanyRequestUpdate;
-import com.fedag.internship.domain.dto.response.CompanyResponse;
+import com.fedag.internship.domain.dto.response.admin.AdminCompanyResponse;
+import com.fedag.internship.domain.dto.response.user.CompanyResponse;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,18 @@ public class CompanyMapperImpl implements CompanyMapper {
     @Override
     public CompanyResponse toResponse(CompanyEntity companyEntity) {
         return new CompanyResponse()
+                .setId(companyEntity.getId())
+                .setName(companyEntity.getName())
+                .setDescription(companyEntity.getDescription())
+                .setRating(companyEntity.getRating())
+                .setLocation(companyEntity.getLocation())
+                .setLink(companyEntity.getLink())
+                .setUserId(companyEntity.getUser().getId());
+    }
+
+    @Override
+    public AdminCompanyResponse toAdminResponse(CompanyEntity companyEntity) {
+        return new AdminCompanyResponse()
                 .setId(companyEntity.getId())
                 .setName(companyEntity.getName())
                 .setDescription(companyEntity.getDescription())

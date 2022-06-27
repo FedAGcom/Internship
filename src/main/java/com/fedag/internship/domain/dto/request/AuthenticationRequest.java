@@ -1,4 +1,4 @@
-package com.fedag.internship.security.dto;
+package com.fedag.internship.domain.dto.request;
 
 import com.fedag.internship.validation.annotation.Email;
 import io.swagger.v3.oas.annotations.media.Schema;

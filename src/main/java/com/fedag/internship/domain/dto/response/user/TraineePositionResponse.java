@@ -1,4 +1,4 @@
-package com.fedag.internship.domain.dto.response;
+package com.fedag.internship.domain.dto.response.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

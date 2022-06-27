@@ -2,7 +2,8 @@ package com.fedag.internship.domain.mapper;
 
 import com.fedag.internship.domain.dto.request.ProposalCompanyRequest;
 import com.fedag.internship.domain.dto.request.ProposalCompanyRequestUpdate;
-import com.fedag.internship.domain.dto.response.ProposalCompanyResponse;
+import com.fedag.internship.domain.dto.response.admin.AdminProposalCompanyResponse;
+import com.fedag.internship.domain.dto.response.user.ProposalCompanyResponse;
 import com.fedag.internship.domain.entity.ProposalCompanyEntity;
 
 /**
@@ -13,6 +14,8 @@ import com.fedag.internship.domain.entity.ProposalCompanyEntity;
  */
 public interface ProposalCompanyMapper {
     ProposalCompanyResponse toResponse(ProposalCompanyEntity proposalCompanyEntity);
+
+    AdminProposalCompanyResponse toAdminResponse(ProposalCompanyEntity proposalCompanyEntity);
 
     ProposalCompanyEntity fromRequest(ProposalCompanyRequest proposalCompanyRequest);
 

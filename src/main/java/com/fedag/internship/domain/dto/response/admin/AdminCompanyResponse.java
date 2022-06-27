@@ -1,4 +1,4 @@
-package com.fedag.internship.domain.dto.response;
+package com.fedag.internship.domain.dto.response.admin;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -10,8 +10,8 @@ import lombok.experimental.Accessors;
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
-@Schema(name = "Компания", description = "Информация о компании")
-public class CompanyResponse {
+@Schema(name = "Компания для админа", description = "Информация о компании")
+public class AdminCompanyResponse {
     @Schema(description = "Идентификатор компании",
             example = "1")
     private Long id;

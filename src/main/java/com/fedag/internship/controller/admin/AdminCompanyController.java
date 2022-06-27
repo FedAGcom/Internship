@@ -1,9 +1,9 @@
-package com.fedag.internship.controller;
+package com.fedag.internship.controller.admin;
 
 import com.fedag.internship.domain.dto.DtoErrorInfo;
 import com.fedag.internship.domain.dto.request.CompanyRequest;
 import com.fedag.internship.domain.dto.request.CompanyRequestUpdate;
-import com.fedag.internship.domain.dto.response.CompanyResponse;
+import com.fedag.internship.domain.dto.response.admin.AdminCompanyResponse;
 import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.service.CompanyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,36 +32,42 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.Optional;
 
+import static com.fedag.internship.domain.util.UrlConstants.ADMIN;
+import static com.fedag.internship.domain.util.UrlConstants.COMPANY_URL;
+import static com.fedag.internship.domain.util.UrlConstants.ID;
+import static com.fedag.internship.domain.util.UrlConstants.MAIN_URL;
+import static com.fedag.internship.domain.util.UrlConstants.SEARCH_BY_NAME_URL;
+import static com.fedag.internship.domain.util.UrlConstants.VERSION;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/companies")
-@Tag(name = "Компания", description = "Работа с компаниями")
-public class CompanyController {
+@RequestMapping(MAIN_URL + VERSION + ADMIN + COMPANY_URL)
+@PreAuthorize("hasAuthority('admin')")
+@SecurityRequirement(name = "bearer-token-auth")
+@Tag(name = "Админка Компаний", description = "Админка для работы с компаниями")
+public class AdminCompanyController {
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
 
     @Operation(summary = "Получение компании по Id")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Компания найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = CompanyResponse.class))})
+                    schema = @Schema(implementation = AdminCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Компания не найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('read')")
-    public ResponseEntity<CompanyResponse> findById(@PathVariable Long id) {
-        CompanyResponse companyResponse = Optional.of(id)
+    @GetMapping(ID)
+    public ResponseEntity<AdminCompanyResponse> findById(@PathVariable Long id) {
+        AdminCompanyResponse adminCompanyResponse = Optional.of(id)
                 .map(companyService::findById)
-                .map(companyMapper::toResponse)
+                .map(companyMapper::toAdminResponse)
                 .orElseThrow();
-        return new ResponseEntity<>(companyResponse, OK);
+        return new ResponseEntity<>(adminCompanyResponse, OK);
     }
 
     @Operation(summary = "Получение страницы с компаниями")
@@ -72,17 +78,16 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<CompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
-        Page<CompanyResponse> companies = companyService.findAll(pageable)
-                .map(companyMapper::toResponse);
+    public ResponseEntity<Page<AdminCompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
+        Page<AdminCompanyResponse> companies = companyService.findAll(pageable)
+                .map(companyMapper::toAdminResponse);
         return new ResponseEntity<>(companies, OK);
     }
 
     @Operation(summary = "Создание компании")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "201", description = "Компания создана",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = CompanyResponse.class))})
+                    schema = @Schema(implementation = AdminCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Ошибка валидации",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
@@ -90,42 +95,38 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<CompanyResponse> create(@RequestParam Long userId,
-                                                  @RequestBody @Valid CompanyRequest companyRequest) {
-        CompanyResponse companyResponse = Optional.ofNullable(companyRequest)
+    public ResponseEntity<AdminCompanyResponse> create(@RequestParam Long userId,
+                                                       @RequestBody @Valid CompanyRequest companyRequest) {
+        AdminCompanyResponse adminCompanyResponse = Optional.ofNullable(companyRequest)
                 .map(companyMapper::fromRequest)
                 .map(companyEntity -> companyService.create(userId, companyEntity))
-                .map(companyMapper::toResponse)
+                .map(companyMapper::toAdminResponse)
                 .orElseThrow();
-        return new ResponseEntity<>(companyResponse, CREATED);
+        return new ResponseEntity<>(adminCompanyResponse, CREATED);
     }
 
     @Operation(summary = "Обновление компании")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Компания обновлена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = CompanyResponse.class))})
+                    schema = @Schema(implementation = AdminCompanyResponse.class))})
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @ApiResponse(responseCode = "404", description = "Компания не найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('write')")
-    public ResponseEntity<CompanyResponse> update(@PathVariable Long id,
-                                                  @RequestBody CompanyRequestUpdate companyRequestUpdate) {
-        CompanyResponse companyResponse = Optional.ofNullable(companyRequestUpdate)
+    @PatchMapping(ID)
+    public ResponseEntity<AdminCompanyResponse> update(@PathVariable Long id,
+                                                       @RequestBody CompanyRequestUpdate companyRequestUpdate) {
+        AdminCompanyResponse adminCompanyResponse = Optional.ofNullable(companyRequestUpdate)
                 .map(companyMapper::fromRequestUpdate)
                 .map(company -> companyService.update(id, company))
-                .map(companyMapper::toResponse)
+                .map(companyMapper::toAdminResponse)
                 .orElseThrow();
-        return new ResponseEntity<>(companyResponse, OK);
+        return new ResponseEntity<>(adminCompanyResponse, OK);
     }
 
     @Operation(summary = "Удаление компании")
-    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "200", description = "Компания удалена")
     @ApiResponse(responseCode = "400", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -133,8 +134,7 @@ public class CompanyController {
     @ApiResponse(responseCode = "404", description = "Компания не найдена",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('write')")
+    @DeleteMapping(ID)
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         companyService.deleteById(id);
         return new ResponseEntity<>(OK);
@@ -147,11 +147,11 @@ public class CompanyController {
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
-    @GetMapping("/search")
-    public ResponseEntity<Page<CompanyResponse>> searchByName(@RequestParam String keyword, Pageable pageable) {
-        Page<CompanyResponse> companies = companyService
+    @GetMapping(SEARCH_BY_NAME_URL)
+    public ResponseEntity<Page<AdminCompanyResponse>> searchByName(@RequestParam String keyword, Pageable pageable) {
+        Page<AdminCompanyResponse> companies = companyService
                 .searchByName(keyword, pageable)
-                .map(companyMapper::toResponse);
+                .map(companyMapper::toAdminResponse);
         return new ResponseEntity<>(companies, OK);
     }
 }

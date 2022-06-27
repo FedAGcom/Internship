@@ -1,4 +1,4 @@
-package com.fedag.internship.domain.dto.response;
+package com.fedag.internship.domain.dto.response.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
-@Schema(name = "Пользователь", description = "Информация о пользователе")
+@Schema(name = "Пользователь для админа", description = "Информация о пользователе")
 public class UserResponse {
     @Schema(description = "Идентификатор пользователя",
             example = "1")
@@ -36,17 +36,6 @@ public class UserResponse {
             minLength = 1,
             example = "someSurname")
     private String lastName;
-
-    @Schema(description = "Роль пользователя",
-            maxLength = 255,
-            minLength = 1,
-            example = "USER")
-    private String role;
-
-
-    @Schema(description = "Статус пользователя",
-            example = "false")
-    private Boolean enabled;
 
     @Schema(description = "Дата создания пользователя")
     private LocalDateTime created;

@@ -3,7 +3,8 @@ package com.fedag.internship.domain.mapper.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fedag.internship.domain.dto.request.TraineePositionRequest;
 import com.fedag.internship.domain.dto.request.TraineePositionRequestUpdate;
-import com.fedag.internship.domain.dto.response.TraineePositionResponse;
+import com.fedag.internship.domain.dto.response.admin.AdminTraineePositionResponse;
+import com.fedag.internship.domain.dto.response.user.TraineePositionResponse;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,21 @@ public class TraineePositionMapperImpl implements TraineePositionMapper {
     @Override
     public TraineePositionResponse toResponse(TraineePositionEntity positionEntity) {
         return new TraineePositionResponse()
+                .setId(positionEntity.getId())
+                .setCompanyId(positionEntity.getCompany().getId())
+                .setName(positionEntity.getName())
+                .setDate(positionEntity.getDate())
+                .setEmployeePosition(positionEntity.getEmployeePosition())
+                .setDocuments(positionEntity.getDocuments())
+                .setLocation(positionEntity.getLocation())
+                .setStatus(positionEntity.getStatus())
+                .setUrl(positionEntity.getUrl())
+                .setText(positionEntity.getText());
+    }
+
+    @Override
+    public AdminTraineePositionResponse toAdminResponse(TraineePositionEntity positionEntity) {
+        return new AdminTraineePositionResponse()
                 .setId(positionEntity.getId())
                 .setCompanyId(positionEntity.getCompany().getId())
                 .setName(positionEntity.getName())

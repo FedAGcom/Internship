@@ -45,11 +45,12 @@ public class FavouriteCompanyServiceImpl implements FavouriteCompanyService {
 
     @Override
     @Transactional
-    public void removeFavouriteCompany(Long userId, Long companyId) {
+    public UserEntity removeFavouriteCompany(Long userId, Long companyId) {
         log.info("Удаление компании с Id: {} из избранного у пользователя с Id: {}", companyId, userId);
         UserEntity userEntity = userService.findById(userId);
         CompanyEntity companyEntity = companyService.findById(companyId);
         companyEntity.removeFavouriteCompanyFromUser(userEntity);
         log.info("Компания с Id: {} удалена из избранного у пользователя с Id: {}", companyId, userId);
+        return userEntity;
     }
 }
