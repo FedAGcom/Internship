@@ -23,8 +23,11 @@ public class UpdateAvgRatingOfCompaniesJob {
     public void updateAvgRatingForCompanies() {
         log.info("Начало обновления рейтинга компаний");
         List<CompanyEntity> list = companyRepository.findAll();
-        list.forEach((element) ->
-                element.setRating(commentRepository.getAvgRatingOfCompany(element.getId())));
+        list.forEach((company) -> {
+            if (company.getComments().size() > 9) {
+                company.setRating(commentRepository.getAvgRatingOfCompany(company.getId()));
+            }
+        });
         log.info("Рейтинг компаний обновлен");
     }
 }
