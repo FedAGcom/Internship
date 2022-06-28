@@ -103,12 +103,12 @@ public class AdminCommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping(COMPANY_URL)
-    public ResponseEntity<AdminCommentResponse> createForCompany(@RequestParam Long userId,
-                                                                 @RequestParam Long companyId,
-                                                                 @RequestBody @Valid CommentRequest commentRequest) {
+    public ResponseEntity<AdminCommentResponse> createForCompany(
+            @RequestParam Long companyId,
+            @RequestBody @Valid CommentRequest commentRequest) {
         AdminCommentResponse result = Optional.ofNullable(commentRequest)
                 .map(commentMapper::fromRequest)
-                .map(comment -> commentService.createForCompany(userId, companyId, comment))
+                .map(comment -> commentService.createForCompany(companyId, comment))
                 .map(commentMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
@@ -125,12 +125,12 @@ public class AdminCommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping(POSITION_URL)
-    public ResponseEntity<AdminCommentResponse> createForTraineePosition(@RequestParam Long userId,
-                                                                         @RequestParam Long positionId,
-                                                                         @RequestBody @Valid CommentRequest commentRequest) {
+    public ResponseEntity<AdminCommentResponse> createForTraineePosition(
+            @RequestParam Long positionId,
+            @RequestBody @Valid CommentRequest commentRequest) {
         AdminCommentResponse result = Optional.ofNullable(commentRequest)
                 .map(commentMapper::fromRequest)
-                .map(comment -> commentService.createForTraineePosition(userId, positionId, comment))
+                .map(comment -> commentService.createForTraineePosition(positionId, comment))
                 .map(commentMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
@@ -147,8 +147,9 @@ public class AdminCommentController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping(ID)
-    public ResponseEntity<AdminCommentResponse> update(@PathVariable Long id,
-                                                       @RequestBody @Valid CommentRequestUpdate commentRequestUpdate) {
+    public ResponseEntity<AdminCommentResponse> update(
+            @PathVariable Long id,
+            @RequestBody @Valid CommentRequestUpdate commentRequestUpdate) {
         AdminCommentResponse result = Optional.ofNullable(commentRequestUpdate)
                 .map(commentMapper::fromRequestUpdate)
                 .map(comment -> commentService.update(id, comment))

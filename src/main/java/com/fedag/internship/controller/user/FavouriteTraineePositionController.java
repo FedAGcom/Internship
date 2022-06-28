@@ -53,10 +53,9 @@ public class FavouriteTraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
     public ResponseEntity<Page<TraineePositionResponse>> getFavouriteTraineePositions(
-            @RequestParam Long userId,
             @PageableDefault(size = 5) Pageable pageable) {
         Page<TraineePositionResponse> page = favouriteTraineePositionService
-                .getFavouriteTraineePositions(userId, pageable)
+                .getFavouriteTraineePositions(pageable)
                 .map(traineePositionMapper::toResponse);
         return new ResponseEntity<>(page, OK);
     }
@@ -72,10 +71,9 @@ public class FavouriteTraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    public ResponseEntity<UserResponse> addFavouriteTraineePosition(@RequestParam Long userId,
-                                                                    @RequestParam Long traineeId) {
+    public ResponseEntity<UserResponse> addFavouriteTraineePosition(@RequestParam Long traineeId) {
         UserEntity userEntity = favouriteTraineePositionService
-                .addFavouriteTraineePosition(userId, traineeId);
+                .addFavouriteTraineePosition(traineeId);
         UserResponse userResponse = userMapper.toResponse(userEntity);
         return new ResponseEntity<>(userResponse, OK);
     }
@@ -91,10 +89,9 @@ public class FavouriteTraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping
-    public ResponseEntity<UserResponse> removeFavouriteTraineePosition(@RequestParam Long userId,
-                                                                       @RequestParam Long traineeId) {
+    public ResponseEntity<UserResponse> removeFavouriteTraineePosition(@RequestParam Long traineeId) {
         UserEntity userEntity = favouriteTraineePositionService
-                .removeFavouriteTraineePosition(userId, traineeId);
+                .removeFavouriteTraineePosition(traineeId);
         UserResponse userResponse = userMapper.toResponse(userEntity);
         return new ResponseEntity<>(userResponse, OK);
     }

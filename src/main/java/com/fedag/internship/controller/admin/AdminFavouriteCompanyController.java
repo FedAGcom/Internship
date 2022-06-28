@@ -55,10 +55,9 @@ public class AdminFavouriteCompanyController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
     public ResponseEntity<Page<AdminCompanyResponse>> getFavouriteCompanies(
-            @RequestParam Long userId,
             @PageableDefault(size = 5) Pageable pageable) {
         Page<AdminCompanyResponse> page = favouriteCompanyService
-                .getFavouriteCompanies(userId, pageable)
+                .getFavouriteCompanies(pageable)
                 .map(companyMapper::toAdminResponse);
         return new ResponseEntity<>(page, OK);
     }
@@ -74,9 +73,8 @@ public class AdminFavouriteCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    public ResponseEntity<AdminUserResponse> addFavouriteCompany(@RequestParam Long userId,
-                                                                 @RequestParam Long companyId) {
-        UserEntity userEntity = favouriteCompanyService.addFavouriteCompany(userId, companyId);
+    public ResponseEntity<AdminUserResponse> addFavouriteCompany(@RequestParam Long companyId) {
+        UserEntity userEntity = favouriteCompanyService.addFavouriteCompany(companyId);
         AdminUserResponse adminUserResponse = userMapper.toAdminResponse(userEntity);
         return new ResponseEntity<>(adminUserResponse, OK);
     }
@@ -92,9 +90,8 @@ public class AdminFavouriteCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping
-    public ResponseEntity<AdminUserResponse> removeFavouriteCompany(@RequestParam Long userId,
-                                                                    @RequestParam Long companyId) {
-        UserEntity userEntity = favouriteCompanyService.removeFavouriteCompany(userId, companyId);
+    public ResponseEntity<AdminUserResponse> removeFavouriteCompany(@RequestParam Long companyId) {
+        UserEntity userEntity = favouriteCompanyService.removeFavouriteCompany(companyId);
         AdminUserResponse adminUserResponse = userMapper.toAdminResponse(userEntity);
         return new ResponseEntity<>(adminUserResponse, OK);
     }

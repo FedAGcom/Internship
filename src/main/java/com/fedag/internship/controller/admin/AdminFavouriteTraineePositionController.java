@@ -55,10 +55,9 @@ public class AdminFavouriteTraineePositionController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
     public ResponseEntity<Page<AdminTraineePositionResponse>> getFavouriteTraineePositions(
-            @RequestParam Long userId,
             @PageableDefault(size = 5) Pageable pageable) {
         Page<AdminTraineePositionResponse> page = favouriteTraineePositionService
-                .getFavouriteTraineePositions(userId, pageable)
+                .getFavouriteTraineePositions(pageable)
                 .map(traineePositionMapper::toAdminResponse);
         return new ResponseEntity<>(page, OK);
     }
@@ -74,10 +73,9 @@ public class AdminFavouriteTraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    public ResponseEntity<AdminUserResponse> addFavouriteTraineePosition(@RequestParam Long userId,
-                                                                         @RequestParam Long traineeId) {
+    public ResponseEntity<AdminUserResponse> addFavouriteTraineePosition(@RequestParam Long traineeId) {
         UserEntity userEntity = favouriteTraineePositionService
-                .addFavouriteTraineePosition(userId, traineeId);
+                .addFavouriteTraineePosition(traineeId);
         AdminUserResponse adminUserResponse = userMapper.toAdminResponse(userEntity);
         return new ResponseEntity<>(adminUserResponse, OK);
     }
@@ -93,10 +91,9 @@ public class AdminFavouriteTraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping
-    public ResponseEntity<AdminUserResponse> removeFavouriteTraineePosition(@RequestParam Long userId,
-                                                                            @RequestParam Long traineeId) {
+    public ResponseEntity<AdminUserResponse> removeFavouriteTraineePosition(@RequestParam Long traineeId) {
         UserEntity userEntity = favouriteTraineePositionService
-                .removeFavouriteTraineePosition(userId, traineeId);
+                .removeFavouriteTraineePosition(traineeId);
         AdminUserResponse adminUserResponse = userMapper.toAdminResponse(userEntity);
         return new ResponseEntity<>(adminUserResponse, OK);
     }

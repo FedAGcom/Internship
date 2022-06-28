@@ -7,7 +7,7 @@ databaseChangeLog:
             dataType:  BIGINT
             incrementBy:  1
             sequenceName:  seq_users_id
-            startValue:  1
+            startValue:  2
   - changeSet:
       id: 1.0.1
       author: damir.iusupov
@@ -56,3 +56,34 @@ databaseChangeLog:
                   type: BOOLEAN
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 1.0.2
+      author: damir.iusupov
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: email
+                  value: admin@admin.com
+              - column:
+                  name: password
+                  value: $2a$12$Oi4.uB032X.TupEwFO8IYebX5YDN/baEa7RLID.C75K.oNw8.AQpm
+              - column:
+                  name: role
+                  value: ADMIN
+              - column:
+                  name: first_name
+                  value: default
+              - column:
+                  name: last_name
+                  value: admin
+              - column:
+                  name: created
+                  value: 2022-01-01 00:00
+              - column:
+                  name: enabled
+                  value: true

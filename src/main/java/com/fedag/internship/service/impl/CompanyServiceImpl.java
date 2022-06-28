@@ -7,7 +7,7 @@ import com.fedag.internship.domain.mapper.CompanyMapper;
 import com.fedag.internship.repository.CompanyRepository;
 import com.fedag.internship.service.CompanyElasticSearchService;
 import com.fedag.internship.service.CompanyService;
-import com.fedag.internship.service.UserService;
+import com.fedag.internship.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CompanyServiceImpl implements CompanyService {
+    private final CompanyElasticSearchService companyElasticSearchService;
+    private final CurrentUserService currentUserService;
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
-    private final UserService userService;
-    private final CompanyElasticSearchService companyElasticSearchService;
 
     @Override
     public CompanyEntity findById(Long id) {
@@ -63,15 +63,15 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public CompanyEntity create(Long userId, CompanyEntity companyEntity) {
-        log.info("Создание компании от пользователя с Id: {}", userId);
+    public CompanyEntity create(CompanyEntity companyEntity) {
+        log.info("Создание компании");
         companyEntity.setActive(true);
-        final UserEntity userEntity = userService.findById(userId);
+        final UserEntity userEntity = currentUserService.getCurrentUser();
         userEntity.setCompany(companyEntity);
         companyEntity.setUser(userEntity);
         CompanyEntity result = companyRepository.save(companyEntity);
         companyElasticSearchService.save(companyEntity);
-        log.info("Компания от пользователя с Id: {} создана", userId);
+        log.info("Компания создана");
         return result;
     }
 

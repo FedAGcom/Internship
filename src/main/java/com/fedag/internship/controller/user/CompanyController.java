@@ -84,8 +84,9 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping(SEARCH_BY_NAME_URL)
-    public ResponseEntity<Page<CompanyResponse>> searchByName(@RequestParam String keyword,
-                                                              Pageable pageable) {
+    public ResponseEntity<Page<CompanyResponse>> searchByName(
+            @RequestParam String keyword,
+            @PageableDefault(size = 5) Pageable pageable) {
         Page<CompanyResponse> companies = companyService
                 .searchByName(keyword, pageable)
                 .map(companyMapper::toResponse);
