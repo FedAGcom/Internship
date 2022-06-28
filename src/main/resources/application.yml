@@ -1,7 +1,5 @@
 # Server
 server:
-  servlet:
-    context-path: /intership/api/v1.0
   error:
     include-binding-errors: always
     include-message: always
@@ -11,7 +9,7 @@ server:
 spring:
   # PostgreSQL
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5432/intership-db
+    url: jdbc:postgresql://localhost:5432/intership-db
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: admin
@@ -29,7 +27,7 @@ spring:
   # Liquibase
   liquibase:
     change-log: classpath:liquibase/db.changelog_master.yaml
-    url: jdbc:postgresql://host.docker.internal:5432/intership-db
+    url: jdbc:postgresql://localhost:5432/intership-db
     user: postgres
     password: admin
 

@@ -1,12 +1,12 @@
 package com.fedag.internship.domain.entity;
 
 public enum Permission {
-    READ("read"),
-    WRITE("write");
+    USER("user"),
+    ADMIN("admin");
 
     private final String permission;
 
-   Permission(String permission) {
+    Permission(String permission) {
         this.permission = permission;
     }
 

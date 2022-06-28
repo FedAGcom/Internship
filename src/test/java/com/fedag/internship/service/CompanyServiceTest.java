@@ -33,19 +33,19 @@ public class CompanyServiceTest {
     public void getCompanyByIdTestWhenIdIsInvalid() {
         Long invalidId = -1L;
         when(companyRepository.findById(invalidId)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> companyService.getCompanyById(invalidId));
+        assertThrows(EntityNotFoundException.class, () -> companyService.findById(invalidId));
     }
 
     @Test
     public void getCompanyByIdTestWhenIdIsValid() {
         when(companyRepository.findById(anyLong())).thenReturn(Optional.of(new CompanyEntity()));
-        assertDoesNotThrow(() -> companyService.getCompanyById(anyLong()));
+        assertDoesNotThrow(() -> companyService.findById(anyLong()));
     }
 
     @Test
     public void getAllCompaniesTest() {
       Pageable pageable = any(Pageable.class);
-      companyService.getAllCompanies(pageable);
+      companyService.findAll(pageable);
       verify(companyRepository).findAll(pageable);
     }
 
@@ -53,7 +53,7 @@ public class CompanyServiceTest {
     public void deleteCompanyTest() {
         when(companyRepository.findById(anyLong())).thenReturn(Optional.of(new CompanyEntity()));
 
-        companyService.deleteCompany(anyLong());
+        companyService.deleteById(anyLong());
 
         verify(companyRepository).deleteById(anyLong());
         verify(companyRepository).findById(anyLong());
@@ -63,9 +63,9 @@ public class CompanyServiceTest {
     public void createCompanyTest() {
         UserEntity userWithoutCompany = new UserEntity();
         CompanyEntity companyWithoutUser = new CompanyEntity();
-        when(userService.getUserById(anyLong())).thenReturn(userWithoutCompany);
+        when(userService.findById(anyLong())).thenReturn(userWithoutCompany);
 
-        companyService.createCompany(anyLong(), companyWithoutUser);
+        companyService.create(anyLong(), companyWithoutUser);
 
         assertNotNull(userWithoutCompany.getCompany());
         assertNotNull(companyWithoutUser.getUser());
@@ -77,7 +77,7 @@ public class CompanyServiceTest {
         CompanyEntity someCompanyEntity = new CompanyEntity();
         when(companyRepository.findById(anyLong())).thenReturn(Optional.of(someCompanyEntity));
 
-        companyService.updateCompany(anyLong(), someCompanyEntity);
+        companyService.update(anyLong(), someCompanyEntity);
 
         verify(companyRepository).save(any());
         verify(companyMapper).merge(any(), any());

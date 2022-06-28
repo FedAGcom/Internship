@@ -12,6 +12,9 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.http.HttpHeaders;
 
+import static org.springframework.http.HttpHeaders.ACCEPT;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+
 /**
  * class ElasticsearchConfig
  *
@@ -40,8 +43,8 @@ public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
     private HttpHeaders headers() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.ACCEPT, "application/vnd.elasticsearch+json;compatible-with=7");
-        headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.elasticsearch+json;compatible-with=7");
+        headers.add(ACCEPT, "application/vnd.elasticsearch+json;compatible-with=7");
+        headers.add(CONTENT_TYPE, "application/vnd.elasticsearch+json;compatible-with=7");
         return headers;
     }
 }

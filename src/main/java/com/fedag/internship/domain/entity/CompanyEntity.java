@@ -64,7 +64,7 @@ public class CompanyEntity {
         userEntity.getFavouriteCompanies().add(this);
     }
 
-    public void removeFavouriteCompany(UserEntity userEntity) {
+    public void removeFavouriteCompanyFromUser(UserEntity userEntity) {
         this.users.remove(userEntity);
         userEntity.getFavouriteCompanies().remove(this);
     }

@@ -7,20 +7,20 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class TraineePositionEntity {
         userEntity.getFavouriteTraineePositions().add(this);
     }
 
-    public void removeFavouriteTraineePosition(UserEntity userEntity) {
+    public void removeFavouriteTraineePositionFromUser(UserEntity userEntity) {
         this.users.remove(userEntity);
         userEntity.getFavouriteTraineePositions().remove(this);
     }

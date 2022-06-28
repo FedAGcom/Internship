@@ -6,15 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserService {
-    UserEntity getUserById(Long id);
+    UserEntity findById(Long id);
 
-    Page<UserEntity> getAllUsersWithRoleUser(Pageable pageable);
+    Page<UserEntity> findAllByRoleUser(Pageable pageable);
 
-    Page<UserEntity> getAllUsersWithRoleDeleted(Pageable pageable);
+    Page<UserEntity> findAllByRoleDeleted(Pageable pageable);
 
-    UserEntity createUser(UserEntity user);
+    Page<UserEntity> findAll(Pageable pageable);
 
-    UserEntity updateUser(Long id, UserEntity user);
+    UserEntity create(UserEntity user);
 
-    void deleteUser(Long id);
+    UserEntity update(Long id, UserEntity user);
+
+    void deleteById(Long id);
 }

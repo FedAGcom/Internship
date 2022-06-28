@@ -4,17 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fedag.internship.domain.document.Task;
 import com.fedag.internship.domain.dto.request.TaskRequest;
 import com.fedag.internship.domain.dto.request.TaskRequestUpdate;
-import com.fedag.internship.domain.dto.response.TaskResponse;
+import com.fedag.internship.domain.dto.response.admin.AdminTaskResponse;
+import com.fedag.internship.domain.dto.response.user.TaskResponse;
 import com.fedag.internship.domain.mapper.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
-* class TaskMapperImpl
-*
-* @author damir.iusupov
-* @since 2022-06-14
-*/
+ * class TaskMapperImpl
+ *
+ * @author damir.iusupov
+ * @since 2022-06-14
+ */
 @Component
 @RequiredArgsConstructor
 public class TaskMapperImpl implements TaskMapper {
@@ -23,6 +24,13 @@ public class TaskMapperImpl implements TaskMapper {
     @Override
     public TaskResponse toResponse(Task task) {
         return new TaskResponse()
+                .setId(task.getId())
+                .setSomeField(task.getSomeField());
+    }
+
+    @Override
+    public AdminTaskResponse toAdminResponse(Task task) {
+        return new AdminTaskResponse()
                 .setId(task.getId())
                 .setSomeField(task.getSomeField());
     }

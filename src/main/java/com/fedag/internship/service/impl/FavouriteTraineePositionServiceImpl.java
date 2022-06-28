@@ -22,9 +22,9 @@ public class FavouriteTraineePositionServiceImpl implements FavouriteTraineePosi
     private final UserService userService;
 
     @Override
-    public Page<TraineePositionEntity> getAllFavouriteTraineePositions(Long userId, Pageable pageable) {
+    public Page<TraineePositionEntity> getFavouriteTraineePositions(Long userId, Pageable pageable) {
         log.info("Получение страницы избранных стажировок пользователя с Id: {}", userId);
-        UserEntity userEntity = userService.getUserById(userId);
+        UserEntity userEntity = userService.findById(userId);
         PageImpl<TraineePositionEntity> result = new PageImpl<>(userEntity.getFavouriteTraineePositions(),
                 pageable,
                 userEntity.getFavouriteTraineePositions().size());
@@ -36,8 +36,8 @@ public class FavouriteTraineePositionServiceImpl implements FavouriteTraineePosi
     @Transactional
     public UserEntity addFavouriteTraineePosition(Long userId, Long traineeId) {
         log.info("Добавление стажировки с Id: {} в избранное пользователю с Id: {}", traineeId, userId);
-        UserEntity userEntity = userService.getUserById(userId);
-        TraineePositionEntity traineePositionEntity = traineePositionService.getPositionById(traineeId);
+        UserEntity userEntity = userService.findById(userId);
+        TraineePositionEntity traineePositionEntity = traineePositionService.findById(traineeId);
         traineePositionEntity.addFavouriteTraineePositionToUser(userEntity);
         log.info("Стажировка с Id: {} добавлена в избранное пользователю с Id: {}", traineeId, userId);
         return userEntity;
@@ -45,11 +45,12 @@ public class FavouriteTraineePositionServiceImpl implements FavouriteTraineePosi
 
     @Override
     @Transactional
-    public void deleteFavouriteTraineePosition(Long userId, Long traineeId) {
+    public UserEntity removeFavouriteTraineePosition(Long userId, Long traineeId) {
         log.info("Удаление стажировки с Id: {} из избранного у пользователя с Id: {}", traineeId, userId);
-        UserEntity userEntity = userService.getUserById(userId);
-        TraineePositionEntity traineePositionEntity = traineePositionService.getPositionById(traineeId);
-        traineePositionEntity.removeFavouriteTraineePosition(userEntity);
+        UserEntity userEntity = userService.findById(userId);
+        TraineePositionEntity traineePositionEntity = traineePositionService.findById(traineeId);
+        traineePositionEntity.removeFavouriteTraineePositionFromUser(userEntity);
         log.info("Стажировка с Id: {} удалена из избранного у пользователя с Id: {}", traineeId, userId);
+        return userEntity;
     }
 }

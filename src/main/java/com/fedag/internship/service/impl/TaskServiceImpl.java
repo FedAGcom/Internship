@@ -27,11 +27,11 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper taskMapper;
 
     @Override
-    public Task getTaskById(String id) {
+    public Task findById(String id) {
         log.info("Получение задания c Id: {}", id);
         Task result = elasticsearchRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Задание с Id: {} не найдено", id);
+                    log.error("Задание с Id: {} не найдено", id);
                     throw new EntityNotFoundException("Task", "Id", id);
                 });
         log.info("Задание c Id: {} получено", id);
@@ -39,7 +39,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<Task> getAllTasks(Pageable pageable) {
+    public Page<Task> findAll(Pageable pageable) {
         log.info("Получение страницы с заданиями");
         Page<Task> result = elasticsearchRepository.findAll(pageable);
         log.info("Страница с заданиями получена");
@@ -48,7 +48,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public Task createTask(Task task) {
+    public Task create(Task task) {
         log.info("Создание задания");
         Task result = elasticsearchRepository.save(task);
         log.info("Задание создано");
@@ -57,9 +57,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public Task updateTask(String id, Task task) {
+    public Task update(String id, Task task) {
         log.info("Обновление задания с Id: {}", id);
-        Task target = this.getTaskById(id);
+        Task target = this.findById(id);
         Task update = taskMapper.merge(task, target);
         Task result = elasticsearchRepository.save(update);
         log.info("Задание с Id: {} обновлено", id);
@@ -68,9 +68,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void deleteTask(String id) {
+    public void deleteById(String id) {
         log.info("Удаление задания с Id: {}", id);
-        this.getTaskById(id);
+        this.findById(id);
         elasticsearchRepository.deleteById(id);
         log.info("Задание с Id: {} удалено", id);
     }

@@ -12,8 +12,11 @@ import org.springframework.data.repository.query.Param;
  * @since 2022-06-01
  */
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
-    @Query(value =
-            "SELECT AVG(rating) FROM comments INNER JOIN company_profiles ON company_id = id WHERE company_id = :companyId HAVING COUNT(rating) > 10"
-                    , nativeQuery = true)
+    @Query(value = "SELECT AVG(rating) FROM comments " +
+            "INNER JOIN company_profiles " +
+            "ON company_id = id " +
+            "WHERE company_id = :companyId " +
+            "HAVING COUNT(rating) > 10",
+            nativeQuery = true)
     Double getAvgRatingOfCompany(@Param("companyId") Long id);
 }

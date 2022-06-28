@@ -20,11 +20,11 @@ public class UpdateAvgRatingOfCompaniesJob {
 
     @Transactional
     @Scheduled(fixedRateString = "${job.timeForScheduler}")
-    public void updateAvgRatingForCompanies(){
+    public void updateAvgRatingForCompanies() {
         log.info("Начало обновления рейтинга компаний");
         List<CompanyEntity> list = companyRepository.findAll();
         list.forEach((element) ->
-                        element.setRating(commentRepository.getAvgRatingOfCompany(element.getId())));
+                element.setRating(commentRepository.getAvgRatingOfCompany(element.getId())));
         log.info("Рейтинг компаний обновлен");
     }
 }

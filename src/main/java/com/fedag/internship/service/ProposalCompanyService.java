@@ -11,19 +11,19 @@ import org.springframework.data.domain.Pageable;
  * @since 2022-06-01
  */
 public interface ProposalCompanyService {
-    ProposalCompanyEntity getProposalCompanyById(Long id);
+    ProposalCompanyEntity findById(Long id);
 
-    Page<ProposalCompanyEntity> getAllProposalCompanies(Pageable pageable);
+    Page<ProposalCompanyEntity> findAll(Pageable pageable);
 
-    ProposalCompanyEntity createProposalCompany(ProposalCompanyEntity proposalCompanyEntity);
+    ProposalCompanyEntity create(ProposalCompanyEntity proposalCompanyEntity);
 
-    ProposalCompanyEntity updateProposalCompany(Long id, ProposalCompanyEntity source);
+    ProposalCompanyEntity update(Long id, ProposalCompanyEntity source);
 
-    ProposalCompanyEntity setProposalCompanyStatusUnderReview(Long id);
+    ProposalCompanyEntity setStatusUnderReview(Long id);
 
-    ProposalCompanyEntity setProposalCompanyStatusRefused(Long id);
+    ProposalCompanyEntity setStatusRefused(Long id);
 
-    ProposalCompanyEntity setProposalCompanyStatusApproved(Long id);
+    ProposalCompanyEntity setStatusApproved(Long id);
 
-    void deleteProposalCompany(Long id);
+    void deleteById(Long id);
 }

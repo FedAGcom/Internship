@@ -3,7 +3,8 @@ package com.fedag.internship.domain.mapper.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fedag.internship.domain.dto.request.ProposalCompanyRequest;
 import com.fedag.internship.domain.dto.request.ProposalCompanyRequestUpdate;
-import com.fedag.internship.domain.dto.response.ProposalCompanyResponse;
+import com.fedag.internship.domain.dto.response.admin.AdminProposalCompanyResponse;
+import com.fedag.internship.domain.dto.response.user.ProposalCompanyResponse;
 import com.fedag.internship.domain.entity.ProposalCompanyEntity;
 import com.fedag.internship.domain.mapper.ProposalCompanyMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,15 @@ public class ProposalCompanyMapperImpl implements ProposalCompanyMapper {
     @Override
     public ProposalCompanyResponse toResponse(ProposalCompanyEntity proposalCompanyEntity) {
         return new ProposalCompanyResponse()
+                .setId(proposalCompanyEntity.getId())
+                .setName(proposalCompanyEntity.getName())
+                .setStatus(proposalCompanyEntity.getStatus())
+                .setDescription(proposalCompanyEntity.getDescription());
+    }
+
+    @Override
+    public AdminProposalCompanyResponse toAdminResponse(ProposalCompanyEntity proposalCompanyEntity) {
+        return new AdminProposalCompanyResponse()
                 .setId(proposalCompanyEntity.getId())
                 .setName(proposalCompanyEntity.getName())
                 .setStatus(proposalCompanyEntity.getStatus())

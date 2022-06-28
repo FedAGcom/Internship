@@ -1,6 +1,5 @@
 package com.fedag.internship.service.impl;
 
-import com.fedag.internship.domain.document.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
@@ -27,11 +26,11 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyElasticSearchService companyElasticSearchService;
 
     @Override
-    public CompanyEntity getCompanyById(Long id) {
+    public CompanyEntity findById(Long id) {
         log.info("Получение компании c Id: {}", id);
         CompanyEntity result = companyRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Компания с Id: {} не найдена", id);
+                    log.error("Компания с Id: {} не найдена", id);
                     throw new EntityNotFoundException("Company", "Id", id);
                 });
         log.info("Компания c Id: {} получена", id);
@@ -39,7 +38,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Page<CompanyEntity> getAllCompanies(Pageable pageable) {
+    public Page<CompanyEntity> findAll(Pageable pageable) {
         log.info("Получение страницы с компаниями");
         Page<CompanyEntity> result = companyRepository.findAll(pageable);
         log.info("Страница с компаниями получена");
@@ -48,22 +47,22 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public CompanyEntity createCompany(Long userId, CompanyEntity companyEntity) {
+    public CompanyEntity create(Long userId, CompanyEntity companyEntity) {
         log.info("Создание компании от пользователя с Id: {}", userId);
-        final UserEntity userEntity = userService.getUserById(userId);
+        final UserEntity userEntity = userService.findById(userId);
         userEntity.setCompany(companyEntity);
         companyEntity.setUser(userEntity);
         CompanyEntity result = companyRepository.save(companyEntity);
-        companyElasticSearchService.saveCompany(companyEntity);
+        companyElasticSearchService.save(companyEntity);
         log.info("Компания от пользователя с Id: {} создана", userId);
         return result;
     }
 
     @Override
     @Transactional
-    public CompanyEntity updateCompany(Long id, CompanyEntity companyEntity) {
+    public CompanyEntity update(Long id, CompanyEntity companyEntity) {
         log.info("Обновление компании с Id: {}", id);
-        CompanyEntity target = this.getCompanyById(id);
+        CompanyEntity target = this.findById(id);
         CompanyEntity update = companyMapper.merge(companyEntity, target);
         CompanyEntity result = companyRepository.save(update);
         log.info("Компания с Id: {} обновлена", id);
@@ -72,19 +71,20 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public void deleteCompany(Long id) {
+    public void deleteById(Long id) {
         log.info("Удаление компании с Id: {}", id);
-        this.getCompanyById(id);
+        this.findById(id);
         companyRepository.deleteById(id);
         log.info("Компания с Id: {} удалена", id);
     }
 
     @Override
     @Transactional
-    public Page<CompanyEntity> searchCompanyByName(String keyword, Pageable pageable) {
-        log.info("Получение страницы с компаниями по имени");
-        Page<CompanyElasticSearchEntity> companiesFromElasticSearch = companyElasticSearchService.searchByName(pageable, keyword);
-        Page<CompanyEntity> result = companiesFromElasticSearch.map(el -> this.getCompanyById(el.getCompanyEntityId()));
+    public Page<CompanyEntity> searchByName(String keyword, Pageable pageable) {
+        log.info("Получение страниц с компаниями по имени");
+        Page<CompanyEntity> result = companyElasticSearchService
+                .elasticsearchByName(pageable, keyword)
+                .map(el -> this.findById(el.getCompanyEntityId()));
         log.info("Страница с компаниями по имени получена");
         return result;
     }
