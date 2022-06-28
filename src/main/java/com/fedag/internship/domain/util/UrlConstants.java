@@ -33,6 +33,7 @@ public interface UrlConstants {
     String POSITION_URL = "/positions";
     String SEARCH_BY_COMPANY_URL = "/search-by-company";
     String USER_URL = "/users";
+    String RESUME_URL = "/resumes";
 
     String AUTH_URL = "/auth";
     String LOGIN_URL = "/login";

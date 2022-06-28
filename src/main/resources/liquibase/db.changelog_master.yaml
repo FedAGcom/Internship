@@ -21,3 +21,5 @@ databaseChangeLog:
       file: classpath:liquibase/db_changelog/v1.0/v_1.9_create_table_updating_password_tokens.yaml
   - include:
       file: classpath:liquibase/db_changelog/v1.0/v_1.10_add_column_status_to_company_and_position.yaml
+  - include:
+      file: classpath:liquibase/db_changelog/v1.0/v_1.11_create_table_resumes.yaml
