@@ -1,14 +1,28 @@
 version: "3.9"
 
 services:
+  # Application
+  internship:
+    image: vasyandd/internship
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+    - 8080:8080
+    depends_on:
+      - database-elasticsearch
+      - database-postgres
+
+
   #  PostgreSQL
   database-postgres:
     image: postgres:14
     container_name: postgres
+    restart: always
     environment:
       - POSTGRES_DB=intership-db
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
 
@@ -16,6 +30,7 @@ services:
   database-elasticsearch:
     image: elasticsearch:8.2.0
     container_name: elasticsearch
+    restart: always
     environment:
       # Password for the 'elastic' user
       - ELASTIC_PASSWORD=admin
