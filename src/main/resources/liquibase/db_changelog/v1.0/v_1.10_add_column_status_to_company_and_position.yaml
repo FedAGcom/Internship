@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.10.0
+      author: damir.iusupov
+      changes:
+        - addColumn:
+            tableName: company_profiles
+            columns:
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1.10.1
+      author: damir.iusupov
+      changes:
+        - addColumn:
+            tableName: trainee_positions
+            columns:
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false

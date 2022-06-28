@@ -61,7 +61,7 @@ public class CompanyController {
         return new ResponseEntity<>(companyResponse, OK);
     }
 
-    @Operation(summary = "Получение страницы с компаниями")
+    @Operation(summary = "Получение страницы с компаниями со статусом ACTIVE")
     @ApiResponse(responseCode = "200", description = "Компании найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
@@ -69,9 +69,9 @@ public class CompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<CompanyResponse>> findAll(@PageableDefault(size = 5)
-                                                         Pageable pageable) {
-        Page<CompanyResponse> companies = companyService.findAll(pageable)
+    public ResponseEntity<Page<CompanyResponse>> findAllByActiveTrue(
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<CompanyResponse> companies = companyService.findAllByActiveTrue(pageable)
                 .map(companyMapper::toResponse);
         return new ResponseEntity<>(companies, OK);
     }

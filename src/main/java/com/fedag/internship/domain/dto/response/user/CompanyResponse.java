@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -48,4 +50,11 @@ public class CompanyResponse {
 
     @Schema(description = "Идентификатор пользователя компании", example = "1")
     private Long userId;
+
+    @Schema(description = "Список идентификаторов пользователей у которых компания в избранном",
+            example = "[1, 2, 3]")
+    private List<Long> favouriteCompanyForUserIds;
+
+    @Schema(description = "Список идентификаторов комментариев компании", example = "[1, 2, 3]")
+    private List<Long> commentIds;
 }

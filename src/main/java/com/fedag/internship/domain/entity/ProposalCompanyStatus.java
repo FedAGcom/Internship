@@ -6,7 +6,7 @@ package com.fedag.internship.domain.entity;
  * @author damir.iusupov
  * @since 2022-06-07
  */
-public enum Status {
+public enum ProposalCompanyStatus {
     NEW,
     UNDER_REVIEW,
     REFUSED,

@@ -62,7 +62,7 @@ public class TraineePositionController {
         return new ResponseEntity<>(result, OK);
     }
 
-    @Operation(summary = "Получение страницы с позициями")
+    @Operation(summary = "Получение страницы с позициями со статусом ACTIVE")
     @ApiResponse(responseCode = "200", description = "Позиции найдены",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = Page.class))})
@@ -70,8 +70,9 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<TraineePositionResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
-        Page<TraineePositionResponse> positions = positionService.findAll(pageable)
+    public ResponseEntity<Page<TraineePositionResponse>> findAllByActiveTrue(
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<TraineePositionResponse> positions = positionService.findAllByActiveTrue(pageable)
                 .map(positionMapper::toResponse);
         return new ResponseEntity<>(positions, OK);
     }

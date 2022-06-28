@@ -43,6 +43,7 @@ public class CompanyEntity {
     private Double rating;
     private String location;
     private String link;
+    private Boolean active;
 
     @OneToOne
     @JoinColumn(name = "user_id")

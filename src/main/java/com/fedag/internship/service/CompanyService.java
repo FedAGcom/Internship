@@ -9,6 +9,10 @@ public interface CompanyService {
 
     Page<CompanyEntity> findAll(Pageable pageable);
 
+    Page<CompanyEntity> findAllByActiveTrue(Pageable pageable);
+
+    Page<CompanyEntity> findAllByActiveFalse(Pageable pageable);
+
     CompanyEntity create(Long userId, CompanyEntity companyDto);
 
     CompanyEntity update(Long id, CompanyEntity companyDto);

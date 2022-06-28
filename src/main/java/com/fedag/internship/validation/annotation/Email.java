@@ -1,5 +1,7 @@
 package com.fedag.internship.validation.annotation;
 
+import com.fedag.internship.validation.validator.EmailValidator;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
