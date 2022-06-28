@@ -3,8 +3,10 @@ version: "3.9"
 services:
   # Application
   internship:
-    build: .
+    image: vasyandd/internship
     restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
     - 8080:8080
     depends_on:
