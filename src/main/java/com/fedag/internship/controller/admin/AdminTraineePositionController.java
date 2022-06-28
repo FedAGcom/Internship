@@ -95,10 +95,11 @@ public class AdminTraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    public ResponseEntity<AdminTraineePositionResponse> create(@RequestBody @Valid TraineePositionRequest request) {
+    public ResponseEntity<AdminTraineePositionResponse> create(@RequestParam Long companyId,
+                                                               @RequestBody @Valid TraineePositionRequest request) {
         AdminTraineePositionResponse positionResponse = Optional.ofNullable(request)
                 .map(positionMapper::fromRequest)
-                .map(positionService::create)
+                .map(position -> positionService.create( companyId, position))
                 .map(positionMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(positionResponse, CREATED);
