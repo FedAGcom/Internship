@@ -1,9 +1,11 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
 import com.fedag.internship.repository.TraineePositionRepository;
+import com.fedag.internship.service.CompanyService;
 import com.fedag.internship.service.PositionElasticSearchService;
 import com.fedag.internship.service.TraineePositionService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class TraineePositionServiceImpl implements TraineePositionService {
     private final PositionElasticSearchService positionElasticSearchService;
     private final TraineePositionRepository positionRepository;
+
+    private final CompanyService companyService;
     private final TraineePositionMapper positionMapper;
 
     @Override
@@ -60,12 +64,14 @@ public class TraineePositionServiceImpl implements TraineePositionService {
 
     @Override
     @Transactional
-    public TraineePositionEntity create(TraineePositionEntity positionEntity) {
+    public TraineePositionEntity create(Long companyId, TraineePositionEntity positionEntity) {
         log.info("Создание позиции стажировки");
         positionEntity.setActive(true);
+        final CompanyEntity companyEntity = companyService.findById(companyId);
+        companyEntity.addPosition(positionEntity);
         TraineePositionEntity result = positionRepository.save(positionEntity);
         positionElasticSearchService.save(positionEntity);
-        log.info("Позиция стажировки создана");
+        log.info("Позиция стажировки создана для компании с Id {}", companyId);
         return result;
     }
 

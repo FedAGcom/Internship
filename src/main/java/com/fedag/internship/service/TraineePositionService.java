@@ -13,7 +13,7 @@ public interface TraineePositionService {
 
     Page<TraineePositionEntity> findAllByActiveFalse(Pageable pageable);
 
-    TraineePositionEntity create(TraineePositionEntity positionEntity);
+    TraineePositionEntity create(Long companyId, TraineePositionEntity positionEntity);
 
     TraineePositionEntity update(Long id, TraineePositionEntity positionEntity);
 

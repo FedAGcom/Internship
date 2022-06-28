@@ -46,11 +46,11 @@ public class TraineePositionEntity {
 
     private LocalDateTime date;
 
-    @Field
     @ManyToOne
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private CompanyEntity company;
 
+    @Field
     private String name;
     private String employeePosition;
     private String status;

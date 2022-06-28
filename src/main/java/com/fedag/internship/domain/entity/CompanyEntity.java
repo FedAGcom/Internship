@@ -56,9 +56,14 @@ public class CompanyEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<UserEntity> users = new ArrayList<>();
 
+
     @Setter(PRIVATE)
     @OneToMany(mappedBy = "company", fetch = LAZY)
     private List<CommentEntity> comments = new ArrayList<>();
+
+    @Setter(PRIVATE)
+    @OneToMany(mappedBy = "company", fetch = LAZY)
+    private List<TraineePositionEntity> positions = new ArrayList<>();
 
     public void addFavouriteCompanyToUser(UserEntity userEntity) {
         this.users.add(userEntity);
@@ -75,7 +80,16 @@ public class CompanyEntity {
         commentEntity.setCompany(this);
     }
 
+    public void addPosition(TraineePositionEntity positionEntity) {
+        this.positions.add(positionEntity);
+        positionEntity.setCompany(this);
+    }
+
     public void removeComments(CommentEntity commentEntity) {
         this.comments.remove(commentEntity);
+    }
+
+    public void removePosition(TraineePositionEntity positionEntity) {
+        this.comments.remove(positionEntity);
     }
 }
