@@ -1,5 +1,6 @@
 package com.fedag.internship.service;
 
+import com.fedag.internship.domain.document.CompanyElasticSearchEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
@@ -25,7 +26,9 @@ public class CompanyServiceTest {
     @Mock
     private CompanyRepository companyRepository;
     @Mock
-    private UserService userService;
+    private CurrentUserService currentUserService;
+    @Mock
+    private CompanyElasticSearchService companyElasticSearchService;
     @InjectMocks
     private CompanyServiceImpl companyService;
 
@@ -63,9 +66,11 @@ public class CompanyServiceTest {
     public void createCompanyTest() {
         UserEntity userWithoutCompany = new UserEntity();
         CompanyEntity companyWithoutUser = new CompanyEntity();
-        when(userService.findById(anyLong())).thenReturn(userWithoutCompany);
+        CompanyElasticSearchEntity elasticSearchEntity = new CompanyElasticSearchEntity();
+        when(currentUserService.getCurrentUser()).thenReturn(userWithoutCompany);
+        when(companyElasticSearchService.save(companyWithoutUser)).thenReturn(elasticSearchEntity);
 
-        companyService.create(anyLong(), companyWithoutUser);
+        companyService.create(companyWithoutUser);
 
         assertNotNull(userWithoutCompany.getCompany());
         assertNotNull(companyWithoutUser.getUser());

@@ -7,6 +7,9 @@ package com.fedag.internship.domain.util;
  * @since 2022-06-23
  */
 public interface UrlConstants {
+    String HOST_URL = "localhost";
+    int PORT = 8080;
+
     String MAIN_URL = "/intership/api";
     String VERSION = "/v1.0";
 

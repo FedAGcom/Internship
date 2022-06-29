@@ -28,17 +28,17 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(MAIN_URL + VERSION + USER_URL + CHANGE_PWD_URL)
-@PreAuthorize("hasAuthority('user')")
-@SecurityRequirement(name = "bearer-token-auth")
 @Tag(name = "Смена пароля", description = "Работа со сменой пароля у пользователя")
 public class UpdatingPasswordController {
     private final UpdatingPasswordService updatingPasswordService;
 
     @Operation(summary = "Запрос на изменение пароля")
+    @SecurityRequirement(name = "bearer-token-auth")
     @ApiResponse(responseCode = "201", description = "Запрос создан")
     @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
+    @PreAuthorize("hasAuthority('user')")
     @PostMapping
     public ResponseEntity<?> changeUserPassword(@RequestParam("password") String password,
                                                 @RequestParam("old-password") String oldPassword) {
