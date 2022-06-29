@@ -7,8 +7,10 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,6 +26,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Setter
 @Table(name = "password_confirmation_tokens")
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class UpdatingPasswordToken {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "seq_password_confirmation_tokens_id")

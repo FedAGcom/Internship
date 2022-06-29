@@ -1,6 +1,8 @@
 package com.fedag.internship.CommentServiceImpl;
 
 import com.fedag.internship.domain.entity.CommentEntity;
+import com.fedag.internship.domain.entity.CompanyEntity;
+import com.fedag.internship.domain.entity.TraineePositionEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.repository.CommentRepository;
@@ -52,9 +54,11 @@ public class CommentServiceImpl_deleteById {
     }
 
     @Test
-    public void testPositive() {
+    public void testPositiveForCompanyComment() {
         Long id = anyLong();
         CommentEntity comment = new CommentEntity().setText("some text # 1");
+        CompanyEntity companyEntity = new CompanyEntity();
+        companyEntity.addComments(comment);
         String email = "some1@email.com";
         String firstName = "some name";
         String lastName = "some surname";
@@ -64,9 +68,30 @@ public class CommentServiceImpl_deleteById {
                 .setLastName(lastName);
         user.addComments(comment);
         when(commentRepository.findById(id)).thenReturn(Optional.of(comment));
-        when(userService.findById(comment.getUser().getId())).thenReturn(user);
         commentService.deleteById(id);
         assertEquals(0, user.getComments().size());
+        assertEquals(0, companyEntity.getComments().size());
+        verify(commentRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void testPositiveForPositionComment() {
+        Long id = anyLong();
+        CommentEntity comment = new CommentEntity().setText("some text # 1");
+        TraineePositionEntity traineePosition = new TraineePositionEntity();
+        traineePosition.addComments(comment);
+        String email = "some1@email.com";
+        String firstName = "some name";
+        String lastName = "some surname";
+        UserEntity user = new UserEntity()
+                .setEmail(email)
+                .setFirstName(firstName)
+                .setLastName(lastName);
+        user.addComments(comment);
+        when(commentRepository.findById(id)).thenReturn(Optional.of(comment));
+        commentService.deleteById(id);
+        assertEquals(0, user.getComments().size());
+        assertEquals(0, traineePosition.getComments().size());
         verify(commentRepository, times(1)).deleteById(anyLong());
     }
 }
