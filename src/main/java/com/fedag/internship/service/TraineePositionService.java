@@ -19,5 +19,5 @@ public interface TraineePositionService {
 
     void deleteById(Long id);
 
-    Page<TraineePositionEntity> searchByCompany(String keyword, Pageable pageable);
+    Page<TraineePositionEntity> searchByPosition(String keyword, Pageable pageable);
 }

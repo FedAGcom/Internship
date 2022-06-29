@@ -8,5 +8,5 @@ import org.springframework.data.domain.Pageable;
 public interface PositionElasticSearchService {
     PositionElasticSearchEntity save(TraineePositionEntity positionEntity);
 
-    Page<PositionElasticSearchEntity> elasticsearchByCompany(Pageable pageable, String name);
+    Page<PositionElasticSearchEntity> elasticsearchByName(Pageable pageable, String name);
 }
