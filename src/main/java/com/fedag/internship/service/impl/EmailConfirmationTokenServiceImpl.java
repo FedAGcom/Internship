@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class EmailConfirmationTokenServiceImpl implements EmailConfirmationToken
     @Override
     public ConfirmationTokenEntity create(UserEntity userEntity) {
         log.info("Создание сущности с токеном для подтвеждения email пользователя");
-        String token = UUID.randomUUID().toString();
+        String token = generateToken();
         LocalDateTime tokenExpires = LocalDateTime.now().plusMinutes(MINUTES_TO_EXPIRE);
         ConfirmationTokenEntity tokenEntity = new ConfirmationTokenEntity(token, userEntity, tokenExpires);
         ConfirmationTokenEntity result = confirmationTokenRepository.save(tokenEntity);
@@ -52,5 +53,14 @@ public class EmailConfirmationTokenServiceImpl implements EmailConfirmationToken
         log.info("Удаление сущности ConfirmationTokenEntity c токеном: {}", token);
         confirmationTokenRepository.delete(token);
         log.info("Сущность ConfirmationTokenEntity c токеном: {} удалена", token);
+    }
+    public String generateToken() {
+
+        String token = "";
+        for (int i = 0; i < 6; i++) {
+            int number = new Random().nextInt(10);
+            token += number;
+        }
+        return  token;
     }
 }
