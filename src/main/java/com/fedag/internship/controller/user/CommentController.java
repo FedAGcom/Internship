@@ -103,12 +103,11 @@ public class CommentController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping(COMPANY_URL)
     public ResponseEntity<CommentResponse> createForCompany(
-            @RequestParam Long userId,
             @RequestParam Long companyId,
             @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse result = Optional.ofNullable(commentRequest)
                 .map(commentMapper::fromRequest)
-                .map(comment -> commentService.createForCompany(userId, companyId, comment))
+                .map(comment -> commentService.createForCompany(companyId, comment))
                 .map(commentMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
@@ -126,12 +125,11 @@ public class CommentController {
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping(POSITION_URL)
     public ResponseEntity<CommentResponse> createForTraineePosition(
-            @RequestParam Long userId,
             @RequestParam Long positionId,
             @RequestBody @Valid CommentRequest commentRequest) {
         CommentResponse result = Optional.ofNullable(commentRequest)
                 .map(commentMapper::fromRequest)
-                .map(comment -> commentService.createForTraineePosition(userId, positionId, comment))
+                .map(comment -> commentService.createForTraineePosition(positionId, comment))
                 .map(commentMapper::toResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);

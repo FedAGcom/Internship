@@ -15,10 +15,9 @@ public interface CommentService {
 
     Page<CommentEntity> findAll(Pageable pageable);
 
-    CommentEntity createForCompany(Long userId, Long companyId, CommentEntity commentEntity);
+    CommentEntity createForCompany(Long companyId, CommentEntity commentEntity);
 
-    CommentEntity createForTraineePosition(Long userId,
-                                           Long traineePositionId,
+    CommentEntity createForTraineePosition(Long traineePositionId,
                                            CommentEntity commentEntity);
 
     CommentEntity update(Long id, CommentEntity commentEntity);

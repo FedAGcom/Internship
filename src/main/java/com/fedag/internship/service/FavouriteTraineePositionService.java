@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface FavouriteTraineePositionService {
-    Page<TraineePositionEntity> getFavouriteTraineePositions(Long userId, Pageable pageable);
+    Page<TraineePositionEntity> getFavouriteTraineePositions(Pageable pageable);
 
-    UserEntity addFavouriteTraineePosition(Long userId, Long traineeId);
+    UserEntity addFavouriteTraineePosition(Long traineeId);
 
-    UserEntity removeFavouriteTraineePosition(Long userId, Long traineeId);
+    UserEntity removeFavouriteTraineePosition(Long traineeId);
 }

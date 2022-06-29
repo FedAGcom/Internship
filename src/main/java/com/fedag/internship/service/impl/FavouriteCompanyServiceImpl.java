@@ -3,8 +3,8 @@ package com.fedag.internship.service.impl;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.service.CompanyService;
+import com.fedag.internship.service.CurrentUserService;
 import com.fedag.internship.service.FavouriteCompanyService;
-import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,39 +18,39 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class FavouriteCompanyServiceImpl implements FavouriteCompanyService {
+    private final CurrentUserService currentUserService;
     private final CompanyService companyService;
-    private final UserService userService;
 
     @Override
-    public Page<CompanyEntity> getFavouriteCompanies(Long userId, Pageable pageable) {
-        log.info("Получение страницы избранных компаний пользователя с Id: {}", userId);
-        UserEntity userEntity = userService.findById(userId);
+    public Page<CompanyEntity> getFavouriteCompanies(Pageable pageable) {
+        log.info("Получение страницы избранных компаний пользователя");
+        UserEntity userEntity = currentUserService.getCurrentUser();
         PageImpl<CompanyEntity> result = new PageImpl<>(userEntity.getFavouriteCompanies(),
                 pageable,
                 userEntity.getFavouriteCompanies().size());
-        log.info("Страница избранных компаний пользователя с Id: {} получена", userId);
+        log.info("Страница избранных компаний пользователя получена");
         return result;
     }
 
     @Override
     @Transactional
-    public UserEntity addFavouriteCompany(Long userId, Long companyId) {
-        log.info("Добавление компании с Id: {} в избранное пользователю с Id: {}", companyId, userId);
-        UserEntity userEntity = userService.findById(userId);
+    public UserEntity addFavouriteCompany(Long companyId) {
+        log.info("Добавление компании с Id: {} в избранное пользователю", companyId);
+        UserEntity userEntity = currentUserService.getCurrentUser();
         CompanyEntity companyEntity = companyService.findById(companyId);
         companyEntity.addFavouriteCompanyToUser(userEntity);
-        log.info("Компания с Id: {} добавлена в избранное пользователю с Id: {}", companyId, userId);
+        log.info("Компания с Id: {} добавлена в избранное пользователю", companyId);
         return userEntity;
     }
 
     @Override
     @Transactional
-    public UserEntity removeFavouriteCompany(Long userId, Long companyId) {
-        log.info("Удаление компании с Id: {} из избранного у пользователя с Id: {}", companyId, userId);
-        UserEntity userEntity = userService.findById(userId);
+    public UserEntity removeFavouriteCompany(Long companyId) {
+        log.info("Удаление компании с Id: {} из избранного у пользователя", companyId);
+        UserEntity userEntity = currentUserService.getCurrentUser();
         CompanyEntity companyEntity = companyService.findById(companyId);
         companyEntity.removeFavouriteCompanyFromUser(userEntity);
-        log.info("Компания с Id: {} удалена из избранного у пользователя с Id: {}", companyId, userId);
+        log.info("Компания с Id: {} удалена из избранного у пользователя", companyId);
         return userEntity;
     }
 }

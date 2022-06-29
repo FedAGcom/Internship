@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface FavouriteCompanyService {
-    Page<CompanyEntity> getFavouriteCompanies(Long userId, Pageable pageable);
+    Page<CompanyEntity> getFavouriteCompanies(Pageable pageable);
 
-    UserEntity addFavouriteCompany(Long userId, Long companyId);
+    UserEntity addFavouriteCompany(Long companyId);
 
-    UserEntity removeFavouriteCompany(Long userId, Long companyId);
+    UserEntity removeFavouriteCompany(Long companyId);
 }

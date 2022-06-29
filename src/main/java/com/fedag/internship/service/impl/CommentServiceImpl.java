@@ -9,8 +9,8 @@ import com.fedag.internship.domain.mapper.CommentMapper;
 import com.fedag.internship.repository.CommentRepository;
 import com.fedag.internship.service.CommentService;
 import com.fedag.internship.service.CompanyService;
+import com.fedag.internship.service.CurrentUserService;
 import com.fedag.internship.service.TraineePositionService;
-import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,8 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
+    private final CurrentUserService currentUserService;
     private final CommentMapper commentMapper;
-    private final UserService userService;
     private final CompanyService companyService;
     private final TraineePositionService traineePositionService;
 
@@ -59,29 +59,28 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentEntity createForCompany(Long userId, Long companyId, CommentEntity commentEntity) {
-        log.info("Создание комментария для компании с Id {} от пользователя с Id: {}", companyId, userId);
-        final UserEntity userEntity = userService.findById(userId);
+    public CommentEntity createForCompany(Long companyId, CommentEntity commentEntity) {
+        log.info("Создание комментария для компании с Id: {}", companyId);
+        final UserEntity userEntity = currentUserService.getCurrentUser();
         userEntity.addComments(commentEntity);
         final CompanyEntity companyEntity = companyService.findById(companyId);
         companyEntity.addComments(commentEntity);
         CommentEntity result = commentRepository.save(commentEntity);
-        log.info("Комментарий для компании с Id {} от пользователя с Id: {} создан", companyId, userId);
+        log.info("Комментарий для компании с Id: {} создан", companyId);
         return result;
     }
 
     @Override
     @Transactional
-    public CommentEntity createForTraineePosition(Long userId,
-                                                  Long traineePositionId,
+    public CommentEntity createForTraineePosition(Long traineePositionId,
                                                   CommentEntity commentEntity) {
-        log.info("Создание комментария для позиции стажировки с Id {} от пользователя с Id: {}", traineePositionId, userId);
-        final UserEntity userEntity = userService.findById(userId);
+        log.info("Создание комментария для позиции стажировки с Id: {}", traineePositionId);
+        final UserEntity userEntity = currentUserService.getCurrentUser();
         userEntity.addComments(commentEntity);
         final TraineePositionEntity traineePosition = traineePositionService.findById(traineePositionId);
         traineePosition.addComments(commentEntity);
         CommentEntity result = commentRepository.save(commentEntity);
-        log.info("Комментарий для позиции стажировки с Id {} от пользователя с Id: {} создан", traineePositionId, userId);
+        log.info("Комментарий для позиции стажировки с Id: {} создан", traineePositionId);
         return result;
     }
 
@@ -101,7 +100,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteById(Long id) {
         log.info("Удаление комментария с Id: {}", id);
         CommentEntity comment = this.findById(id);
-        final UserEntity userEntity = userService.findById(comment.getUser().getId());
+        final UserEntity userEntity = comment.getUser();
         userEntity.removeComments(comment);
         if (comment.getCompany() != null) {
             final CompanyEntity companyEntity = comment.getCompany();

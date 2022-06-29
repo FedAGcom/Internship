@@ -80,7 +80,8 @@ public class AdminCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping
-    public ResponseEntity<Page<AdminCompanyResponse>> findAll(@PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<Page<AdminCompanyResponse>> findAll(
+            @PageableDefault(size = 5) Pageable pageable) {
         Page<AdminCompanyResponse> companies = companyService.findAll(pageable)
                 .map(companyMapper::toAdminResponse);
         return new ResponseEntity<>(companies, OK);
@@ -127,11 +128,11 @@ public class AdminCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping
-    public ResponseEntity<AdminCompanyResponse> create(@RequestParam Long userId,
-                                                       @RequestBody @Valid CompanyRequest companyRequest) {
+    public ResponseEntity<AdminCompanyResponse> create(
+            @RequestBody @Valid CompanyRequest companyRequest) {
         AdminCompanyResponse adminCompanyResponse = Optional.ofNullable(companyRequest)
                 .map(companyMapper::fromRequest)
-                .map(companyEntity -> companyService.create(userId, companyEntity))
+                .map(companyService::create)
                 .map(companyMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(adminCompanyResponse, CREATED);
@@ -148,8 +149,9 @@ public class AdminCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PatchMapping(ID)
-    public ResponseEntity<AdminCompanyResponse> update(@PathVariable Long id,
-                                                       @RequestBody CompanyRequestUpdate companyRequestUpdate) {
+    public ResponseEntity<AdminCompanyResponse> update(
+            @PathVariable Long id,
+            @RequestBody CompanyRequestUpdate companyRequestUpdate) {
         AdminCompanyResponse adminCompanyResponse = Optional.ofNullable(companyRequestUpdate)
                 .map(companyMapper::fromRequestUpdate)
                 .map(company -> companyService.update(id, company))
@@ -180,7 +182,9 @@ public class AdminCompanyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping(SEARCH_BY_NAME_URL)
-    public ResponseEntity<Page<AdminCompanyResponse>> searchByName(@RequestParam String keyword, Pageable pageable) {
+    public ResponseEntity<Page<AdminCompanyResponse>> searchByName(
+            @RequestParam String keyword,
+            @PageableDefault(size = 5) Pageable pageable) {
         Page<AdminCompanyResponse> companies = companyService
                 .searchByName(keyword, pageable)
                 .map(companyMapper::toAdminResponse);

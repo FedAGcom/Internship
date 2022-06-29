@@ -13,7 +13,7 @@ public interface CompanyService {
 
     Page<CompanyEntity> findAllByActiveFalse(Pageable pageable);
 
-    CompanyEntity create(Long userId, CompanyEntity companyDto);
+    CompanyEntity create(CompanyEntity companyDto);
 
     CompanyEntity update(Long id, CompanyEntity companyDto);
 
