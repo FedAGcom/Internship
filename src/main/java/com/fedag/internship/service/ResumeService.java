@@ -9,7 +9,7 @@ public interface ResumeService {
 
     Page<ResumeEntity> findAll(Pageable pageable);
 
-    ResumeEntity create(Long userId, ResumeEntity resumeEntity);
+    ResumeEntity create(ResumeEntity resumeEntity);
 
     ResumeEntity update(Long id, ResumeEntity resumeEntity);
 

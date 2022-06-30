@@ -5,6 +5,7 @@ import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.ResumeMapper;
 import com.fedag.internship.repository.ResumeRepository;
+import com.fedag.internship.service.CurrentUserService;
 import com.fedag.internship.service.ResumeService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final UserService userService;
     private final ResumeMapper resumeMapper;
+    private final CurrentUserService currentUserService;
 
     @Override
     @Transactional
@@ -47,13 +49,13 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     @Transactional
-    public ResumeEntity create(Long userId, ResumeEntity resumeEntity) {
-        log.info("Создание резюме для пользователя с Id: {}", userId);
-        UserEntity userEntity = userService.findById(userId);
+    public ResumeEntity create(ResumeEntity resumeEntity) {
+        log.info("Создание резюме");
+        UserEntity userEntity = currentUserService.getCurrentUser();
         userEntity.setResume(resumeEntity);
         resumeEntity.setUser(userEntity);
         ResumeEntity result = resumeRepository.save(resumeEntity);
-        log.info("Резюме для пользователя с Id: {} создано", userId);
+        log.info("Резюме для пользователя с Id: {} создано", userEntity.getId());
         return result;
     }
 

@@ -85,14 +85,13 @@ public class AdminResumeController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @PostMapping(USER_URL)
-    public ResponseEntity<AdminResumeResponse> createForUser(@RequestParam Long userId,
-                                                             @RequestPart MultipartFile multipartFile,
+    public ResponseEntity<AdminResumeResponse> createForUser(@RequestPart MultipartFile multipartFile,
                                                              @RequestPart @Valid ResumeRequest resumeRequest) throws IOException {
         resumeRequest.setResumeFile(multipartFile.getBytes());
         resumeRequest.setResumeFileType(multipartFile.getContentType());
         AdminResumeResponse result = Optional.of(resumeRequest)
                 .map(resumeMapper::fromRequest)
-                .map(resumeEntity -> resumeService.create(userId, resumeEntity))
+                .map(resumeService::create)
                 .map(resumeMapper::toAdminResponse)
                 .orElseThrow();
         return new ResponseEntity<>(result, CREATED);
