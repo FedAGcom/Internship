@@ -46,6 +46,7 @@ public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchServ
     @Transactional
     public Page<CompanyElasticSearchEntity> elasticsearchByName(Pageable pageable, String name) {
         log.info("Полнотекстовый поиск компаний по имени: {}", name);
+        name = name.toLowerCase();
         QueryBuilder fuzzyQuery = QueryBuilders
                 .matchQuery("name", name)
                 .fuzziness(Fuzziness.AUTO);
@@ -66,6 +67,7 @@ public class CompanyElasticSearchServiceImpl implements CompanyElasticSearchServ
                 .search(query, CompanyElasticSearchEntity.class, IndexCoordinates.of(COMPANY_INDEX));
         List<CompanyElasticSearchEntity> companies = new ArrayList<>();
         productHits.forEach(searchHit -> companies.add(searchHit.getContent()));
+        companies.forEach(c -> System.out.println(c.getName()));
         PageImpl<CompanyElasticSearchEntity> result = new PageImpl<>(companies, pageable, companies.size());
         log.info("Список компаний по имени: {} получен", name);
         return result;
