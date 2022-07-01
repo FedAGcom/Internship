@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.11.0
+      author: vasyandd
+      changes:
+        - createSequence:
+            dataType: BIGINT
+            incrementBy: 1
+            sequenceName: seq_resumes_id
+            startValue: 1
+  - changeSet:
+      id: 1.11.1
+      author: vasyandd
+      changes:
+        - createTable:
+            tableName: resumes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: phone
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resume_file
+                  type: bytea
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resume_file_type
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cover_letter
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    unique: true
+                    nullable: false
+
+  - changeSet:
+      id: 1.11.2
+      author: vasyandd
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: resumes
+            constraintName: fk_resumes_users
+            referencedColumnNames: id
+            referencedTableName: users
