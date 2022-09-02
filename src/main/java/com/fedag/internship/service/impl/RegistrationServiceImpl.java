@@ -17,6 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static com.fedag.internship.domain.entity.Role.USER;
+import static com.fedag.internship.domain.util.UrlConstants.CONFIRM_URL;
+import static com.fedag.internship.domain.util.UrlConstants.HOST_URL;
+import static com.fedag.internship.domain.util.UrlConstants.MAIN_URL;
+import static com.fedag.internship.domain.util.UrlConstants.PORT;
+import static com.fedag.internship.domain.util.UrlConstants.REGISTER_URL;
+import static com.fedag.internship.domain.util.UrlConstants.VERSION;
 import static java.time.LocalDateTime.now;
 
 @Slf4j
@@ -29,7 +35,13 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final EmailSenderService emailSenderService;
 
     private final static String EMAIL_SUBJECT = "Подтверждение аккаунта";
-    private final static String LINK = "http://localhost:8080/intership/api/v1.0/registration/confirm?token=";
+    private final static String LINK = "http://" +
+            HOST_URL + ":" + PORT +
+            MAIN_URL +
+            VERSION +
+            REGISTER_URL +
+            CONFIRM_URL +
+            "?token=";
 
     @Transactional
     @Override
@@ -40,13 +52,13 @@ public class RegistrationServiceImpl implements RegistrationService {
         userEntity.setEnabled(false);
         userService.create(userEntity);
         ConfirmationTokenEntity token = emailConfirmationTokenService.create(userEntity);
-        String head = String.format("<h1>Приветствуем вас, %s</h1>", userEntity.getEmail());
+        String head = String.format("<h3>Приветствуем вас, %s</h3>", userEntity.getEmail());
         String div1 = "<div>Добро пожаловать в FedAG Intership!</div>";
         String div2 = "<div>Для активации аккаунта пройдите по ссылке ниже.</div><br>";
         String linkWithToken = LINK + token.getToken();
         String button = String.format("<a href=\"%s\">Activate link</a>", linkWithToken);
         String resultMessage = head + div1 + div2 + button;
-        emailSenderService.send(userEntity.getEmail(), EMAIL_SUBJECT, resultMessage);
+        emailSenderService.sendHtml(userEntity.getEmail(), EMAIL_SUBJECT, resultMessage);
         log.info("Запрос на регистрацию пользователя с email: {} создан", request.getEmail());
     }
 
