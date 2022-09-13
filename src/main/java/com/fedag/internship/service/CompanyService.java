@@ -19,5 +19,7 @@ public interface CompanyService {
 
     void deleteById(Long id);
 
+    void deleteComments(Long id);
+
     Page<CompanyEntity> searchByName(String keyword, Pageable pageable);
 }

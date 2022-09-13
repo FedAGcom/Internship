@@ -1,10 +1,12 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityAlreadyExistsException;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.UserMapper;
 import com.fedag.internship.repository.UserRepository;
+import com.fedag.internship.service.CommentService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.fedag.internship.domain.entity.Role.DELETED;
 import static com.fedag.internship.domain.entity.Role.USER;
@@ -25,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final CommentService commentService;
 
     @Override
     public UserEntity findById(Long id) {
@@ -92,7 +97,22 @@ public class UserServiceImpl implements UserService {
     public void deleteById(Long id) {
         log.info("Удаление пользователя с Id: {}", id);
         this.findById(id);
+
+        log.info("Удаление комментариев пользователя с Id: {}", id);
+        deleteComments(id);
+
         userRepository.deleteById(id);
         log.info("Пользователь с Id: {} удален", id);
     }
+
+    @Override
+    @Transactional
+    public void deleteComments(Long id) {
+        UserEntity userEntity = this.findById(id);
+        List<CommentEntity> commentEntities = userEntity.getComments();
+        for (int i = commentEntities.size() - 1; i >= 0; --i) {
+            commentService.deleteById(commentEntities.get(i).getId());
+        }
+    }
+
 }
