@@ -6,9 +6,14 @@ import com.fedag.internship.repository.PositionElasticSearcherRepository;
 import com.fedag.internship.service.PositionElasticSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -45,8 +50,9 @@ public class PositionElasticSearchServiceImpl implements PositionElasticSearchSe
 
     @Override
     @Transactional
-    public Page<PositionElasticSearchEntity> elasticsearchByCompany(Pageable pageable, String name) {
+    public Page<PositionElasticSearchEntity> elasticsearchByName(Pageable pageable, String name) {
         log.info("Полнотекстовый поиск позиций для стажировки по имени: {}", name);
+        name = name.toLowerCase();
         QueryBuilder fuzzyQuery = QueryBuilders
                 .matchQuery("name", name)
                 .fuzziness(Fuzziness.AUTO);

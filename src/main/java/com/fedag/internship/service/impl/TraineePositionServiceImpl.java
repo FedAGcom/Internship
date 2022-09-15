@@ -122,10 +122,10 @@ public class TraineePositionServiceImpl implements TraineePositionService {
 
     @Override
     @Transactional
-    public Page<TraineePositionEntity> searchByCompany(String keyword, Pageable pageable) {
+    public Page<TraineePositionEntity> searchByPosition(String keyword, Pageable pageable) {
         log.info("Получение страницы с позициями по компании");
         Page<TraineePositionEntity> result = positionElasticSearchService
-                .elasticsearchByCompany(pageable, keyword)
+                .elasticsearchByName(pageable, keyword)
                 .map(el -> this.findById(el.getCompanyEntityId()));
         log.info("Страница с позициями по компании получена");
         return result;

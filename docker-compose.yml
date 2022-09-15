@@ -3,7 +3,7 @@ version: "3.9"
 services:
   # Application
   internship:
-    image: vasyandd/internship
+    image: maxirage/internship
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"

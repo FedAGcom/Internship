@@ -59,6 +59,9 @@ public class UserEntity {
     @OneToOne(mappedBy = "user")
     private CompanyEntity company;
 
+    @OneToOne(mappedBy = "user")
+    private ResumeEntity resume;
+
     @Setter(PRIVATE)
     @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<CommentEntity> comments = new ArrayList<>();
