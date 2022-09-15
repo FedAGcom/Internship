@@ -52,6 +52,7 @@ public class PositionElasticSearchServiceImpl implements PositionElasticSearchSe
     @Transactional
     public Page<PositionElasticSearchEntity> elasticsearchByName(Pageable pageable, String name) {
         log.info("Полнотекстовый поиск позиций для стажировки по имени: {}", name);
+        name = name.toLowerCase();
         QueryBuilder fuzzyQuery = QueryBuilders
                 .matchQuery("name", name)
                 .fuzziness(Fuzziness.AUTO);
