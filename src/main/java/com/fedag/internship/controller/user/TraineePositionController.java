@@ -85,10 +85,10 @@ public class TraineePositionController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @GetMapping(SEARCH_BY_COMPANY_URL)
-    public ResponseEntity<Page<TraineePositionResponse>> searchByCompany(@RequestParam String keyword,
+    public ResponseEntity<Page<TraineePositionResponse>> searchByPosition(@RequestParam String keyword,
                                                                          Pageable pageable) {
         Page<TraineePositionResponse> positions = positionService
-                .searchByCompany(keyword, pageable)
+                .searchByPosition(keyword, pageable)
                 .map(positionMapper::toResponse);
         return new ResponseEntity<>(positions, OK);
     }
