@@ -1,11 +1,15 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.TraineePositionEntity;
+import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.TraineePositionMapper;
+import com.fedag.internship.repository.CommentRepository;
 import com.fedag.internship.repository.TraineePositionRepository;
 import com.fedag.internship.service.CompanyService;
+import com.fedag.internship.service.CurrentUserService;
 import com.fedag.internship.service.PositionElasticSearchService;
 import com.fedag.internship.service.TraineePositionService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -22,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class TraineePositionServiceImpl implements TraineePositionService {
     private final PositionElasticSearchService positionElasticSearchService;
     private final TraineePositionRepository positionRepository;
+    private final CommentRepository commentRepository;
+    private final CurrentUserService currentUserService;
 
     private final CompanyService companyService;
     private final TraineePositionMapper positionMapper;
@@ -91,8 +99,25 @@ public class TraineePositionServiceImpl implements TraineePositionService {
     public void deleteById(Long id) {
         log.info("Удаление позиции стажировки с Id: {}", id);
         this.findById(id);
+
+        log.info("Удаление комментариев позиции стажировки с Id: {}", id);
+        deleteComments(id);
+
         positionRepository.deleteById(id);
         log.info("Позиция стажировки с Id: {} удалена", id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteComments(Long id) {
+        TraineePositionEntity traineePositionEntity = this.findById(id);
+        UserEntity userEntity = currentUserService.getCurrentUser();
+        List<CommentEntity> commentEntities = traineePositionEntity.getComments();
+        for (int i = commentEntities.size() - 1; i >= 0; --i) {
+            userEntity.removeComments(commentEntities.get(i));
+            commentRepository.deleteById(commentEntities.get(i).getId());
+            traineePositionEntity.removeComments(commentEntities.get(i));
+        }
     }
 
     @Override

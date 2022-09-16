@@ -19,4 +19,6 @@ public interface UserService {
     UserEntity update(Long id, UserEntity user);
 
     void deleteById(Long id);
+
+    void deleteComments(Long id);
 }

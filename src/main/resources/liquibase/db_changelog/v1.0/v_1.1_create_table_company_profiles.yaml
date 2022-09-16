@@ -49,7 +49,6 @@ databaseChangeLog:
                   name: user_id
                   type: BIGINT
                   constraints:
-                    unique: true
                     nullable: false
   - changeSet:
       id: 1.1.2

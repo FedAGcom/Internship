@@ -1,9 +1,11 @@
 package com.fedag.internship.service.impl;
 
+import com.fedag.internship.domain.entity.CommentEntity;
 import com.fedag.internship.domain.entity.CompanyEntity;
 import com.fedag.internship.domain.entity.UserEntity;
 import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.CompanyMapper;
+import com.fedag.internship.repository.CommentRepository;
 import com.fedag.internship.repository.CompanyRepository;
 import com.fedag.internship.service.CompanyElasticSearchService;
 import com.fedag.internship.service.CompanyService;
@@ -15,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CurrentUserService currentUserService;
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
+    private final CommentRepository commentRepository;
 
     @Override
     public CompanyEntity findById(Long id) {
@@ -91,8 +96,25 @@ public class CompanyServiceImpl implements CompanyService {
     public void deleteById(Long id) {
         log.info("Удаление компании с Id: {}", id);
         this.findById(id);
+
+        log.info("Удаление комментариев компании с Id: {}", id);
+        deleteComments(id);
+
         companyRepository.deleteById(id);
         log.info("Компания с Id: {} удалена", id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteComments(Long id) {
+        CompanyEntity companyEntity = this.findById(id);
+        UserEntity userEntity = currentUserService.getCurrentUser();
+        List<CommentEntity> commentEntities = companyEntity.getComments();
+        for (int i = commentEntities.size() - 1; i >= 0; --i) {
+            userEntity.removeComments(commentEntities.get(i));
+            commentRepository.deleteById(commentEntities.get(i).getId());
+            companyEntity.removeComments(commentEntities.get(i));
+        }
     }
 
     @Override
