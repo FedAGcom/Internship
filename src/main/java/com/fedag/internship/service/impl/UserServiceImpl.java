@@ -7,6 +7,7 @@ import com.fedag.internship.domain.exception.EntityNotFoundException;
 import com.fedag.internship.domain.mapper.UserMapper;
 import com.fedag.internship.repository.UserRepository;
 import com.fedag.internship.service.CommentService;
+import com.fedag.internship.service.CurrentUserService;
 import com.fedag.internship.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import static com.fedag.internship.domain.entity.Role.DELETED;
 import static com.fedag.internship.domain.entity.Role.USER;
+import static com.fedag.internship.domain.entity.Role.BLOCKED;
 
 @Slf4j
 @Service
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final CurrentUserService currentUserService;
     private final CommentService commentService;
 
     @Override
@@ -48,6 +51,14 @@ public class UserServiceImpl implements UserService {
         log.info("Получение страницы с пользователями с ролью USER");
         Page<UserEntity> result = userRepository.findAllByRole(USER, pageable);
         log.info("Страница с пользователями с ролью USER получена");
+        return result;
+    }
+
+    @Override
+    public Page<UserEntity> findAllByRoleBlocked(Pageable pageable) {
+        log.info("Получение страницы с пользователями с ролью BLOCKED");
+        Page<UserEntity> result = userRepository.findAllByRole(BLOCKED, pageable);
+        log.info("Страница с пользователями с ролью BLOCKED получена");
         return result;
     }
 
@@ -94,15 +105,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        log.info("Удаление пользователя с Id: {}", id);
+    public void blockById(Long id) {
+        log.info("Блокировка пользователя с Id: {}", id);
         this.findById(id);
 
         log.info("Удаление комментариев пользователя с Id: {}", id);
         deleteComments(id);
 
+        userRepository.blockedById(id);
+        log.info("Пользователь с Id: {} заблокирован", id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById() {
+        final UserEntity userEntity = currentUserService.getCurrentUser();
+        final Long id = userEntity.getId();
+
+        log.info("Удаление аккаунта с Id: {}", id);
+        this.findById(id);
         userRepository.deleteById(id);
         log.info("Пользователь с Id: {} удален", id);
+    }
+
+    @Override
+    @Transactional
+    public void recoveryById() {
+        final UserEntity userEntity = currentUserService.getCurrentUser();
+        final Long id = userEntity.getId();
+
+        log.info("Восстановление аккаунта с Id: {}", id);
+        this.findById(id);
+        userRepository.recoveryById(id);
+        log.info("Аккаунт с Id: {} восстановлен", id);
     }
 
     @Override

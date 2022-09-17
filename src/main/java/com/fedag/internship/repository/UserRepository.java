@@ -14,8 +14,16 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByEmail(String email);
 
     @Modifying
+    @Query("UPDATE UserEntity user SET user.role = 'BLOCKED' WHERE user.id = :id")
+    void blockedById(Long id);
+
+    @Modifying
     @Query("UPDATE UserEntity user SET user.role = 'DELETED' WHERE user.id = :id")
     void deleteById(Long id);
+
+    @Modifying
+    @Query("UPDATE UserEntity user SET user.role = 'USER' WHERE user.id = :id")
+    void recoveryById(Long id);
 
     Page<UserEntity> findAllByRole(Role role, Pageable pageable);
 }

@@ -70,7 +70,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         LocalDateTime tokenExpiredDate = confirmationToken.getExpired();
         if (tokenExpiredDate.isBefore(now())) {
             log.error("Время действия токена истекло");
-            userService.deleteById(confirmationToken.getUserEntity().getId());
+            userService.blockById(confirmationToken.getUserEntity().getId());
             emailConfirmationTokenService.delete(confirmationToken);
             throw new InvalidConfirmationTokenException("Token is expired");
         }

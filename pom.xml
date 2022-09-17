@@ -151,7 +151,7 @@
                 <version>4.11.0</version>
                 <configuration>
                     <propertyFile>
-                        src/main/resources/liquibase/liquibase.properties
+                        src/main/resources/application.yml
                     </propertyFile>
                     <changeLogFile>
                         /src/main/resources/liquibase/db.changelog_master.yaml
