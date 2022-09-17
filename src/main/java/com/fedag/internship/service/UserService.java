@@ -10,6 +10,8 @@ public interface UserService {
 
     Page<UserEntity> findAllByRoleUser(Pageable pageable);
 
+    Page<UserEntity> findAllByRoleBlocked(Pageable pageable);
+
     Page<UserEntity> findAllByRoleDeleted(Pageable pageable);
 
     Page<UserEntity> findAll(Pageable pageable);
@@ -18,7 +20,11 @@ public interface UserService {
 
     UserEntity update(Long id, UserEntity user);
 
-    void deleteById(Long id);
+    void blockById(Long id);
+
+    void deleteById();
+
+    void recoveryById();
 
     void deleteComments(Long id);
 }

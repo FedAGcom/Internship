@@ -38,6 +38,7 @@ import static com.fedag.internship.domain.util.UrlConstants.MAIN_URL;
 import static com.fedag.internship.domain.util.UrlConstants.USER;
 import static com.fedag.internship.domain.util.UrlConstants.USER_URL;
 import static com.fedag.internship.domain.util.UrlConstants.VERSION;
+import static com.fedag.internship.domain.util.UrlConstants.BLOCKED;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -87,6 +88,21 @@ public class AdminUserController {
     public ResponseEntity<Page<AdminUserResponse>> findAllByRoleUser(@PageableDefault(size = 5)
                                                                      Pageable pageable) {
         Page<AdminUserResponse> users = userService.findAllByRoleUser(pageable)
+                .map(userMapper::toAdminResponse);
+        return new ResponseEntity<>(users, OK);
+    }
+
+    @Operation(summary = "Получение страницы с пользователями с ролью BLOCKED")
+    @ApiResponse(responseCode = "200", description = "Пользователи найдены",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Page.class))})
+    @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера",
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DtoErrorInfo.class))})
+    @GetMapping(BLOCKED)
+    public ResponseEntity<Page<AdminUserResponse>> findAllByRoleBlocked(@PageableDefault(size = 5)
+                                                                        Pageable pageable) {
+        Page<AdminUserResponse> users = userService.findAllByRoleBlocked(pageable)
                 .map(userMapper::toAdminResponse);
         return new ResponseEntity<>(users, OK);
     }
@@ -171,8 +187,8 @@ public class AdminUserController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DtoErrorInfo.class))})
     @DeleteMapping(ID)
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
-        userService.deleteById(id);
+    public ResponseEntity<?> blockById(@PathVariable Long id) {
+        userService.blockById(id);
         return new ResponseEntity<>(OK);
     }
 }

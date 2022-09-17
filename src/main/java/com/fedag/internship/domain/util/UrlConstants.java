@@ -15,6 +15,7 @@ public interface UrlConstants {
 
     String ADMIN = "/admin";
     String USER = "/user";
+    String BLOCKED = "/blocked";
     String DELETED = "/deleted";
 
     String ACTIVE = "/active";
@@ -37,6 +38,7 @@ public interface UrlConstants {
     String SEARCH_BY_COMPANY_URL = "/search-by-company";
     String USER_URL = "/users";
     String RESUME_URL = "/resumes";
+    String DELETE_USER_URL = "/delete";
 
     String AUTH_URL = "/auth";
     String LOGIN_URL = "/login";
